@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark"> <!-- 默认暗黑模式 -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nanobanana Pro - 终极完整版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // 配置 Tailwind 的暗黑模式策略
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 全局字体与过渡 */
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; transition: background-color 0.3s, color 0.3s; }
+        
+        /* 自定义输入框样式 (适配双主题) */
+        .custom-input { 
+            transition: all 0.2s; 
+        }
+        .custom-input:focus { 
+            border-color: #fbbf24; 
+            outline: none; 
+            box-shadow: 0 0 0 1px #fbbf24; 
+        }
+        
+        /* 滚动条美化 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #52525b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #71717a; }
+        
+        /* 选中状态 */
+        .active-btn { background-color: #fbbf24; color: black; border-color: #fbbf24; font-weight: bold; }
+        
+        /* 图片预览区的删除按钮悬浮显示 */
+        .img-thumb:hover .delete-btn { opacity: 1; }
+
+        /* 缩放容器 */
+        #zoom-container { overflow: hidden; cursor: grab; }
+        #zoom-container:active { cursor: grabbing; }
+        #main-image { transition: transform 0.1s ease-out; transform-origin: center center; }
+
+        /* 模态框动画 */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.2s; }
+        .modal-exit { opacity: 0; transform: scale(0.95); transition: all 0.2s; }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-gray-50 text-gray-800 dark:bg-[#09090b] dark:text-[#e4e4e7]">
+
+    <!-- 1. 顶部导航栏 -->
+    <header class="h-14 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#09090b] flex items-center justify-between px-4 shrink-0 z-20 transition-colors">
+        <div class="flex items-center gap-3">
+            <!-- 🍌 香蕉图标 (白底) -->
+            <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-gray-200 shadow-sm shrink-0 overflow-hidden p-1">
+                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                    <path d="M855.1 762.3c-23.2-34-58.4-60.8-103.8-78.2-18.4-7.2-22.7-27.2-21.4-44.2 2.6-32.8 11.2-114.6 15.6-155.6 2.6-24-3.4-45-16.6-61.4-23.6-29.4-61-42.2-104.6-36.2-73.6 10.2-132.8 53-176.4 84.4-24.2 17.4-48 34.6-70.8 48.6-39.6 24.4-118.4 61.2-159.4 69-41.2 7.8-82.6 3.4-106.8-2.6-11.8-3-19.8-14-19.2-26.2 0.8-15 14.8-26 29.8-23.6 14.8 2.4 46.2 5.8 77.8-0.2 31.6-6 102.6-39 138-60.8 24.6-15.2 50.4-33.8 76.6-52.6 51.6-37.2 125.2-90 223.4-103.6 69.4-9.6 128.2 10.4 165.6 56.4 25.8 31.6 33.6 70.6 28.2 110.8-2 15.6-8.2 80-13.2 131.6-0.6 5.8-0.6 11.2 0.2 16.2 11.6 4.4 20.6 11.2 26.6 20.2 10.2 15 11 34.6 2.2 50.6-26.6 52.8-82.2 106-166.2 157.4l-11.4-19z" fill="#FACC15"></path>
+                </svg>
+            </div>
+            <span class="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">Nanobanana Pro</span>
+        </div>
+
+        <div class="flex items-center gap-2 text-sm">
+            
+            <!-- 🌓 主题切换按钮 -->
+            <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-[#18181b] dark:text-gray-400 transition">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+            </button>
+
+            <!-- ⚙️ 设置按钮 (API Key) -->
+            <button onclick="openSettings()" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-[#18181b] dark:text-gray-400 transition" title="API 设置">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- 2. 主界面 -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- ============ 左侧：参数控制区 ============ -->
+        <aside class="w-[360px] bg-white border-r border-gray-200 dark:bg-[#0c0c0e] dark:border-[#27272a] flex flex-col overflow-y-auto z-10 transition-colors">
+            <div class="p-5 space-y-6">
+                
+                <div class="flex items-center gap-2 text-amber-500 font-bold text-sm uppercase tracking-wider">
+                    <i class="fa-solid fa-sliders"></i> 生成设置
+                </div>
+
+                <!-- 模型 -->
+                <div class="space-y-2">
+                    <label class="text-xs text-gray-500 font-bold uppercase">模型名称</label>
+                    <input type="text" id="model-input" value="nano-banana-2-4k" class="w-full custom-input rounded px-3 py-2.5 text-sm bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200 font-mono" placeholder="输入模型名称">
+                </div>
+
+                <!-- 多图上传 -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs text-gray-500 font-bold uppercase">参考图片 (<span id="img-count">0</span>/10)</label>
+                        <button onclick="clearAllImages()" class="text-[10px] text-red-500 hover:text-red-400 cursor-pointer">清空</button>
+                    </div>
+                    
+                    <!-- 图片列表容器 -->
+                    <div id="preview-grid" class="grid grid-cols-4 gap-2 mb-2 hidden"></div>
+
+                    <!-- 上传按钮 -->
+                    <div id="upload-box" onclick="document.getElementById('file-upload').click()" class="border-2 border-dashed border-gray-300 dark:border-[#27272a] hover:border-amber-500 hover:bg-gray-50 dark:hover:bg-[#18181b] rounded-lg h-24 flex flex-col items-center justify-center cursor-pointer transition group">
+                        <i class="fa-solid fa-plus text-xl text-gray-400 group-hover:text-amber-500 mb-1 transition"></i>
+                        <span class="text-[10px] text-gray-500 group-hover:text-gray-400">点击上传 (支持多选)</span>
+                        <input type="file" id="file-upload" class="hidden" multiple accept="image/*" onchange="handleFiles(event)">
+                    </div>
+                </div>
+
+                <!-- 提示词 -->
+                <div class="space-y-2">
+                    <label class="text-xs text-gray-500 font-bold uppercase">提示词</label>
+                    <textarea id="prompt-input" class="w-full h-28 custom-input rounded-lg p-3 text-sm bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-700 resize-none" placeholder="描述你的创意..."></textarea>
+                </div>
+
+                <!-- 宽高比 -->
+                <div class="space-y-2">
+                    <label class="text-xs text-gray-500 font-bold uppercase">宽高比</label>
+                    <div class="relative">
+                        <select id="ratio-select" class="w-full custom-input rounded px-3 py-2 text-sm bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200 appearance-none">
+                            <option value="16:9">16:9 (横屏电影)</option>
+                            <option value="9:16">9:16 (手机竖屏)</option>
+                            <option value="1:1">1:1 (正方形)</option>
+                            <option value="4:3">4:3 (标准屏幕)</option>
+                            <option value="3:4">3:4 (竖向标准)</option>
+                            <option value="3:2">3:2 (单反画幅)</option>
+                            <option value="2:3">2:3 (海报)</option>
+                            <option value="21:9">21:9 (宽银幕)</option>
+                            <option value="5:4">5:4</option>
+                            <option value="4:5">4:5</option>
+                        </select>
+                        <div class="absolute right-3 top-2.5 text-gray-500 pointer-events-none">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数量 & 尺寸 -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-xs text-gray-500 font-bold uppercase">生成数量</label>
+                        <div class="flex gap-1">
+                            <button onclick="setBatchSize(1)" class="batch-btn active-btn flex-1 py-2 text-xs rounded transition" data-val="1">1</button>
+                            <button onclick="setBatchSize(2)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="2">2</button>
+                            <button onclick="setBatchSize(3)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="3">3</button>
+                            <button onclick="setBatchSize(4)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="4">4</button>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-gray-500 font-bold uppercase">画质</label>
+                        <select id="size-select" class="w-full custom-input rounded px-3 py-2 text-sm bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200">
+                            <option value="4K">4K (超清)</option>
+                            <option value="2K">2K (高清)</option>
+                            <option value="1K">1K (标准)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="pt-4 pb-10">
+                    <button onclick="submitTask()" id="generate-btn" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:opacity-90 text-black font-bold py-3.5 rounded-lg transition transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+                        <span class="text-base">✨ 立即生成</span>
+                        <i id="loading-icon" class="fa-solid fa-circle-notch fa-spin hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ============ 右侧：预览与展示区 ============ -->
+        <main class="flex-1 flex flex-col min-w-0 bg-gray-100 dark:bg-black transition-colors">
+            
+            <!-- 顶部工具条 -->
+            <div class="h-12 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#0c0c0e] flex items-center justify-between px-4 shrink-0 z-20 transition-colors">
+                <button class="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white flex items-center gap-2 transition">
+                    <i class="fa-solid fa-arrow-left"></i> 导入
+                </button>
+                <button onclick="downloadCurrentImage()" class="text-xs text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-500 flex items-center gap-2 transition">
+                    下载 JPG <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+
+            <!-- 图片展示核心区 -->
+            <div class="flex-1 relative flex flex-col overflow-hidden select-none">
+                
+                <!-- 内部工具栏 -->
+                <div class="absolute top-4 left-4 z-30 flex items-center gap-4 bg-white/80 dark:bg-[#18181b]/80 backdrop-blur rounded-lg px-3 py-1.5 border border-gray-200 dark:border-[#27272a] shadow-sm">
+                    <span class="text-xs font-bold text-gray-800 dark:text-white">Preview</span>
+                    <div class="w-[1px] h-3 bg-gray-300 dark:bg-gray-600"></div>
+                    <span class="text-[10px] text-gray-500 dark:text-gray-400">滚轮缩放 / 拖拽移动 / 双击复位</span>
+                    <div class="w-[1px] h-3 bg-gray-300 dark:bg-gray-600"></div>
+                    <button onclick="clearMainPreview()" class="text-gray-400 hover:text-red-500 text-xs"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <!-- 缩放容器 -->
+                <div id="zoom-container" class="w-full h-full flex items-center justify-center relative bg-gray-200 dark:bg-black transition-colors">
+                    <!-- 空状态 -->
+                    <div id="empty-placeholder" class="text-center absolute pointer-events-none">
+                        <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-white dark:bg-[#111] border border-gray-200 dark:border-[#222] flex items-center justify-center">
+                            <i class="fa-solid fa-image text-3xl text-gray-300 dark:text-[#333]"></i>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-600 text-sm">图片生成后将在此处预览</p>
+                    </div>
+                    
+                    <!-- 图片 -->
+                    <img id="main-image" class="hidden max-h-[85vh] max-w-[85%] object-contain rounded-md shadow-2xl border border-gray-300 dark:border-[#27272a]" draggable="false">
+                </div>
+            </div>
+
+            <!-- 底部任务列表 -->
+            <div class="h-44 bg-white dark:bg-[#0c0c0e] border-t border-gray-200 dark:border-[#27272a] flex flex-col shrink-0 z-20 transition-colors">
+                <div class="px-4 py-2 flex items-center gap-2 bg-gray-50 dark:bg-[#121214] border-b border-gray-100 dark:border-none">
+                    <i class="fa-solid fa-list text-[10px] text-gray-500"></i>
+                    <span class="text-xs font-bold text-gray-600 dark:text-gray-300">任务列表</span>
+                </div>
+                
+                <div id="history-list" class="flex-1 p-3 overflow-x-auto flex gap-3 items-center">
+                    <div class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ⚙️ 设置模态框 -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white dark:bg-[#18181b] p-6 rounded-xl w-96 shadow-2xl border border-gray-200 dark:border-[#27272a] transform transition-all scale-100">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold dark:text-white flex items-center gap-2"><i class="fa-solid fa-gear text-amber-500"></i> API 设置</h3>
+                <button onclick="closeSettings()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">API Key (令牌)</label>
+                    <input type="password" id="modal-api-key" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-300 dark:border-[#27272a] rounded p-3 text-sm text-gray-800 dark:text-gray-200 outline-none focus:border-amber-500" placeholder="sk-xxxxxxxx">
+                    <p class="text-[10px] text-gray-400 mt-1">Key 将会保存在本地浏览器缓存中。</p>
+                </div>
+                
+                <button onclick="saveSettings()" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-2 rounded transition">保存配置</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ 全局变量 & 初始化 ============
+        const API_URL = "https://ai.t8star.cn/v1/images/edits";
+        let uploadFiles = []; 
+        let batchSize = 1;    
+        let currentMainImageUrl = ""; 
+        let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
+
+        // 页面加载初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            // 1. 读取保存的 API Key
+            const savedKey = localStorage.getItem('nano_api_key');
+            if (savedKey) {
+                document.getElementById('modal-api-key').value = savedKey;
+            } else {
+                // 如果没有Key，自动打开设置
+                openSettings();
+            }
+
+            // 2. 读取主题偏好
+            const savedTheme = localStorage.getItem('nano_theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-sun text-orange-500';
+            }
+        });
+
+        // ============ 设置与主题逻辑 ============
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-sun text-orange-500';
+                localStorage.setItem('nano_theme', 'light');
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('nano_theme', 'dark');
+            }
+        }
+
+        function openSettings() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function saveSettings() {
+            const key = document.getElementById('modal-api-key').value.trim();
+            if (key) {
+                localStorage.setItem('nano_api_key', key);
+                closeSettings();
+                // 给个小反馈
+                const btn = document.querySelector('button[onclick="saveSettings()"]');
+                const originalText = btn.innerText;
+                btn.innerText = "已保存 ✓";
+                setTimeout(() => btn.innerText = originalText, 1000);
+            } else {
+                alert("请输入有效的 API Key");
+            }
+        }
+
+        // ============ 核心功能 (保持不变) ============
+        // [缩放逻辑]
+        const zoomContainer = document.getElementById('zoom-container');
+        const imgEl = document.getElementById('main-image');
+
+        function updateTransform() {
+            imgEl.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        }
+        function resetZoom() {
+            scale = 1; pointX = 0; pointY = 0;
+            updateTransform();
+        }
+        zoomContainer.addEventListener('wheel', (e) => {
+            if (imgEl.classList.contains('hidden')) return;
+            e.preventDefault();
+            const delta = -e.deltaY;
+            (delta > 0) ? (scale *= 1.1) : (scale /= 1.1);
+            if (scale < 0.5) scale = 0.5;
+            if (scale > 5) scale = 5;
+            updateTransform();
+        });
+        zoomContainer.addEventListener('mousedown', (e) => {
+            if (imgEl.classList.contains('hidden')) return;
+            e.preventDefault();
+            startX = e.clientX - pointX;
+            startY = e.clientY - pointY;
+            panning = true;
+        });
+        zoomContainer.addEventListener('mouseup', () => { panning = false; });
+        zoomContainer.addEventListener('mouseleave', () => { panning = false; });
+        zoomContainer.addEventListener('mousemove', (e) => {
+            if (!panning) return;
+            e.preventDefault();
+            pointX = e.clientX - startX;
+            pointY = e.clientY - startY;
+            updateTransform();
+        });
+        zoomContainer.addEventListener('dblclick', resetZoom);
+
+        // [文件处理]
+        function handleFiles(event) {
+            const files = Array.from(event.target.files);
+            if (uploadFiles.length + files.length > 10) { alert("最多10张"); return; }
+            files.forEach(file => uploadFiles.push(file));
+            renderPreviewGrid();
+        }
+        function renderPreviewGrid() {
+            const grid = document.getElementById('preview-grid');
+            const countSpan = document.getElementById('img-count');
+            grid.innerHTML = ''; countSpan.innerText = uploadFiles.length;
+            (uploadFiles.length > 0) ? grid.classList.remove('hidden') : grid.classList.add('hidden');
+            uploadFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = "img-thumb relative w-full aspect-square bg-gray-200 dark:bg-gray-800 rounded overflow-hidden border border-gray-300 dark:border-gray-700 group";
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center">
+                            <span class="text-[10px] text-white font-mono bg-black/50 px-1 rounded">${index + 1}</span>
+                        </div>
+                        <button onclick="removeFile(${index})" class="delete-btn absolute top-0.5 right-0.5 bg-red-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[10px] opacity-0 transition hover:bg-red-600"><i class="fa-solid fa-xmark"></i></button>
+                    `;
+                    grid.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        function removeFile(index) { uploadFiles.splice(index, 1); renderPreviewGrid(); document.getElementById('file-upload').value = ''; }
+        function clearAllImages() { uploadFiles = []; renderPreviewGrid(); document.getElementById('file-upload').value = ''; }
+        
+        // [数量选择]
+        function setBatchSize(num) {
+            batchSize = num;
+            document.querySelectorAll('.batch-btn').forEach(btn => {
+                if(parseInt(btn.dataset.val) === num) {
+                    btn.className = "batch-btn active-btn flex-1 py-2 text-xs rounded transition";
+                } else {
+                    btn.className = "batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition";
+                }
+            });
+        }
+
+        // [提交生成]
+        async function submitTask() {
+            // 从 localStorage 获取 key
+            const apiKey = localStorage.getItem('nano_api_key');
+            if (!apiKey) { openSettings(); return; }
+
+            const prompt = document.getElementById('prompt-input').value.trim();
+            const ratio = document.getElementById('ratio-select').value;
+            const size = document.getElementById('size-select').value;
+            const modelName = document.getElementById('model-input').value.trim();
+            const btn = document.getElementById('generate-btn');
+            const icon = document.getElementById('loading-icon');
+
+            if (!prompt) { alert("请输入提示词"); return; }
+            if (!modelName) { alert("模型名称不能为空"); return; }
+
+            btn.disabled = true; btn.classList.add('opacity-70', 'cursor-not-allowed');
+            icon.classList.remove('hidden'); btn.querySelector('span').innerText = "生成中...";
+
+            const formData = new FormData();
+            formData.append('model', modelName);
+            formData.append('prompt', prompt);
+            formData.append('aspect_ratio', ratio);
+            formData.append('image_size', size);
+            formData.append('n', batchSize); 
+            formData.append('response_format', 'url');
+            uploadFiles.forEach((file) => formData.append('image', file));
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${apiKey}` },
+                    body: formData
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error?.message || "请求失败");
+                const results = data.data || (data.url ? [{url: data.url}] : []);
+                if (results.length > 0) {
+                    setMainImage(results[0].url);
+                    results.forEach(img => addToHistory(img.url, prompt));
+                } else { alert("生成成功，但未返回图片链接"); }
+            } catch (err) { console.error(err); alert("错误: " + err.message); } 
+            finally {
+                btn.disabled = false; btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                icon.classList.add('hidden'); btn.querySelector('span').innerText = "✨ 立即生成";
+            }
+        }
+
+        // [UI 显示]
+        function setMainImage(url) {
+            currentMainImageUrl = url;
+            const img = document.getElementById('main-image');
+            const placeholder = document.getElementById('empty-placeholder');
+            placeholder.classList.add('hidden'); img.src = url; img.classList.remove('hidden');
+            resetZoom();
+        }
+        function clearMainPreview() {
+            currentMainImageUrl = "";
+            document.getElementById('main-image').classList.add('hidden');
+            document.getElementById('main-image').src = "";
+            document.getElementById('empty-placeholder').classList.remove('hidden');
+        }
+        function addToHistory(url, prompt) {
+            const list = document.getElementById('history-list');
+            if (list.children[0]?.innerText === "暂无历史任务") list.innerHTML = '';
+            const item = document.createElement('div');
+            item.className = "flex-shrink-0 w-32 h-24 bg-gray-200 dark:bg-[#18181b] rounded-lg overflow-hidden border border-gray-300 dark:border-[#27272a] hover:border-amber-500 cursor-pointer transition relative group";
+            item.onclick = () => setMainImage(url);
+            item.innerHTML = `<img src="${url}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center"><i class="fa-solid fa-eye text-white"></i></div>
+                <div class="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5"><p class="text-[8px] text-gray-300 truncate">${prompt}</p></div>`;
+            list.prepend(item);
+        }
+
+        // [下载 JPG]
+        async function downloadCurrentImage() {
+            if (!currentMainImageUrl) { alert("当前没有可下载的图片"); return; }
+            const btn = document.querySelector('button[onclick="downloadCurrentImage()"]');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 下载中...';
+            try {
+                const response = await fetch(currentMainImageUrl);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl; a.download = `nanobanana_${Date.now()}.jpg`; 
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+            } catch (e) { console.error(e); window.open(currentMainImageUrl, '_blank'); } 
+            finally { btn.innerHTML = originalHTML; }
+        }
+    </script>
+</body>
+</html>
