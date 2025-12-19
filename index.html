@@ -207,15 +207,17 @@
                 <div class="px-4 py-2 flex items-center justify-between bg-gray-50 dark:bg-[#121214] border-b border-gray-100 dark:border-none">
                     <div class="flex items-center gap-2">
                         <input type="checkbox" id="select-all" class="task-checkbox" onchange="toggleSelectAll()">
-                        <span class="text-xs font-bold text-gray-600 dark:text-gray-300">任务列表</span>
+                        <span class="text-xs font-bold text-gray-600 dark:text-gray-300">
+                            任务列表 <span id="selection-count" class="text-purple-500 ml-1 hidden"></span>
+                        </span>
                     </div>
                     <div id="batch-actions" class="hidden flex gap-2">
                         <button onclick="batchDownload()" class="text-[10px] bg-purple-500/20 text-purple-500 hover:bg-purple-500 hover:text-white px-2 py-1 rounded transition border border-purple-500/30">下载选中</button>
                         <button onclick="batchDelete()" class="text-[10px] bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-2 py-1 rounded transition border border-red-500/30">删除选中</button>
                     </div>
                 </div>
-                <div id="history-list" class="flex-1 p-4 overflow-x-auto flex gap-4 items-center">
-                    <div id="history-empty" class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>
+                <div id="history-list" class="flex-1 p-2 overflow-x-auto grid grid-rows-2 grid-flow-col gap-2 items-center">
+                    <div id="history-empty" class="text-xs text-gray-400 col-span-full row-span-2 flex items-center justify-center select-none w-full h-full">暂无历史任务</div>
                 </div>
             </div>
         </main>
@@ -283,7 +285,7 @@
         let draggingActionIndex = -1;
         let dragStartOffset = { x: 0, y: 0 };
 
-        // ============ 新增：自动存档功能 ============
+        // 自动存档功能
         function saveHistoryToLocal() {
             const items = [];
             document.querySelectorAll('.history-item').forEach(item => {
@@ -696,12 +698,12 @@
         function clearMainPreview() { currentMainImageUrl = "";
         imgWrapper.classList.add('hidden'); document.getElementById('empty-placeholder').classList.remove('hidden'); document.getElementById('time-badge').classList.add('hidden'); document.getElementById('compare-hint').classList.add('hidden'); }
         
-        // 修改：增加自动存档
         function addToHistory(url, prompt, duration, isRestoring = false) {
             const list = document.getElementById('history-list');
             const empty = document.getElementById('history-empty'); if (empty) empty.remove();
             const item = document.createElement('div');
-            item.className = "history-item group relative flex-shrink-0 aspect-[4/3] h-full w-auto bg-gray-900 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:border-purple-500 transition shadow-lg";
+            // 修改：高度改为 h-full，宽度由比例决定，去掉 w-auto 限制
+            item.className = "history-item group relative flex-shrink-0 aspect-[4/3] h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:border-purple-500 transition shadow-lg";
             item.dataset.url = url; item.dataset.prompt = encodeURIComponent(prompt); item.dataset.duration = duration;
             item.onclick = (e) => { if(!e.target.closest('.task-checkbox') && !e.target.closest('button')) { const decPrompt = decodeURIComponent(item.dataset.prompt);
             setMainImage(url, duration); document.getElementById('prompt-input').value = decPrompt; } };
@@ -715,14 +717,32 @@
 
         function toggleSelectAll() { const mainCb = document.getElementById('select-all');
         document.querySelectorAll('#history-list .task-checkbox').forEach(cb => cb.checked = mainCb.checked); updateBatchState(); }
+        
+        // 修改：增加计数显示逻辑
         function updateBatchState() {
             const checkboxes = document.querySelectorAll('#history-list .task-checkbox');
             const checked = Array.from(checkboxes).filter(cb => cb.checked);
-            const batchActions = document.getElementById('batch-actions'); if(checked.length > 0) batchActions.classList.remove('hidden'); else batchActions.classList.add('hidden');
+            
+            // 1. 显示/隐藏批量操作按钮
+            const batchActions = document.getElementById('batch-actions'); 
+            if(checked.length > 0) batchActions.classList.remove('hidden'); else batchActions.classList.add('hidden');
+            
+            // 2. 更新全选框状态
             const mainCb = document.getElementById('select-all');
-            if(checked.length === checkboxes.length && checkboxes.length > 0) mainCb.checked = true; else if(checked.length === 0) mainCb.checked = false;
+            if(checked.length === checkboxes.length && checkboxes.length > 0) mainCb.checked = true; 
+            else if(checked.length === 0) mainCb.checked = false;
             else mainCb.indeterminate = true;
+
+            // 3. 更新数量显示文本
+            const countSpan = document.getElementById('selection-count');
+            if(checked.length > 0) {
+                countSpan.innerText = `(已选 ${checked.length})`;
+                countSpan.classList.remove('hidden');
+            } else {
+                countSpan.classList.add('hidden');
+            }
         }
+
         async function batchDownload() {
             const checked = document.querySelectorAll('#history-list .task-checkbox:checked');
             if(checked.length === 0) return;
@@ -735,8 +755,8 @@
             if(checked.length === 0) return;
             if(!confirm(`确认删除选中的 ${checked.length} 张任务吗？`)) return;
             checked.forEach(cb => cb.closest('.history-item').remove()); updateBatchState();
-            if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>';
-            saveHistoryToLocal(); // 保存删除后的状态
+            if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 col-span-full row-span-2 flex items-center justify-center select-none w-full h-full">暂无历史任务</div>';
+            saveHistoryToLocal(); 
         }
         function viewOriginal(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox-modal').classList.remove('hidden');
         }
@@ -747,8 +767,8 @@
         a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(u); } catch (e) { window.open(url, '_blank'); } }
         
         function deleteHistoryItem(btn) { const item = btn.closest('.history-item');
-        if(item) { item.remove(); updateBatchState(); if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>';
-        saveHistoryToLocal(); // 保存删除后的状态
+        if(item) { item.remove(); updateBatchState(); if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 col-span-full row-span-2 flex items-center justify-center select-none w-full h-full">暂无历史任务</div>';
+        saveHistoryToLocal(); 
         } }
         
         async function downloadCurrentImage() { if (!currentMainImageUrl) { alert("当前没有图片"); return; } downloadSingleImage(currentMainImageUrl);
