@@ -12,22 +12,51 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        
         .custom-input { transition: all 0.2s; }
-        .custom-input:focus { border-color: #6366f1; outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
-        .custom-input:read-only { background-color: #f3f4f6; color: #9ca3af; cursor: not-allowed; border-color: #e5e7eb; }
-        .dark .custom-input:read-only { background-color: #27272a; color: #71717a; border-color: #3f3f46; }
-        select:disabled { background-color: #e5e7eb; color: #9ca3af; cursor: not-allowed !important; }
-        .dark select:disabled { background-color: #27272a; color: #52525b; }
+        .custom-input:focus { 
+            border-color: #6366f1; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); 
+        }
+        .custom-input:read-only {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+            border-color: #e5e7eb;
+        }
+        .dark .custom-input:read-only {
+            background-color: #27272a;
+            color: #71717a;
+            border-color: #3f3f46;
+        }
+        
+        /* 禁用状态的 Select */
+        select:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed !important;
+        }
+        .dark select:disabled {
+            background-color: #27272a;
+            color: #52525b;
+        }
+        
         select { cursor: pointer !important; }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #52525b; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #71717a; }
+        
         .active-btn { background-color: #a855f7; color: white; border-color: #a855f7; font-weight: bold; }
+        
         #zoom-container { overflow: hidden; cursor: grab; position: relative; }
         #zoom-container:active { cursor: grabbing; }
+        
         .compare-slider { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: rgba(255, 255, 255, 0.8); z-index: 40; cursor: ew-resize; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         .compare-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+        
         .task-checkbox { width: 16px; height: 16px; accent-color: #a855f7; cursor: pointer; }
         .resizer-x { width: 4px; cursor: col-resize; background: transparent; z-index: 50; }
         .resizer-y { height: 4px; cursor: row-resize; background: transparent; z-index: 50; }
@@ -35,9 +64,11 @@
         .dropdown-arrow { transition: transform 0.3s ease; }
         .dropdown-open .dropdown-arrow { transform: rotate(180deg); }
         .glow-effect { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5); border-color: #6366f1 !important; color: #6366f1 !important; }
+
         .color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.1s; }
         .color-btn:hover { transform: scale(1.1); }
         .color-btn.active { border-color: #6366f1; box-shadow: 0 0 0 2px white, 0 0 0 4px #6366f1; }
+        
         .tool-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: #666; }
         .tool-btn.active { background-color: #e0e7ff; color: #6366f1; font-weight: bold; }
         .tool-btn:hover { background-color: #f3f4f6; }
@@ -66,24 +97,34 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden" id="main-container">
+        
         <aside id="left-panel" class="w-[360px] min-w-[280px] max-w-[600px] bg-white border-r border-gray-200 dark:bg-[#0c0c0e] dark:border-[#27272a] flex flex-col overflow-y-auto z-10 transition-colors">
             <div class="p-5 space-y-3">
+                
                 <div class="flex items-center justify-between relative z-50">
                     <div class="flex items-center gap-2 text-purple-500 font-bold text-sm uppercase tracking-wider">
                         <i class="fa-solid fa-sliders"></i> 生成设置
                     </div>
+                    
                     <div class="relative w-40" id="custom-model-dropdown">
                         <input type="hidden" id="model-input" value="nano-banana-2-4k">
-                        <div onclick="toggleModelDropdown(event)" id="dropdown-trigger" class="w-full flex justify-between items-center bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] rounded-lg px-3 py-1.5 cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-[#27272a]">
+                        
+                        <div onclick="toggleModelDropdown(event)" id="dropdown-trigger" 
+                             class="w-full flex justify-between items-center bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] rounded-lg px-3 py-1.5 cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-[#27272a]">
                             <span id="current-model-text" class="text-xs font-bold font-mono text-gray-700 dark:text-gray-300">nano-banana-2</span>
                             <i class="fa-solid fa-chevron-down text-[10px] text-gray-500 dropdown-arrow"></i>
                         </div>
+
                         <div id="dropdown-options" class="hidden absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-xl shadow-xl overflow-hidden z-50 p-1">
-                            <div onclick="selectModel('nano-banana-2-4k', 'nano-banana-2')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-2-4k">
+                            <div onclick="selectModel('nano-banana-2-4k', 'nano-banana-2')" 
+                                 class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition"
+                                 data-val="nano-banana-2-4k">
                                 <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">nano-banana-2</span>
                                 <i class="fa-solid fa-check text-indigo-500 text-xs opacity-100 check-icon"></i>
                             </div>
-                            <div onclick="selectModel('nano-banana-hd', 'nano-banana-hd')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-hd">
+                            <div onclick="selectModel('nano-banana-hd', 'nano-banana-hd')" 
+                                 class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition"
+                                 data-val="nano-banana-hd">
                                 <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">nano-banana-hd</span>
                                 <i class="fa-solid fa-check text-indigo-500 text-xs opacity-0 check-icon"></i>
                             </div>
@@ -96,13 +137,17 @@
                         <label class="text-xs text-gray-500 font-bold uppercase">参考图片</label>
                         <button onclick="clearAllSlots()" class="text-[10px] text-red-500 hover:text-red-400 cursor-pointer ml-auto">清空全部</button>
                     </div>
+
                     <input type="file" id="slot-file-input" class="hidden" accept="image/*" onchange="handleSlotFile(event)">
-                    <div id="slots-grid" class="grid grid-cols-3 gap-2 select-none"></div>
+
+                    <div id="slots-grid" class="grid grid-cols-3 gap-2 select-none">
+                    </div>
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-xs text-gray-500 font-bold uppercase">提示词</label>
                     <textarea id="prompt-input" class="w-full h-28 custom-input rounded-lg p-3 text-sm bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-700 resize-none" placeholder="描述你的创意..."></textarea>
+                    
                     <p id="prompt-lock-msg" class="text-[10px] text-indigo-500 hidden flex items-center justify-between">
                         <span><i class="fa-solid fa-lock mr-1"></i> 检测到涂鸦，提示词已锁定。</span>
                         <span onclick="unlockPrompt()" class="cursor-pointer underline hover:text-indigo-400 font-bold ml-2">解锁</span>
@@ -131,15 +176,8 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label class="text-xs text-gray-500 font-bold uppercase">数量</label>
-                        <div class="flex gap-1">
-                            <button onclick="setBatchSize(1)" class="batch-btn active-btn flex-1 py-2 text-xs rounded transition" data-val="1">1</button>
-                            <button onclick="setBatchSize(2)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="2">2</button>
-                            <button onclick="setBatchSize(3)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="3">3</button>
-                            <button onclick="setBatchSize(4)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="4">4</button>
-                        </div>
-                    </div>
+                    <div class="space-y-2"><label class="text-xs text-gray-500 font-bold uppercase">数量</label><div class="flex gap-1"><button onclick="setBatchSize(1)" class="batch-btn active-btn flex-1 py-2 text-xs rounded transition" data-val="1">1</button><button onclick="setBatchSize(2)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="2">2</button><button onclick="setBatchSize(3)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="3">3</button><button onclick="setBatchSize(4)" class="batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition" data-val="4">4</button></div></div>
+                    
                     <div class="space-y-2">
                         <label class="text-xs text-black dark:text-gray-200 font-bold uppercase">分辨率</label>
                         <select id="size-select" class="w-full custom-input rounded px-3 py-2 text-sm bg-gray-50 border-gray-300 text-black dark:bg-[#18181b] dark:border-[#27272a] dark:text-white cursor-pointer">
@@ -149,17 +187,14 @@
                         </select>
                     </div>
                 </div>
-                <div class="pt-4 pb-10">
-                    <button onclick="submitTask()" id="generate-btn" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-90 text-white font-bold py-3.5 rounded-lg transition transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
-                        <span class="text-base">✨ 立即生成</span><i id="loading-icon" class="fa-solid fa-circle-notch fa-spin hidden"></i>
-                    </button>
-                </div>
+                <div class="pt-4 pb-10"><button onclick="submitTask()" id="generate-btn" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-90 text-white font-bold py-3.5 rounded-lg transition transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"><span class="text-base">✨ 立即生成</span><i id="loading-icon" class="fa-solid fa-circle-notch fa-spin hidden"></i></button></div>
             </div>
         </aside>
 
         <div id="resizer-sidebar" class="resizer-x bg-gray-200 dark:bg-[#1f1f22]"></div>
 
         <main class="flex-1 flex flex-col min-w-0 bg-gray-100 dark:bg-black transition-colors" id="right-panel">
+            
             <div class="h-12 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#0c0c0e] flex items-center justify-between px-4 shrink-0 z-20 transition-colors">
                 <button onclick="importCurrentImage()" class="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white flex items-center gap-2 transition" title="将当前图作为参考图">
                     <i class="fa-solid fa-arrow-left"></i> 导入
@@ -207,17 +242,15 @@
                 <div class="px-4 py-2 flex items-center justify-between bg-gray-50 dark:bg-[#121214] border-b border-gray-100 dark:border-none">
                     <div class="flex items-center gap-2">
                         <input type="checkbox" id="select-all" class="task-checkbox" onchange="toggleSelectAll()">
-                        <span class="text-xs font-bold text-gray-600 dark:text-gray-300">
-                            任务列表 <span id="selection-count" class="text-purple-500 ml-1 hidden"></span>
-                        </span>
+                        <span class="text-xs font-bold text-gray-600 dark:text-gray-300">任务列表</span>
                     </div>
                     <div id="batch-actions" class="hidden flex gap-2">
                         <button onclick="batchDownload()" class="text-[10px] bg-purple-500/20 text-purple-500 hover:bg-purple-500 hover:text-white px-2 py-1 rounded transition border border-purple-500/30">下载选中</button>
                         <button onclick="batchDelete()" class="text-[10px] bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-2 py-1 rounded transition border border-red-500/30">删除选中</button>
                     </div>
                 </div>
-                <div id="history-list" class="flex-1 p-2 overflow-x-auto grid grid-rows-2 grid-flow-col gap-2 items-center">
-                    <div id="history-empty" class="text-xs text-gray-400 col-span-full row-span-2 flex items-center justify-center select-none w-full h-full">暂无历史任务</div>
+                <div id="history-list" class="flex-1 p-4 overflow-x-auto flex gap-4 items-center">
+                    <div id="history-empty" class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>
                 </div>
             </div>
         </main>
@@ -263,8 +296,7 @@
         const MAX_SLOTS = 9;
         let imageSlots = new Array(MAX_SLOTS).fill(null);
         let currentActiveSlot = -1; 
-        let batchSize = 1;
-        let currentMainImageUrl = ""; 
+        let batchSize = 1; let currentMainImageUrl = ""; 
         let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
         let originalRefImage = null; 
 
@@ -277,26 +309,15 @@
         let editTargetIndex = -1;
         let canvas = document.getElementById('paint-canvas');
         
-        let drawActions = [];
+        // 核心：操作栈 (用于撤回和重绘)
+        let drawActions = []; // { type: 'path'|'text', color, points:[], text, x, y }
         let currentPath = null;
-        let baseImage = null; 
+        let baseImage = null; // 底图对象
 
+        // 移动工具变量
         let isDraggingText = false;
         let draggingActionIndex = -1;
         let dragStartOffset = { x: 0, y: 0 };
-
-        // 自动存档功能
-        function saveHistoryToLocal() {
-            const items = [];
-            document.querySelectorAll('.history-item').forEach(item => {
-                items.push({
-                    url: item.dataset.url,
-                    prompt: decodeURIComponent(item.dataset.prompt),
-                    duration: item.dataset.duration
-                });
-            });
-            localStorage.setItem('nano_history_data', JSON.stringify(items));
-        }
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedKey = localStorage.getItem('nano_api_key');
@@ -308,30 +329,25 @@
             
             ctx = canvas.getContext('2d');
             
+            // 绑定输入框回车确认
             document.getElementById('text-tool-input').addEventListener('keydown', (e) => {
                 if(e.key === 'Enter') finalizeText();
             });
             
             renderSlots();
-
-            // 恢复历史记录
-            const savedHistory = localStorage.getItem('nano_history_data');
-            if (savedHistory) {
-                try {
-                    const items = JSON.parse(savedHistory);
-                    for (let i = items.length - 1; i >= 0; i--) {
-                        addToHistory(items[i].url, items[i].prompt, items[i].duration, true);
-                    }
-                } catch(e) { console.error("恢复记录失败", e); }
-            }
         });
 
         // ============ 核心：重绘引擎 ============
         function redrawCanvas() {
+            // 1. 清空
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 2. 画底图
             if(baseImage) {
                 ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
             }
+            
+            // 3. 画所有动作
             drawActions.forEach(action => {
                 ctx.fillStyle = action.color;
                 ctx.strokeStyle = action.color;
@@ -362,12 +378,14 @@
             if(!file) return;
 
             editTargetIndex = index;
-            drawActions = [];
+            drawActions = []; // 重置动作
+
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    baseImage = img;
+                    baseImage = img; // 保存底图
+                    
                     const wrapper = document.getElementById('canvas-wrapper');
                     const maxW = window.innerWidth * 0.9;
                     const maxH = window.innerHeight * 0.8;
@@ -403,7 +421,9 @@
             const input = document.getElementById('text-tool-input');
             if (!input.classList.contains('hidden')) finalizeText();
 
+            // 再次重绘确保最新状态
             redrawCanvas();
+
             canvas.toBlob((blob) => {
                 const newFile = new File([blob], `doodle_${Date.now()}.png`, { type: 'image/png' });
                 newFile.isDoodled = true;
@@ -426,6 +446,7 @@
         }
 
         function setTool(tool) {
+            // 如果从文本切换走，先确认文字
             if(currentTool === 'text' && tool !== 'text') {
                 const input = document.getElementById('text-tool-input');
                 if(!input.classList.contains('hidden')) finalizeText();
@@ -435,11 +456,14 @@
             document.getElementById('tool-brush').classList.toggle('active', tool === 'brush');
             document.getElementById('tool-text').classList.toggle('active', tool === 'text');
             document.getElementById('tool-move').classList.toggle('active', tool === 'move');
+            
+            // 设置光标
             if(tool === 'move') canvas.style.cursor = 'move';
             else if(tool === 'text') canvas.style.cursor = 'text';
             else canvas.style.cursor = 'crosshair';
         }
 
+        // ============ Canvas 鼠标交互 ============
         canvas.addEventListener('mousedown', (e) => {
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -453,17 +477,20 @@
             } else if (currentTool === 'text') {
                 handleTextClick(e);
             } else if (currentTool === 'move') {
+                // 简单的命中检测（倒序查找最上层的文字）
                 for (let i = drawActions.length - 1; i >= 0; i--) {
                     const act = drawActions[i];
                     if (act.type === 'text') {
+                        // 估算文字宽高达
                         ctx.font = "bold 24px Arial";
                         const w = ctx.measureText(act.text).width;
                         const h = 24; 
+                        // 简单的包围盒：y是基线，所以 top = y - h
                         if (x >= act.x && x <= act.x + w && y >= act.y - h && y <= act.y + 10) {
                             isDraggingText = true;
                             draggingActionIndex = i;
                             dragStartOffset = { x: x - act.x, y: y - act.y };
-                            return;
+                            return; // 选中一个就停止
                         }
                     }
                 }
@@ -492,6 +519,7 @@
             draggingActionIndex = -1;
         });
 
+        // 文本输入框定位
         function handleTextClick(e) {
             const input = document.getElementById('text-tool-input');
             const rect = document.getElementById('canvas-wrapper').getBoundingClientRect();
@@ -499,6 +527,7 @@
             const y = e.clientY - rect.top;
 
             if (!input.classList.contains('hidden')) finalizeText();
+
             input.value = "";
             input.style.left = x + 'px';
             input.style.top = y + 'px';
@@ -515,8 +544,11 @@
                 return;
             }
             
+            // 将文字转为 Action
             const x = parseFloat(input.style.left);
-            const y = parseFloat(input.style.top) + 22;
+            // 修正垂直对齐：input top 是左上角，Canvas fillText 是基线。大约 +22px
+            const y = parseFloat(input.style.top) + 22; 
+            
             drawActions.push({
                 type: 'text',
                 text: input.value,
@@ -524,10 +556,12 @@
                 x: x,
                 y: y
             });
+            
             input.classList.add('hidden');
             redrawCanvas();
         }
 
+        // ============ 其他逻辑 ============
         let manualUnlock = false;
         function updatePromptLockState() {
             const currentModel = document.getElementById('model-input').value;
@@ -536,11 +570,9 @@
             const lockMsg = document.getElementById('prompt-lock-msg');
             if (!hasDoodle) manualUnlock = false;
             if (currentModel === 'nano-banana-2-4k' && hasDoodle && !manualUnlock) {
-                promptBox.value = FIXED_PROMPT;
-                promptBox.readOnly = true; lockMsg.classList.remove('hidden');
+                promptBox.value = FIXED_PROMPT; promptBox.readOnly = true; lockMsg.classList.remove('hidden');
             } else {
-                promptBox.readOnly = false;
-                lockMsg.classList.add('hidden');
+                promptBox.readOnly = false; lockMsg.classList.add('hidden');
             }
         }
         function unlockPrompt() { manualUnlock = true; updatePromptLockState(); }
@@ -551,19 +583,19 @@
             const options = document.getElementById('dropdown-options');
             const trigger = document.getElementById('dropdown-trigger');
             container.classList.toggle('dropdown-open'); options.classList.toggle('hidden');
-            if (container.classList.contains('dropdown-open')) { trigger.classList.add('glow-effect'); trigger.classList.remove('bg-gray-100', 'dark:bg-[#18181b]');
-            } 
-            else { trigger.classList.remove('glow-effect'); trigger.classList.add('bg-gray-100', 'dark:bg-[#18181b]');
-            }
+            if (container.classList.contains('dropdown-open')) { trigger.classList.add('glow-effect'); trigger.classList.remove('bg-gray-100', 'dark:bg-[#18181b]'); } 
+            else { trigger.classList.remove('glow-effect'); trigger.classList.add('bg-gray-100', 'dark:bg-[#18181b]'); }
         }
         
+        // 修改：模型选择逻辑中加入禁用分辨率
         function selectModel(val, text) {
-            document.getElementById('model-input').value = val;
+            document.getElementById('model-input').value = val; 
             document.getElementById('current-model-text').innerText = text;
             
+            // 分辨率锁定逻辑: 选择 nano-banana-hd 时，锁定分辨率为 2K 并禁用
             const sizeSelect = document.getElementById('size-select');
             if (val === 'nano-banana-hd') {
-                sizeSelect.value = '2K';
+                sizeSelect.value = '2K'; // 改为锁定到 2K
                 sizeSelect.disabled = true;
             } else {
                 sizeSelect.disabled = false;
@@ -578,42 +610,29 @@
         }
         
         function closeDropdownOnClickOutside(event) {
-            const container = document.getElementById('custom-model-dropdown');
-            const options = document.getElementById('dropdown-options'); const trigger = document.getElementById('dropdown-trigger');
-            if (container && !container.contains(event.target)) { container.classList.remove('dropdown-open'); options.classList.add('hidden'); trigger.classList.remove('glow-effect'); trigger.classList.add('bg-gray-100', 'dark:bg-[#18181b]');
-            }
+            const container = document.getElementById('custom-model-dropdown'); const options = document.getElementById('dropdown-options'); const trigger = document.getElementById('dropdown-trigger');
+            if (container && !container.contains(event.target)) { container.classList.remove('dropdown-open'); options.classList.add('hidden'); trigger.classList.remove('glow-effect'); trigger.classList.add('bg-gray-100', 'dark:bg-[#18181b]'); }
         }
         function toggleTheme() {
-            const html = document.documentElement;
-            const icon = document.getElementById('theme-icon');
-            if (html.classList.contains('dark')) { html.classList.remove('dark'); icon.className = 'fa-solid fa-sun text-purple-500'; localStorage.setItem('nano_theme', 'light');
-            }
-            else { html.classList.add('dark'); icon.className = 'fa-solid fa-moon';
-            localStorage.setItem('nano_theme', 'dark'); }
+            const html = document.documentElement; const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) { html.classList.remove('dark'); icon.className = 'fa-solid fa-sun text-purple-500'; localStorage.setItem('nano_theme', 'light'); }
+            else { html.classList.add('dark'); icon.className = 'fa-solid fa-moon'; localStorage.setItem('nano_theme', 'dark'); }
         }
-        function openSettings() { document.getElementById('settings-modal').classList.remove('hidden');
-        }
-        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden');
-        }
-        function saveSettings() { const key = document.getElementById('modal-api-key').value.trim(); if (key) { localStorage.setItem('nano_api_key', key);
-        closeSettings(); } else alert("请输入API Key"); }
+        function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
+        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+        function saveSettings() { const key = document.getElementById('modal-api-key').value.trim(); if (key) { localStorage.setItem('nano_api_key', key); closeSettings(); } else alert("请输入API Key"); }
 
         const leftPanel = document.getElementById('left-panel'), resizerSidebar = document.getElementById('resizer-sidebar');
         const taskPanel = document.getElementById('task-panel'), resizerTasklist = document.getElementById('resizer-tasklist');
         resizerSidebar.addEventListener('mousedown', (e) => { e.preventDefault(); document.body.classList.add('no-select'); document.addEventListener('mousemove', resizeSidebar); document.addEventListener('mouseup', stopResizeSidebar); });
-        function resizeSidebar(e) { const w = e.clientX; if (w > 280 && w < 600) leftPanel.style.width = w + 'px';
-        }
-        function stopResizeSidebar() { document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeSidebar); document.removeEventListener('mouseup', stopResizeSidebar);
-        }
+        function resizeSidebar(e) { const w = e.clientX; if (w > 280 && w < 600) leftPanel.style.width = w + 'px'; }
+        function stopResizeSidebar() { document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeSidebar); document.removeEventListener('mouseup', stopResizeSidebar); }
         resizerTasklist.addEventListener('mousedown', (e) => { e.preventDefault(); document.body.classList.add('no-select'); document.addEventListener('mousemove', resizeTasklist); document.addEventListener('mouseup', stopResizeTasklist); });
-        function resizeTasklist(e) { const h = window.innerHeight - e.clientY; if (h > 120 && h < 600) taskPanel.style.height = h + 'px';
-        }
-        function stopResizeTasklist() { document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeTasklist); document.removeEventListener('mouseup', stopResizeTasklist);
-        }
+        function resizeTasklist(e) { const h = window.innerHeight - e.clientY; if (h > 120 && h < 600) taskPanel.style.height = h + 'px'; }
+        function stopResizeTasklist() { document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeTasklist); document.removeEventListener('mouseup', stopResizeTasklist); }
 
         function renderSlots() {
-            const grid = document.getElementById('slots-grid');
-            const currentModel = document.getElementById('model-input').value; const canDoodle = (currentModel === 'nano-banana-2-4k');
+            const grid = document.getElementById('slots-grid'); const currentModel = document.getElementById('model-input').value; const canDoodle = (currentModel === 'nano-banana-2-4k');
             grid.innerHTML = '';
             imageSlots.forEach((file, index) => {
                 const slotNum = index + 1; const div = document.createElement('div');
@@ -627,47 +646,35 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    div.onclick = () => triggerSlotUpload(index);
-                    div.innerHTML = `<i class="fa-solid fa-plus text-gray-300 dark:text-gray-600 text-lg mb-1 group-hover:text-purple-500 transition"></i><span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono group-hover:text-purple-500 transition">图片 ${slotNum}</span>`;
+                    div.onclick = () => triggerSlotUpload(index); div.innerHTML = `<i class="fa-solid fa-plus text-gray-300 dark:text-gray-600 text-lg mb-1 group-hover:text-purple-500 transition"></i><span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono group-hover:text-purple-500 transition">图片 ${slotNum}</span>`;
                 }
                 grid.appendChild(div);
             });
         }
-        function triggerSlotUpload(index) { currentActiveSlot = index; const input = document.getElementById('slot-file-input');
-        input.value = ''; input.click(); }
-        function handleSlotFile(event) { const file = event.target.files[0];
-        if (!file) return; imageSlots[currentActiveSlot] = file; renderSlots(); updatePromptLockState(); }
-        function clearSlot(index, event) { if(event) event.stopPropagation();
-        imageSlots[index] = null; renderSlots(); updatePromptLockState(); }
-        function clearAllSlots() { imageSlots = new Array(MAX_SLOTS).fill(null);
-        renderSlots(); updatePromptLockState(); }
+        function triggerSlotUpload(index) { currentActiveSlot = index; const input = document.getElementById('slot-file-input'); input.value = ''; input.click(); }
+        function handleSlotFile(event) { const file = event.target.files[0]; if (!file) return; imageSlots[currentActiveSlot] = file; renderSlots(); updatePromptLockState(); }
+        function clearSlot(index, event) { if(event) event.stopPropagation(); imageSlots[index] = null; renderSlots(); updatePromptLockState(); }
+        function clearAllSlots() { imageSlots = new Array(MAX_SLOTS).fill(null); renderSlots(); updatePromptLockState(); }
 
         const zoomContainer = document.getElementById('zoom-container'), imgWrapper = document.getElementById('img-wrapper'), sliderHandle = document.getElementById('slider-handle'), compareOverlay = document.getElementById('compare-overlay');
         function updateTransform() { imgWrapper.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
-        function resetZoom() { scale = 1;
-        pointX = 0; pointY = 0; updateTransform(); }
+        function resetZoom() { scale = 1; pointX = 0; pointY = 0; updateTransform(); }
         zoomContainer.addEventListener('wheel', (e) => { if (imgWrapper.classList.contains('hidden')) return; e.preventDefault(); const delta = -e.deltaY; (delta > 0) ? (scale *= 1.1) : (scale /= 1.1); if (scale < 0.5) scale = 0.5; if (scale > 5) scale = 5; updateTransform(); });
         zoomContainer.addEventListener('mousedown', (e) => { if (e.target.closest('#slider-handle')) { isSliding = true; e.preventDefault(); return; } if (imgWrapper.classList.contains('hidden')) return; e.preventDefault(); startX = e.clientX - pointX; startY = e.clientY - pointY; panning = true; });
         window.addEventListener('mouseup', () => { panning = false; isSliding = false; });
         zoomContainer.addEventListener('mousemove', (e) => { if (isSliding) { const rect = imgWrapper.getBoundingClientRect(); let x = e.clientX - rect.left; if (x < 0) x = 0; if (x > rect.width) x = rect.width; const percentage = (x / rect.width) * 100; sliderHandle.style.left = percentage + '%'; compareOverlay.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`; return; } if (!panning) return; e.preventDefault(); pointX = e.clientX - startX; pointY = e.clientY - startY; updateTransform(); });
         zoomContainer.addEventListener('dblclick', resetZoom);
-        function setBatchSize(num) { batchSize = num; document.querySelectorAll('.batch-btn').forEach(btn => { if(parseInt(btn.dataset.val) === num) btn.className = "batch-btn active-btn flex-1 py-2 text-xs rounded transition"; else btn.className = "batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition"; });
-        }
+        function setBatchSize(num) { batchSize = num; document.querySelectorAll('.batch-btn').forEach(btn => { if(parseInt(btn.dataset.val) === num) btn.className = "batch-btn active-btn flex-1 py-2 text-xs rounded transition"; else btn.className = "batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition"; }); }
 
         async function submitTask() {
-            const apiKey = localStorage.getItem('nano_api_key');
-            if (!apiKey) { openSettings(); return; }
-            const prompt = document.getElementById('prompt-input').value.trim();
-            const ratio = document.getElementById('ratio-select').value; const size = document.getElementById('size-select').value; const modelName = document.getElementById('model-input').value;
+            const apiKey = localStorage.getItem('nano_api_key'); if (!apiKey) { openSettings(); return; }
+            const prompt = document.getElementById('prompt-input').value.trim(); const ratio = document.getElementById('ratio-select').value; const size = document.getElementById('size-select').value; const modelName = document.getElementById('model-input').value;
             const btn = document.getElementById('generate-btn'), icon = document.getElementById('loading-icon');
             if (!prompt) { alert("请输入提示词"); return; }
-            btn.disabled = true;
-            btn.classList.add('opacity-70', 'cursor-not-allowed'); icon.classList.remove('hidden'); btn.querySelector('span').innerText = "生成中...";
+            btn.disabled = true; btn.classList.add('opacity-70', 'cursor-not-allowed'); icon.classList.remove('hidden'); btn.querySelector('span').innerText = "生成中...";
             const validImages = imageSlots.filter(item => item !== null); originalRefImage = null;
-            if (validImages.length > 0) { const reader = new FileReader(); reader.onload = (e) => { originalRefImage = e.target.result; }; reader.readAsDataURL(validImages[0]);
-            }
-            const startTime = Date.now();
-            const formData = new FormData();
+            if (validImages.length > 0) { const reader = new FileReader(); reader.onload = (e) => { originalRefImage = e.target.result; }; reader.readAsDataURL(validImages[0]); }
+            const startTime = Date.now(); const formData = new FormData();
             formData.append('model', modelName); formData.append('prompt', prompt); formData.append('aspect_ratio', ratio); formData.append('image_size', size); formData.append('n', batchSize); formData.append('response_format', 'url');
             validImages.forEach((file) => formData.append('image', file));
             try {
@@ -675,114 +682,54 @@
                 const data = await response.json(); const duration = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
                 if (!response.ok) throw new Error(data.error?.message || "请求失败");
                 const results = data.data || (data.url ? [{url: data.url}] : []);
-                if (results.length > 0) { setMainImage(results[0].url, duration, originalRefImage); results.forEach(img => addToHistory(img.url, prompt, duration)); } else { alert("生成成功，但未返回图片链接");
-                }
-            } catch (err) { console.error(err);
-            alert("错误: " + err.message); } 
-            finally { btn.disabled = false;
-            btn.classList.remove('opacity-70', 'cursor-not-allowed'); icon.classList.add('hidden'); btn.querySelector('span').innerText = "✨ 立即生成"; }
+                if (results.length > 0) { setMainImage(results[0].url, duration, originalRefImage); results.forEach(img => addToHistory(img.url, prompt, duration)); } else { alert("生成成功，但未返回图片链接"); }
+            } catch (err) { console.error(err); alert("错误: " + err.message); } 
+            finally { btn.disabled = false; btn.classList.remove('opacity-70', 'cursor-not-allowed'); icon.classList.add('hidden'); btn.querySelector('span').innerText = "✨ 立即生成"; }
         }
 
         function setMainImage(url, duration = "", refSrc = null) {
-            currentMainImageUrl = url;
-            const placeholder = document.getElementById('empty-placeholder'); const timeBadge = document.getElementById('time-badge');
+            currentMainImageUrl = url; const placeholder = document.getElementById('empty-placeholder'); const timeBadge = document.getElementById('time-badge');
             placeholder.classList.add('hidden'); imgWrapper.classList.remove('hidden'); document.getElementById('main-image').src = url;
-            if (refSrc) { document.getElementById('ref-image').src = refSrc; compareOverlay.classList.remove('hidden');
-            sliderHandle.classList.remove('hidden'); sliderHandle.style.left = '50%'; compareOverlay.style.clipPath = 'inset(0 50% 0 0)'; document.getElementById('compare-hint').classList.remove('hidden');
-            } 
-            else { compareOverlay.classList.add('hidden'); sliderHandle.classList.add('hidden'); document.getElementById('compare-hint').classList.add('hidden');
-            }
-            resetZoom(); if(duration) { document.getElementById('time-val').innerText = duration; timeBadge.classList.remove('hidden');
-            } else { timeBadge.classList.add('hidden'); }
+            if (refSrc) { document.getElementById('ref-image').src = refSrc; compareOverlay.classList.remove('hidden'); sliderHandle.classList.remove('hidden'); sliderHandle.style.left = '50%'; compareOverlay.style.clipPath = 'inset(0 50% 0 0)'; document.getElementById('compare-hint').classList.remove('hidden'); } 
+            else { compareOverlay.classList.add('hidden'); sliderHandle.classList.add('hidden'); document.getElementById('compare-hint').classList.add('hidden'); }
+            resetZoom(); if(duration) { document.getElementById('time-val').innerText = duration; timeBadge.classList.remove('hidden'); } else { timeBadge.classList.add('hidden'); }
         }
-        function clearMainPreview() { currentMainImageUrl = "";
-        imgWrapper.classList.add('hidden'); document.getElementById('empty-placeholder').classList.remove('hidden'); document.getElementById('time-badge').classList.add('hidden'); document.getElementById('compare-hint').classList.add('hidden'); }
-        
-        function addToHistory(url, prompt, duration, isRestoring = false) {
-            const list = document.getElementById('history-list');
-            const empty = document.getElementById('history-empty'); if (empty) empty.remove();
+        function clearMainPreview() { currentMainImageUrl = ""; imgWrapper.classList.add('hidden'); document.getElementById('empty-placeholder').classList.remove('hidden'); document.getElementById('time-badge').classList.add('hidden'); document.getElementById('compare-hint').classList.add('hidden'); }
+        function addToHistory(url, prompt, duration) {
+            const list = document.getElementById('history-list'); const empty = document.getElementById('history-empty'); if (empty) empty.remove();
             const item = document.createElement('div');
-            // 修改：高度改为 h-full，宽度由比例决定，去掉 w-auto 限制
-            item.className = "history-item group relative flex-shrink-0 aspect-[4/3] h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:border-purple-500 transition shadow-lg";
+            item.className = "history-item group relative flex-shrink-0 aspect-[4/3] h-full w-auto bg-gray-900 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:border-purple-500 transition shadow-lg";
             item.dataset.url = url; item.dataset.prompt = encodeURIComponent(prompt); item.dataset.duration = duration;
-            item.onclick = (e) => { if(!e.target.closest('.task-checkbox') && !e.target.closest('button')) { const decPrompt = decodeURIComponent(item.dataset.prompt);
-            setMainImage(url, duration); document.getElementById('prompt-input').value = decPrompt; } };
-            
-            // 下面这行代码中的 button class 里的 w-7 h-7 改为了 w-5 h-5，图标 text-xs 改为了 text-[10px]
-            item.innerHTML = `<img src="${url}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-300 pointer-events-none"><div class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/60 to-transparent pointer-events-none"></div><div class="absolute top-2 left-2 z-20"><input type="checkbox" class="task-checkbox" onchange="updateBatchState()" onclick="event.stopPropagation()"></div><div class="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition duration-200 z-20"><button onclick="event.stopPropagation(); downloadSingleImage('${url}')" class="w-5 h-5 rounded-full bg-black/40 hover:bg-purple-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition"><i class="fa-solid fa-download text-[10px]"></i></button><button onclick="event.stopPropagation(); deleteHistoryItem(this)" class="w-5 h-5 rounded-full bg-black/40 hover:bg-red-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition"><i class="fa-solid fa-trash text-[10px]"></i></button></div><div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none"><p class="text-white text-xs font-bold line-clamp-2 leading-tight drop-shadow-md mb-1.5">${prompt.replace(/</g, "&lt;")}</p><div class="flex items-center gap-2"><i class="fa-regular fa-circle-check text-green-400 text-[10px]"></i><span class="text-[9px] text-gray-500 ml-auto bg-white/10 px-1.5 py-0.5 rounded">${duration}</span></div></div>`;
-            
+            item.onclick = (e) => { if(!e.target.closest('.task-checkbox') && !e.target.closest('button')) { const decPrompt = decodeURIComponent(item.dataset.prompt); setMainImage(url, duration); document.getElementById('prompt-input').value = decPrompt; } };
+            item.innerHTML = `<img src="${url}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-300 pointer-events-none"><div class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/60 to-transparent pointer-events-none"></div><div class="absolute top-2 left-2 z-20"><input type="checkbox" class="task-checkbox" onchange="updateBatchState()" onclick="event.stopPropagation()"></div><div class="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition duration-200 z-20"><button onclick="event.stopPropagation(); downloadSingleImage('${url}')" class="w-7 h-7 rounded-full bg-black/40 hover:bg-purple-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition"><i class="fa-solid fa-download text-xs"></i></button><button onclick="event.stopPropagation(); deleteHistoryItem(this)" class="w-7 h-7 rounded-full bg-black/40 hover:bg-red-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition"><i class="fa-solid fa-trash text-xs"></i></button></div><div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none"><p class="text-white text-xs font-bold line-clamp-2 leading-tight drop-shadow-md mb-1.5">${prompt.replace(/</g, "&lt;")}</p><div class="flex items-center gap-2"><i class="fa-regular fa-circle-check text-green-400 text-[10px]"></i><span class="text-[9px] text-gray-500 ml-auto bg-white/10 px-1.5 py-0.5 rounded">${duration}</span></div></div>`;
             list.prepend(item);
-            if (!isRestoring) {
-                saveHistoryToLocal();
-            }
         }
-
-        function toggleSelectAll() { const mainCb = document.getElementById('select-all');
-        document.querySelectorAll('#history-list .task-checkbox').forEach(cb => cb.checked = mainCb.checked); updateBatchState(); }
-        
-        // 修改：增加计数显示逻辑
+        function toggleSelectAll() { const mainCb = document.getElementById('select-all'); document.querySelectorAll('#history-list .task-checkbox').forEach(cb => cb.checked = mainCb.checked); updateBatchState(); }
         function updateBatchState() {
-            const checkboxes = document.querySelectorAll('#history-list .task-checkbox');
-            const checked = Array.from(checkboxes).filter(cb => cb.checked);
-            
-            // 1. 显示/隐藏批量操作按钮
-            const batchActions = document.getElementById('batch-actions'); 
-            if(checked.length > 0) batchActions.classList.remove('hidden'); else batchActions.classList.add('hidden');
-            
-            // 2. 更新全选框状态
-            const mainCb = document.getElementById('select-all');
-            if(checked.length === checkboxes.length && checkboxes.length > 0) mainCb.checked = true; 
-            else if(checked.length === 0) mainCb.checked = false;
-            else mainCb.indeterminate = true;
-
-            // 3. 更新数量显示文本
-            const countSpan = document.getElementById('selection-count');
-            if(checked.length > 0) {
-                countSpan.innerText = `(已选 ${checked.length})`;
-                countSpan.classList.remove('hidden');
-            } else {
-                countSpan.classList.add('hidden');
-            }
+            const checkboxes = document.querySelectorAll('#history-list .task-checkbox'); const checked = Array.from(checkboxes).filter(cb => cb.checked);
+            const batchActions = document.getElementById('batch-actions'); if(checked.length > 0) batchActions.classList.remove('hidden'); else batchActions.classList.add('hidden');
+            const mainCb = document.getElementById('select-all'); if(checked.length === checkboxes.length && checkboxes.length > 0) mainCb.checked = true; else if(checked.length === 0) mainCb.checked = false; else mainCb.indeterminate = true;
         }
-
         async function batchDownload() {
-            const checked = document.querySelectorAll('#history-list .task-checkbox:checked');
-            if(checked.length === 0) return;
+            const checked = document.querySelectorAll('#history-list .task-checkbox:checked'); if(checked.length === 0) return;
             if(!confirm(`确认下载选中的 ${checked.length} 张图片吗？`)) return;
-            for(let cb of checked) { const item = cb.closest('.history-item'); downloadSingleImage(item.dataset.url);
-            await new Promise(r => setTimeout(r, 500)); }
+            for(let cb of checked) { const item = cb.closest('.history-item'); downloadSingleImage(item.dataset.url); await new Promise(r => setTimeout(r, 500)); }
         }
         function batchDelete() {
-            const checked = document.querySelectorAll('#history-list .task-checkbox:checked');
-            if(checked.length === 0) return;
+            const checked = document.querySelectorAll('#history-list .task-checkbox:checked'); if(checked.length === 0) return;
             if(!confirm(`确认删除选中的 ${checked.length} 张任务吗？`)) return;
             checked.forEach(cb => cb.closest('.history-item').remove()); updateBatchState();
-            if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 col-span-full row-span-2 flex items-center justify-center select-none w-full h-full">暂无历史任务</div>';
-            saveHistoryToLocal(); 
+            if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>';
         }
-        function viewOriginal(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox-modal').classList.remove('hidden');
-        }
-        function closeLightbox() { document.getElementById('lightbox-modal').classList.add('hidden');
-        }
-        async function downloadSingleImage(url) { try { const r = await fetch(url);
-        const b = await r.blob(); const u = window.URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = `nano_${Date.now()}.jpg`; document.body.appendChild(a);
-        a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(u); } catch (e) { window.open(url, '_blank'); } }
-        
-        function deleteHistoryItem(btn) { const item = btn.closest('.history-item');
-        if(item) { item.remove(); updateBatchState(); if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 col-span-full row-span-2 flex items-center justify-center select-none w-full h-full">暂无历史任务</div>';
-        saveHistoryToLocal(); 
-        } }
-        
-        async function downloadCurrentImage() { if (!currentMainImageUrl) { alert("当前没有图片"); return; } downloadSingleImage(currentMainImageUrl);
-        }
+        function viewOriginal(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox-modal').classList.remove('hidden'); }
+        function closeLightbox() { document.getElementById('lightbox-modal').classList.add('hidden'); }
+        async function downloadSingleImage(url) { try { const r = await fetch(url); const b = await r.blob(); const u = window.URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = `nano_${Date.now()}.jpg`; document.body.appendChild(a); a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(u); } catch (e) { window.open(url, '_blank'); } }
+        function deleteHistoryItem(btn) { const item = btn.closest('.history-item'); if(item) { item.remove(); updateBatchState(); if(document.getElementById('history-list').children.length === 0) document.getElementById('history-list').innerHTML = '<div id="history-empty" class="text-xs text-gray-400 w-full text-center select-none">暂无历史任务</div>'; } }
+        async function downloadCurrentImage() { if (!currentMainImageUrl) { alert("当前没有图片"); return; } downloadSingleImage(currentMainImageUrl); }
         async function importCurrentImage() {
-            if(!currentMainImageUrl) { alert("当前没有可导入的图片");
-            return; }
-            const emptyIndex = imageSlots.findIndex(slot => slot === null);
-            if (emptyIndex === -1) { alert("格子已满 (9张)，请先删除一些图片"); return; }
-            try { const r = await fetch(currentMainImageUrl);
-            const b = await r.blob(); const f = new File([b], `import_${Date.now()}.jpg`, { type: b.type }); imageSlots[emptyIndex] = f; renderSlots();
-            } catch(e) { alert("导入失败"); }
+            if(!currentMainImageUrl) { alert("当前没有可导入的图片"); return; }
+            const emptyIndex = imageSlots.findIndex(slot => slot === null); if (emptyIndex === -1) { alert("格子已满 (9张)，请先删除一些图片"); return; }
+            try { const r = await fetch(currentMainImageUrl); const b = await r.blob(); const f = new File([b], `import_${Date.now()}.jpg`, { type: b.type }); imageSlots[emptyIndex] = f; renderSlots(); } catch(e) { alert("导入失败"); }
         }
     </script>
 </body>
