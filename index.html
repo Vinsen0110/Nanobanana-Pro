@@ -87,7 +87,7 @@
             <span class="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">编辑图片</span>
         </div>
         <div class="flex items-center gap-3 text-sm">
-            <a href="https://api.bltcy.ai/register?aff=dlam79084" target="_blank" class="bg-green-500 hover:bg-green-600 text-white text-xs font-bold px-3 py-1.5 rounded transition shadow-sm flex items-center gap-1">
+            <a href="https://ai.t8star.cn/register?aff=XUPQ71902" target="_blank" class="bg-green-500 hover:bg-green-600 text-white text-xs font-bold px-3 py-1.5 rounded transition shadow-sm flex items-center gap-1">
                 <i class="fa-solid fa-key"></i> 获取Key
             </a>
             <div class="w-[1px] h-4 bg-gray-300 dark:bg-gray-700 mx-1"></div>
@@ -292,12 +292,7 @@
     <div id="settings-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center backdrop-blur-sm"><div class="bg-white dark:bg-[#18181b] p-6 rounded-xl w-96 shadow-2xl border border-gray-200 dark:border-[#27272a]"><div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold dark:text-white flex items-center gap-2"><i class="fa-solid fa-gear text-purple-500"></i> API 设置</h3><button onclick="closeSettings()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div class="space-y-4"><div><label class="block text-xs font-bold text-gray-500 mb-2 uppercase">API Key</label><input type="password" id="modal-api-key" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-300 dark:border-[#27272a] rounded p-3 text-sm text-gray-800 dark:text-gray-200 outline-none focus:border-purple-500" placeholder="sk-xxxxxxxx"><p class="text-[10px] text-gray-400 mt-1">Key 保存在本地。</p></div><button onclick="saveSettings()" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 rounded transition">保存配置</button></div></div></div>
 
     <script>
-       
-const API_URL = "https://api.bltcy.ai/v1/images/edits";
-
-// 如果要换回去，把上面那行网址替换下面这行
-// const API_URL = "https://ai.t8star.cn/v1/images/edits";(贞贞T8工坊)
-// const API_URL = "https://api.bltcy.ai/v1/images/edits";（柏拉图API）
+        const API_URL = "https://ai.t8star.cn/v1/images/edits";
         const MAX_SLOTS = 9;
         let imageSlots = new Array(MAX_SLOTS).fill(null);
         let currentActiveSlot = -1; 
@@ -680,37 +675,7 @@ const API_URL = "https://api.bltcy.ai/v1/images/edits";
             const validImages = imageSlots.filter(item => item !== null); originalRefImage = null;
             if (validImages.length > 0) { const reader = new FileReader(); reader.onload = (e) => { originalRefImage = e.target.result; }; reader.readAsDataURL(validImages[0]); }
             const startTime = Date.now(); const formData = new FormData();
-            formData.append('model', modelName); 
-formData.append('prompt', prompt);
-
-// === 智能参数过滤（修复版） ===
-// 判断是否为高级版 (banana-2)
-const isAdvanced = modelName.includes('banana-2');
-
-if (isAdvanced) {
-    // === 情况1: nano-banana-2 (高级版) ===
-    // 它支持所有参数，直接发送
-    formData.append('aspect_ratio', ratio);
-    formData.append('image_size', size);
-} else {
-    // === 情况2: nano-banana / hd (普通版) ===
-    // 1. 检查用户选的比例是否在官方白名单里 (1:1, 2:3, 3:2, 3:4)
-    const safeRatios = ['1:1', '2:3', '3:2', '3:4'];
-    
-    if (safeRatios.includes(ratio)) {
-        formData.append('aspect_ratio', ratio);
-    } else {
-        // 如果是 16:9 等不支持的比例，这里什么都不做（不发送参数）
-        // 这样服务器就会按默认逻辑处理，而不会报错
-        console.log("当前模型忽略不支持的比例: " + ratio);
-    }
-    // 2. 注意：这里绝对不发 image_size
-}
-// === 修改结束 ===
-// === 修改结束 ===
-
-formData.append('n', batchSize); 
-formData.append('response_format', 'url');
+            formData.append('model', modelName); formData.append('prompt', prompt); formData.append('aspect_ratio', ratio); formData.append('image_size', size); formData.append('n', batchSize); formData.append('response_format', 'url');
             validImages.forEach((file) => formData.append('image', file));
             try {
                 const response = await fetch(API_URL, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}` }, body: formData });
@@ -769,13 +734,3 @@ formData.append('response_format', 'url');
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
