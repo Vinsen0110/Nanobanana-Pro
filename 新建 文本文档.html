@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 创意工坊 - 选择模型</title>
+    <link rel="icon" href="kitty.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-[#fafafa] min-h-screen flex flex-col items-center justify-center p-6 text-gray-800">
+
+    <div class="text-center mb-16 space-y-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-[#6366f1] tracking-tight">选择生成模型</h1>
+        <p class="text-gray-500 text-lg">探索最先进的AI视频和图片生成技术</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full">
+
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col h-80 relative overflow-hidden group cursor-not-allowed opacity-80 grayscale-[0.3]">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
+            <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mb-6 text-indigo-500 text-2xl">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-900">Sora 2</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-8 flex-1">
+                OpenAI 最新一代视频生成模型，创造逼真且富有想象力的场景。
+            </p>
+            <div class="mt-auto">
+                <span class="text-indigo-400 font-bold text-sm cursor-not-allowed">即将开放</span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col h-80 relative overflow-hidden group cursor-not-allowed opacity-80 grayscale-[0.3]">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-fuchsia-500"></div>
+            <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-6 text-purple-500 text-2xl">
+                <i class="fa-solid fa-video"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-900">Veo 3.1</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-8 flex-1">
+                Google DeepMind 视频生成技术，专注于高清电影级创作。
+            </p>
+            <div class="mt-auto">
+                <span class="text-purple-400 font-bold text-sm cursor-not-allowed">即将开放</span>
+            </div>
+        </div>
+
+        <a href="editor.html" class="block bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col h-80 relative overflow-hidden card-hover cursor-pointer ring-2 ring-transparent hover:ring-yellow-400/50">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
+            <div class="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center mb-6 text-yellow-500 text-2xl">
+                <i class="fa-regular fa-image"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3 text-gray-900">Nanobanana Pro</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-8 flex-1">
+                专业级图片生成工具，为您的创意提供无限可能。支持重绘与扩图。
+            </p>
+            <div class="mt-auto flex items-center text-yellow-600 font-bold text-sm group">
+                开始生成 <i class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+            </div>
+        </a>
+
+    </div>
+
+    <footer class="mt-20 text-gray-400 text-xs">
+        &copy; 2025 AI Creative Studio. All rights reserved.
+    </footer>
+
+</body>
+</html>
