@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sora 2 Studio Pro</title>
+    <title>Sora 2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
@@ -95,10 +95,10 @@
 </head>
 <body class="h-screen flex flex-col overflow-hidden bg-gray-50 text-gray-800 dark:bg-[#09090b] dark:text-[#e4e4e7]" onload="initApp()">
 
-    <header class="h-14 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#09090b] flex items-center justify-between px-4 shrink-0 z-20">
+   <header class="h-14 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#09090b] flex items-center justify-between px-4 shrink-0 z-20">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-                <i class="fa-solid fa-clapperboard text-sm"></i>
+            <div class="w-8 h-8 rounded-lg overflow-hidden border border-gray-200 shadow-sm shrink-0">
+                <img src="sora2.png" class="w-full h-full object-cover" alt="Logo">
             </div>
             <span class="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100">Sora 2 Studio</span>
         </div>
@@ -766,4 +766,5 @@
         function clearHistory() { if(confirm("清空历史记录？")) { taskList = []; saveHistory(); renderTaskList(); activeTaskId=null; document.getElementById('preview-placeholder').classList.remove('hidden'); document.getElementById('main-player').classList.add('hidden'); } }
     </script>
 </body>
+
 </html>
