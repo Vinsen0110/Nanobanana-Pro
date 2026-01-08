@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xs的工具箱</title>
+    <title>Xs的工具箱 v2.1</title>
      <link rel="icon" href="kitty.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -64,7 +64,7 @@
         .dark .time-badge { background: #18181b; border-color: #27272a; color: #d1d5db; }
         .time-badge:hover { border-color: #8b5cf6; color: #7c3aed; }
 
-        /* 编辑模式样式 - 左右两边 */
+        /* 编辑模式样式 */
         .time-edit-mode {
             flex-shrink: 0; width: 100px; height: 36px;
             display: flex; align-items: center; justify-content: center; gap: 0;
@@ -326,18 +326,21 @@
                 <button onclick="closeSettings()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#27272a] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#3f3f46] transition"><i class="fa-solid fa-xmark text-gray-500"></i></button>
             </div>
             <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API 网站地址</label>
-                    <input type="text" id="setting-url" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="https://api.bltcy.ai">
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
-                            <i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn
-                        </button>
-                        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
-                            <i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai
-                        </button>
-                    </div>
-                </div>
+               <div>
+    <label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API 网站地址</label>
+    <input type="text" id="setting-url" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="https://api.bltcy.ai">
+    <div class="flex flex-wrap gap-2 mt-2">
+        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
+            <i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai
+        </button>
+        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
+            <i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn
+        </button>
+        <button onclick="fillApiUrl('https://ai.yijiarj.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition cursor-pointer">
+            <i class="fa-solid fa-fire"></i> 一加: ai.yijiarj.cn
+        </button>
+    </div>
+</div>
                 <div><label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API Key</label><input type="password" id="setting-key" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="sk-..."></div>
                 <button onclick="saveSettings()" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-violet-500/20 mt-2">保存配置</button>
             </div>
@@ -482,10 +485,6 @@
                 let timeComponent = '';
                 
                 if (shot.isEditing) {
-                    // 编辑模式：显示 [Start] - [End]
-                    // 第一个分镜的 Start 是 disabled (0)
-                    // 最后一个分镜的 End 是 disabled (Max)
-                    
                     const startDisabled = (index === 0) ? 'disabled' : '';
                     const endDisabled = (index === lastIndex) ? 'disabled' : '';
 
@@ -538,27 +537,78 @@
             }
         }
 
-        // === 下面是通用的函数 ===
+        // === 一加API 模型映射逻辑 ===
+        function getYijiaModel(baseModel, duration, ratio) {
+            const isLandscape = ratio === '16:9';
+            const dur = parseInt(duration);
+
+            if (baseModel === 'sora-2-pro') {
+                // Pro Mapping
+                if (isLandscape) {
+                    if (dur === 10) return 'sora-2-pro-landscape-10s-large-yijia';
+                    if (dur === 15) return 'sora-2-pro-landscape-15s-large-yijia';
+                    if (dur === 25) return 'sora-2-pro-landscape-25s-yijia';
+                    // Fallback for unexpected durations
+                    return 'sora-2-pro-landscape-15s-large-yijia';
+                } else {
+                    // Portrait (Default)
+                    if (dur === 10) return 'sora-2-pro-10s-large-yijia';
+                    if (dur === 15) return 'sora-2-pro-15s-large-yijia';
+                    if (dur === 25) return 'sora-2-pro-25s-yijia';
+                    return 'sora-2-pro-15s-large-yijia';
+                }
+            } else {
+                // Normal Sora 2 Mapping
+                if (isLandscape) {
+                     if (dur === 15) return 'sora-2-landscape-15s-yijia';
+                     return 'sora-2-landscape-yijia'; // Default/Fallback for 10s or others
+                } else {
+                     if (dur === 15) return 'sora-2-15s-yijia';
+                     return 'sora-2-yijia'; // Default/Fallback for 10s or others
+                }
+            }
+            return baseModel; // Should not reach here
+        }
+
         function updateModelLimits() {
             const model = document.getElementById('model-select').value;
             const durSelectSingle = document.getElementById('duration-single');
             const hdSingle = document.getElementById('hd-single');
             const durSelectSb = document.getElementById('duration-sb');
             const hdSb = document.getElementById('hd-sb');
+            
+            // 保存当前选择的值以便恢复
+            const currentDurSingle = durSelectSingle.value;
+            const currentDurSb = durSelectSb.value;
+            
             durSelectSingle.innerHTML = ''; durSelectSb.innerHTML = '';
             
             if (model === 'sora-2-pro') {
-                const opts = [new Option("15 秒", "15"), new Option("25 秒", "25")];
+                // Pro支持 10s, 15s, 25s
+                const opts = [
+                    new Option("10 秒", "10"), 
+                    new Option("15 秒", "15"), 
+                    new Option("25 秒", "25")
+                ];
                 opts.forEach(o => durSelectSingle.add(o.cloneNode(true)));
                 opts.forEach(o => durSelectSb.add(o.cloneNode(true)));
                 hdSingle.disabled = false; hdSb.disabled = false;
             } else {
-                const opts = [new Option("10 秒", "10"), new Option("15 秒", "15")];
+                // Sora 2 支持 10s(兜底), 15s
+                const opts = [
+                    new Option("10 秒", "10"), 
+                    new Option("15 秒", "15")
+                ];
                 opts.forEach(o => durSelectSingle.add(o.cloneNode(true)));
                 opts.forEach(o => durSelectSb.add(o.cloneNode(true)));
                 hdSingle.disabled = true; hdSingle.checked = false;
                 hdSb.disabled = true; hdSb.checked = false;
             }
+            
+            // 尝试恢复之前的选择，如果不存在则默认第一个
+            if(Array.from(durSelectSingle.options).some(o => o.value === currentDurSingle)) durSelectSingle.value = currentDurSingle;
+            if(Array.from(durSelectSb.options).some(o => o.value === currentDurSb)) durSelectSb.value = currentDurSb;
+
             resetStoryboard();
         }
 
@@ -618,15 +668,34 @@
         function loadTheme() { if(localStorage.getItem('sora_theme') === 'light') { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').className = 'fa-solid fa-sun text-purple-500'; } else { document.documentElement.classList.add('dark'); document.getElementById('theme-icon').className = 'fa-solid fa-moon'; } }
         function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
         function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
-        function loadSettings() { document.getElementById('setting-key').value = localStorage.getItem('sora_api_key') || ''; const url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL; document.getElementById('setting-url').value = url; updateApiDisplay(url); }
+        function loadSettings() { 
+            document.getElementById('setting-key').value = localStorage.getItem('sora_api_key') || ''; 
+            
+            // 获取存储的 URL
+            let url = localStorage.getItem('sora_api_url');
+            
+            // 自动纠错逻辑：
+            // 1. 如果没有存过地址，就用柏拉图。
+            // 2. 如果存的是那个写错的一加地址(yijiazj)，强制改回柏拉图，防止报错。
+            if (!url || url.includes('yijiazj.cn')) {
+                url = "https://api.bltcy.ai"; // 强制默认回柏拉图
+                localStorage.setItem('sora_api_url', url); // 更新缓存
+            }
+            
+            document.getElementById('setting-url').value = url; 
+            updateApiDisplay(url); 
+        }
         function saveSettings() { let url = document.getElementById('setting-url').value.trim(); if(url.endsWith('/')) url = url.slice(0, -1); localStorage.setItem('sora_api_key', document.getElementById('setting-key').value.trim()); localStorage.setItem('sora_api_url', url || DEFAULT_API_URL); updateApiDisplay(url || DEFAULT_API_URL); closeSettings(); }
         function handleImageUpload(e) { const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (evt) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); const max = 1024; let w=img.width, h=img.height; if(w>max||h>max){const r=Math.min(max/w,max/h);w*=r;h*=r;} canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h); currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7); document.getElementById('preview-img').src = currentImageBase64; document.getElementById('preview-img').classList.remove('hidden'); document.getElementById('upload-placeholder').classList.add('hidden'); document.getElementById('clear-img-btn').classList.remove('hidden'); }; img.src = evt.target.result; }; reader.readAsDataURL(file); }
         function clearImage(e) { e.stopPropagation(); document.getElementById('file-input').value = ''; document.getElementById('preview-img').classList.add('hidden'); document.getElementById('upload-placeholder').classList.remove('hidden'); document.getElementById('clear-img-btn').classList.add('hidden'); currentImageBase64 = null; }
 
         async function submitTask() {
             const key = localStorage.getItem('sora_api_key');
-            const url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
+            let url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
             if(!key) { openSettings(); return; }
+
+            // 检测是否是一加API (包含 yijia 关键字)
+            const isYijia = url.includes('yijia') || url.includes('oneplus');
 
             const btnId = currentMode === 'single' ? 'generate-btn-single' : 'generate-btn-sb';
             const iconId = currentMode === 'single' ? 'loading-icon-single' : 'loading-icon-sb';
@@ -671,16 +740,28 @@
 
             try {
                 const images = (currentMode === 'single' && currentImageBase64) ? [currentImageBase64] : [];
-                const payload = {
-                    model: document.getElementById('model-select').value,
+                
+                // 1. 确定 Base Model
+                let modelToSend = document.getElementById('model-select').value;
+                
+                // 2. 如果是一加API，进行模型重映射
+                if (isYijia) {
+                    modelToSend = getYijiaModel(modelToSend, finalDuration, finalRatio);
+                }
+
+              const payload = {
+                    model: modelToSend,
                     prompt: prompt,
                     aspect_ratio: finalRatio,
-                    duration: finalDuration,
+                    duration: parseInt(finalDuration), // <--- 加了 parseInt() 转为数字
                     hd: finalHd,
                     images: images
                 };
 
-                const res = await fetch(`${url}/v2/videos/generations`, {
+                // 3. 确定 API 路径 (一加可能使用 v1)
+                const endpoint = isYijia ? '/v1/video/generations' : '/v2/videos/generations';
+
+                const res = await fetch(`${url}${endpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
                     body: JSON.stringify(payload)
@@ -691,7 +772,8 @@
                 const taskId = data.task_id || data.id || (data.data && data.data.id);
                 
                 if(taskId) {
-                    addTaskToList(taskId, prompt, payload.model, payload.duration, payload.aspect_ratio);
+                    // 记录时，duration显示用户的选择，但model记录实际发送的
+                    addTaskToList(taskId, prompt, modelToSend, payload.duration, payload.aspect_ratio);
                     updatePreview(taskId);
                     checkTaskStatus(taskId);
                 } else { alert("无 Task ID 返回"); }
@@ -707,8 +789,12 @@
         async function checkTaskStatus(id) {
             const key = localStorage.getItem('sora_api_key');
             const url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
+            const isYijia = url.includes('yijia') || url.includes('oneplus');
+            // 一加查询路径可能也是 v1，不过通常 GET 查询较宽容，这里根据模式微调
+            const endpoint = isYijia ? `/v1/video/generations/${id}` : `/v2/videos/generations/${id}`;
+
             try {
-                const res = await fetch(`${url}/v2/videos/generations/${id}`, { headers: {'Authorization': `Bearer ${key}`} });
+                const res = await fetch(`${url}${endpoint}`, { headers: {'Authorization': `Bearer ${key}`} });
                 if(!res.ok) return;
                 const data = await res.json();
                 const task = taskList.find(t => t.id === id); if(!task) return;
