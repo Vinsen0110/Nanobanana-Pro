@@ -18,7 +18,6 @@
         .upload-box { background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='8%2c8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); }
         .dark .upload-box { background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%233F3F46FF' stroke-width='2' stroke-dasharray='8%2c8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); }
         
-        /* 拖拽条样式 */
         .resizer-x { width: 6px; cursor: col-resize; background-color: #f3f4f6; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb; transition: background-color 0.2s; z-index: 50; display: flex; align-items: center; justify-content: center; }
         .dark .resizer-x { background-color: #18181b; border-color: #27272a; }
         .resizer-x:hover, .resizer-x.resizing { background-color: #d8b4fe; }
@@ -29,7 +28,6 @@
         .resizer-y:hover, .resizer-y.resizing { background-color: #d8b4fe; }
         .resizer-y::before { content: "•••"; color: #9ca3af; font-size: 10px; letter-spacing: 2px; line-height: 0; }
         
-        /* 模型选择器样式 */
         .model-selector { appearance: none; background-color: #fff; border: 1px solid #e5e7eb; color: #374151; font-weight: 600; text-align: left; transition: all 0.2s ease-in-out; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280' stroke-width='2'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3e%3c/path%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1rem; }
         .dark .model-selector { background-color: #18181b; border-color: #27272a; color: #e5e7eb; }
         .model-selector:focus { outline: none; border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); color: #7c3aed; }
@@ -45,12 +43,10 @@
         .task-item.selected { background-color: rgba(139, 92, 246, 0.05); border-left-color: #8b5cf6; }
         .dark .task-item.selected { background-color: rgba(139, 92, 246, 0.1); }
 
-        /* 标签切换动画 */
         .tab-btn { position: relative; }
         .tab-btn.active { color: #7c3aed; background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
         .dark .tab-btn.active { background-color: #27272a; color: #a78bfa; box-shadow: none; border: 1px solid #3f3f46; }
         
-        /* 故事板新样式 */
         .storyboard-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; animation: fadeIn 0.2s ease-out; }
         
         .time-badge {
@@ -64,7 +60,6 @@
         .dark .time-badge { background: #18181b; border-color: #27272a; color: #d1d5db; }
         .time-badge:hover { border-color: #8b5cf6; color: #7c3aed; }
 
-        /* 编辑模式样式 */
         .time-edit-mode {
             flex-shrink: 0; width: 100px; height: 36px;
             display: flex; align-items: center; justify-content: center; gap: 0;
@@ -82,7 +77,6 @@
         .time-input:focus { background-color: rgba(139, 92, 246, 0.1); }
         .time-sep { color: #d1d5db; font-weight: normal; }
 
-        /* 禁用的Input样式 */
         .time-input.disabled { color: #9ca3af; background: #f9fafb; pointer-events: none; }
         .dark .time-input.disabled { color: #52525b; background: #27272a; }
 
@@ -326,22 +320,31 @@
                 <button onclick="closeSettings()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#27272a] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#3f3f46] transition"><i class="fa-solid fa-xmark text-gray-500"></i></button>
             </div>
             <div class="space-y-4">
-               <div>
-    <label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API 网站地址</label>
-    <input type="text" id="setting-url" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="https://api.bltcy.ai">
-    <div class="flex flex-wrap gap-2 mt-2">
-        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
-            <i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai
-        </button>
-        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
-            <i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn
-        </button>
-        <button onclick="fillApiUrl('https://ai.yijiarj.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition cursor-pointer">
-            <i class="fa-solid fa-fire"></i> 一加: ai.yijiarj.cn
-        </button>
-    </div>
-</div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API 网站地址</label>
+                    <input type="text" id="setting-url" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="https://api.bltcy.ai">
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
+                            <i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn
+                        </button>
+                        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
+                            <i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai
+                        </button>
+                        <button onclick="fillApiUrl('https://ai.yijiarj.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition cursor-pointer">
+                            <i class="fa-solid fa-fire"></i> 一加: ai.yijiarj.cn
+                        </button>
+                    </div>
+                </div>
                 <div><label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API Key</label><input type="password" id="setting-key" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="sk-..."></div>
+                
+                <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="text-xs font-bold text-gray-500 ml-1">ImgBB 图床 Key (可选)</label>
+                        <a href="https://api.imgbb.com/" target="_blank" class="text-[10px] text-violet-500 hover:underline">获取免费Key</a>
+                    </div>
+                    <input type="password" id="setting-imgbb" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="一加API自动上传需填...">
+                </div>
+
                 <button onclick="saveSettings()" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-violet-500/20 mt-2">保存配置</button>
             </div>
         </div>
@@ -351,6 +354,7 @@
         const DEFAULT_API_URL = "https://api.bltcy.ai"; 
         let taskList = [];
         let currentImageBase64 = null; 
+        let currentImageFile = null; // 新增：保存原始文件对象用于上传图床
         let pollingInterval = null;
         let activeTaskId = null;
         let currentMode = 'single';
@@ -379,11 +383,10 @@
                 tabSingle.classList.remove('active'); tabSB.classList.add('active');
                 panelSingle.classList.add('hidden'); panelSB.classList.remove('hidden');
                 document.getElementById('upload-area').style.opacity = '0.5'; document.getElementById('upload-area').style.pointerEvents = 'none';
-                renderStoryboardRows();
             }
         }
 
-        // === 故事板核心逻辑 (双向编辑) ===
+        // === 故事板核心逻辑 ===
         function resetStoryboard() {
             const maxDuration = parseFloat(document.getElementById('duration-sb').value) || 15;
             storyShots = [{ id: Date.now(), duration: maxDuration, prompt: '', isEditing: false }];
@@ -395,8 +398,6 @@
             const lastShot = storyShots[storyShots.length - 1];
             
             if (lastShot.duration <= 1) return;
-
-            // 逻辑：从最后分镜头部切出 5s (或者剩余的一半)
             let newDur = 5;
             if (lastShot.duration < 6) newDur = lastShot.duration - 1; 
 
@@ -411,8 +412,6 @@
             if(storyShots.length <= 1) { alert("至少保留一个分镜"); return; }
             const deletedDuration = storyShots[index].duration;
             storyShots.splice(index, 1);
-            
-            // 补给最后一个分镜 (或者新的最后一个)
             if (index === storyShots.length) { 
                 storyShots[storyShots.length - 1].duration += deletedDuration;
             } else {
@@ -430,36 +429,19 @@
         function updateTimePoint(shotIndex, isEndTime, newVal) {
             const maxDuration = parseFloat(document.getElementById('duration-sb').value);
             let val = parseFloat(newVal);
-            if(isNaN(val) || val < 0) return; // invalid input
-
-            // 计算所有绝对时间点 [0, t1, t2, ..., max]
+            if(isNaN(val) || val < 0) return; 
             let timePoints = [0];
             storyShots.forEach(s => timePoints.push(timePoints[timePoints.length-1] + s.duration));
-            
-            // 我们要修改的是哪个点？
-            // StartTime of Shot i -> point i
-            // EndTime of Shot i -> point i+1
             let pointIndex = isEndTime ? shotIndex + 1 : shotIndex;
-
-            // 限制范围: point[i-1] + 1 <= val <= point[i+1] - 1
-            // 注意 point[0] 固定0, point[last] 固定 maxDuration
-            
-            const minVal = timePoints[pointIndex - 1] + 0.5; // 最小间隔0.5s
+            const minVal = timePoints[pointIndex - 1] + 0.5; 
             const maxVal = timePoints[pointIndex + 1] - 0.5;
-
             if (val < minVal) val = minVal;
             if (val > maxVal) val = maxVal;
-
-            // 更新该时间点
             timePoints[pointIndex] = val;
-
-            // 反算回 duration
-            // d[i] = p[i+1] - p[i]
             for (let i = 0; i < storyShots.length; i++) {
                 let d = timePoints[i+1] - timePoints[i];
                 storyShots[i].duration = parseFloat(d.toFixed(1));
             }
-
             storyShots[shotIndex].isEditing = false;
             renderStoryboardRows();
         }
@@ -483,11 +465,9 @@
                 row.className = "storyboard-row group";
 
                 let timeComponent = '';
-                
                 if (shot.isEditing) {
                     const startDisabled = (index === 0) ? 'disabled' : '';
                     const endDisabled = (index === lastIndex) ? 'disabled' : '';
-
                     timeComponent = `
                         <div class="time-edit-mode">
                             <input type="number" value="${startTime}" class="time-input ${startDisabled}"
@@ -507,7 +487,6 @@
                         </div>
                     `;
                 }
-
                 row.innerHTML = `
                     ${timeComponent}
                     <input type="text" 
@@ -543,31 +522,27 @@
             const dur = parseInt(duration);
 
             if (baseModel === 'sora-2-pro') {
-                // Pro Mapping
                 if (isLandscape) {
                     if (dur === 10) return 'sora-2-pro-landscape-10s-large-yijia';
                     if (dur === 15) return 'sora-2-pro-landscape-15s-large-yijia';
                     if (dur === 25) return 'sora-2-pro-landscape-25s-yijia';
-                    // Fallback for unexpected durations
                     return 'sora-2-pro-landscape-15s-large-yijia';
                 } else {
-                    // Portrait (Default)
                     if (dur === 10) return 'sora-2-pro-10s-large-yijia';
                     if (dur === 15) return 'sora-2-pro-15s-large-yijia';
                     if (dur === 25) return 'sora-2-pro-25s-yijia';
                     return 'sora-2-pro-15s-large-yijia';
                 }
             } else {
-                // Normal Sora 2 Mapping
                 if (isLandscape) {
                      if (dur === 15) return 'sora-2-landscape-15s-yijia';
-                     return 'sora-2-landscape-yijia'; // Default/Fallback for 10s or others
+                     return 'sora-2-landscape-yijia'; 
                 } else {
                      if (dur === 15) return 'sora-2-15s-yijia';
-                     return 'sora-2-yijia'; // Default/Fallback for 10s or others
+                     return 'sora-2-yijia'; 
                 }
             }
-            return baseModel; // Should not reach here
+            return baseModel; 
         }
 
         function updateModelLimits() {
@@ -577,14 +552,12 @@
             const durSelectSb = document.getElementById('duration-sb');
             const hdSb = document.getElementById('hd-sb');
             
-            // 保存当前选择的值以便恢复
             const currentDurSingle = durSelectSingle.value;
             const currentDurSb = durSelectSb.value;
             
             durSelectSingle.innerHTML = ''; durSelectSb.innerHTML = '';
             
             if (model === 'sora-2-pro') {
-                // Pro支持 10s, 15s, 25s
                 const opts = [
                     new Option("10 秒", "10"), 
                     new Option("15 秒", "15"), 
@@ -594,7 +567,6 @@
                 opts.forEach(o => durSelectSb.add(o.cloneNode(true)));
                 hdSingle.disabled = false; hdSb.disabled = false;
             } else {
-                // Sora 2 支持 10s(兜底), 15s
                 const opts = [
                     new Option("10 秒", "10"), 
                     new Option("15 秒", "15")
@@ -605,7 +577,6 @@
                 hdSb.disabled = true; hdSb.checked = false;
             }
             
-            // 尝试恢复之前的选择，如果不存在则默认第一个
             if(Array.from(durSelectSingle.options).some(o => o.value === currentDurSingle)) durSelectSingle.value = currentDurSingle;
             if(Array.from(durSelectSb.options).some(o => o.value === currentDurSb)) durSelectSb.value = currentDurSb;
 
@@ -668,33 +639,103 @@
         function loadTheme() { if(localStorage.getItem('sora_theme') === 'light') { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').className = 'fa-solid fa-sun text-purple-500'; } else { document.documentElement.classList.add('dark'); document.getElementById('theme-icon').className = 'fa-solid fa-moon'; } }
         function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
         function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+        
+        // 自动加载配置
         function loadSettings() { 
             document.getElementById('setting-key').value = localStorage.getItem('sora_api_key') || ''; 
-            
-            // 获取存储的 URL
+            document.getElementById('setting-imgbb').value = localStorage.getItem('sora_imgbb_key') || ''; // 加载图床KEY
             let url = localStorage.getItem('sora_api_url');
-            
-            // 自动纠错逻辑：
-            // 1. 如果没有存过地址，就用柏拉图。
-            // 2. 如果存的是那个写错的一加地址(yijiazj)，强制改回柏拉图，防止报错。
-            if (!url || url.includes('yijiazj.cn')) {
-                url = "https://api.bltcy.ai"; // 强制默认回柏拉图
-                localStorage.setItem('sora_api_url', url); // 更新缓存
+            if (!url || url.includes('yijiazj.cn')) { 
+                url = "https://api.bltcy.ai"; 
+                localStorage.setItem('sora_api_url', url); 
             }
-            
             document.getElementById('setting-url').value = url; 
             updateApiDisplay(url); 
         }
-        function saveSettings() { let url = document.getElementById('setting-url').value.trim(); if(url.endsWith('/')) url = url.slice(0, -1); localStorage.setItem('sora_api_key', document.getElementById('setting-key').value.trim()); localStorage.setItem('sora_api_url', url || DEFAULT_API_URL); updateApiDisplay(url || DEFAULT_API_URL); closeSettings(); }
-        function handleImageUpload(e) { const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (evt) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); const max = 1024; let w=img.width, h=img.height; if(w>max||h>max){const r=Math.min(max/w,max/h);w*=r;h*=r;} canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h); currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7); document.getElementById('preview-img').src = currentImageBase64; document.getElementById('preview-img').classList.remove('hidden'); document.getElementById('upload-placeholder').classList.add('hidden'); document.getElementById('clear-img-btn').classList.remove('hidden'); }; img.src = evt.target.result; }; reader.readAsDataURL(file); }
-        function clearImage(e) { e.stopPropagation(); document.getElementById('file-input').value = ''; document.getElementById('preview-img').classList.add('hidden'); document.getElementById('upload-placeholder').classList.remove('hidden'); document.getElementById('clear-img-btn').classList.add('hidden'); currentImageBase64 = null; }
 
+        // 保存配置
+        function saveSettings() { 
+            let url = document.getElementById('setting-url').value.trim(); 
+            if(url.endsWith('/')) url = url.slice(0, -1); 
+            localStorage.setItem('sora_api_key', document.getElementById('setting-key').value.trim()); 
+            localStorage.setItem('sora_api_url', url || DEFAULT_API_URL); 
+            localStorage.setItem('sora_imgbb_key', document.getElementById('setting-imgbb').value.trim()); // 保存图床KEY
+            updateApiDisplay(url || DEFAULT_API_URL); 
+            closeSettings(); 
+        }
+
+        // 修改：处理图片上传（保存文件对象）
+        function handleImageUpload(e) { 
+            const file = e.target.files[0]; 
+            if(!file) return; 
+            currentImageFile = file; // 保存原始文件对象
+            const reader = new FileReader(); 
+            reader.onload = (evt) => { 
+                const img = new Image(); 
+                img.onload = () => { 
+                    const canvas = document.createElement('canvas'); 
+                    const ctx = canvas.getContext('2d'); 
+                    const max = 1024; 
+                    let w=img.width, h=img.height; 
+                    if(w>max||h>max){const r=Math.min(max/w,max/h);w*=r;h*=r;} 
+                    canvas.width=w;canvas.height=h;
+                    ctx.drawImage(img,0,0,w,h); 
+                    currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7); 
+                    document.getElementById('preview-img').src = currentImageBase64; 
+                    document.getElementById('preview-img').classList.remove('hidden'); 
+                    document.getElementById('upload-placeholder').classList.add('hidden'); 
+                    document.getElementById('clear-img-btn').classList.remove('hidden'); 
+                }; 
+                img.src = evt.target.result; 
+            }; 
+            reader.readAsDataURL(file); 
+        }
+
+        function clearImage(e) { 
+            e.stopPropagation(); 
+            document.getElementById('file-input').value = ''; 
+            document.getElementById('preview-img').classList.add('hidden'); 
+            document.getElementById('upload-placeholder').classList.remove('hidden'); 
+            document.getElementById('clear-img-btn').classList.add('hidden'); 
+            currentImageBase64 = null; 
+            currentImageFile = null;
+        }
+
+        // 🔴 新增：上传图片到 ImgBB
+        async function uploadImageToImgbb(file) {
+            const apiKey = localStorage.getItem('sora_imgbb_key');
+            if (!apiKey) {
+                alert("⚠️ 请先在设置中填写 ImgBB API Key！\n\n一加 API 需要网络图片链接，请去 api.imgbb.com 获取免费 Key。");
+                throw new Error("Missing ImgBB API Key");
+            }
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            try {
+                // 🔴 关键修改：添加 &expiration=604800 (7天后自动删除)
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}&expiration=604800`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    return data.data.url;
+                } else {
+                    throw new Error(data.error?.message || "上传图床失败");
+                }
+            } catch (e) {
+                alert("图床上传失败: " + e.message);
+                throw e;
+            }
+        }
+
+        // 修改版：submitTask (集成自动上传)
         async function submitTask() {
             const key = localStorage.getItem('sora_api_key');
             let url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
             if(!key) { openSettings(); return; }
 
-            // 检测是否是一加API (包含 yijia 关键字)
             const isYijia = url.includes('yijia') || url.includes('oneplus');
 
             const btnId = currentMode === 'single' ? 'generate-btn-single' : 'generate-btn-sb';
@@ -739,26 +780,44 @@
             txt.innerText = "提交中...";
 
             try {
-                const images = (currentMode === 'single' && currentImageBase64) ? [currentImageBase64] : [];
-                
-                // 1. 确定 Base Model
+                const images = []; 
+                let finalImageUrl = null;
+
+                // 🔴 处理图片逻辑：自动上传图床（无输入框版）
+                if (currentMode === 'single') {
+                    // 1. 一加API -> 必须上传图床
+                    if (isYijia && currentImageFile) {
+                        txt.innerText = "正在上传图片...";
+                        finalImageUrl = await uploadImageToImgbb(currentImageFile);
+                    }
+                    // 2. 其他API -> 直接用Base64
+                    else if (currentImageBase64) {
+                        images.push(currentImageBase64);
+                    }
+                }
+
+                // 恢复文字
+                txt.innerText = "提交任务...";
+
                 let modelToSend = document.getElementById('model-select').value;
-                
-                // 2. 如果是一加API，进行模型重映射
                 if (isYijia) {
                     modelToSend = getYijiaModel(modelToSend, finalDuration, finalRatio);
                 }
 
-              const payload = {
+                const payload = {
                     model: modelToSend,
                     prompt: prompt,
                     aspect_ratio: finalRatio,
-                    duration: parseInt(finalDuration), // <--- 加了 parseInt() 转为数字
+                    duration: parseInt(finalDuration),
                     hd: finalHd,
                     images: images
                 };
 
-                // 3. 确定 API 路径 (一加可能使用 v1)
+                // 一加专用字段
+                if (isYijia && finalImageUrl) {
+                    payload.input_reference = finalImageUrl;
+                }
+
                 const endpoint = isYijia ? '/v1/video/generations' : '/v2/videos/generations';
 
                 const res = await fetch(`${url}${endpoint}`, {
@@ -772,8 +831,7 @@
                 const taskId = data.task_id || data.id || (data.data && data.data.id);
                 
                 if(taskId) {
-                    // 记录时，duration显示用户的选择，但model记录实际发送的
-                    addTaskToList(taskId, prompt, modelToSend, payload.duration, payload.aspect_ratio);
+                    addTaskToList(taskId, prompt, modelToSend, payload.duration, payload.aspect_ratio, url, key);
                     updatePreview(taskId);
                     checkTaskStatus(taskId);
                 } else { alert("无 Task ID 返回"); }
@@ -784,41 +842,65 @@
                 txt.innerText = "立即生成";
             }
         }
+        
         function startPolling() { if(pollingInterval) clearInterval(pollingInterval); pollingInterval = setInterval(() => { const pending = taskList.some(t => t.status !== 'SUCCESS' && t.status !== 'FAILURE'); if(pending) checkAllTasksStatus(); }, 4000); }
-        async function checkAllTasksStatus() { const pending = taskList.filter(t => t.status !== 'SUCCESS' && t.status !== 'FAILURE'); for(const t of pending) await checkTaskStatus(t.id); }
+        
+        async function checkAllTasksStatus() { 
+            const pending = taskList.filter(t => t.status !== 'FAILURE' && (t.status !== 'SUCCESS' || !t.videoUrl)); 
+            for(const t of pending) await checkTaskStatus(t.id); 
+        }
+        
         async function checkTaskStatus(id) {
-            const key = localStorage.getItem('sora_api_key');
-            const url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
+            const task = taskList.find(t => t.id === id); if(!task) return;
+            const key = task.apiKey || localStorage.getItem('sora_api_key');
+            const url = task.apiUrl || localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
             const isYijia = url.includes('yijia') || url.includes('oneplus');
-            // 一加查询路径可能也是 v1，不过通常 GET 查询较宽容，这里根据模式微调
             const endpoint = isYijia ? `/v1/video/generations/${id}` : `/v2/videos/generations/${id}`;
 
             try {
                 const res = await fetch(`${url}${endpoint}`, { headers: {'Authorization': `Bearer ${key}`} });
                 if(!res.ok) return;
-                const data = await res.json();
-                const task = taskList.find(t => t.id === id); if(!task) return;
-                let status = (data.status || data.task_status || (data.data && data.data.status) || '').toUpperCase();
+                let data = await res.json();
+                if (Array.isArray(data) && data.length > 0) { data = data[0]; }
+                
+                let status = '';
+                if(data.status) status = data.status;
+                else if(data.data && data.data.status) status = data.data.status;
+                else if(data.data && data.data.data && data.data.data.status) status = data.data.data.status;
+                status = status.toUpperCase();
+                
                 if(data.progress) task.progress = parseInt(data.progress);
                 else if(data.data && data.data.progress) task.progress = parseInt(data.data.progress);
-                else if(data.percentage) task.progress = parseInt(data.percentage);
+                else if(data.data && data.data.data && data.data.data.progress) task.progress = parseInt(data.data.data.progress);
+
                 if(['SUCCESS', 'SUCCEEDED', 'COMPLETED'].includes(status)) {
                     task.status = 'SUCCESS'; task.progress = 100; task.finishTime = Date.now();
-                    let vUrl = null;
-                    if(data.data && data.data.output) vUrl = data.data.output; 
-                    else if(data.data && Array.isArray(data.data) && data.data[0]?.url) vUrl = data.data[0].url;
-                    else if(data.video_url) vUrl = data.video_url; else if(data.url) vUrl = data.url;
-                    task.videoUrl = vUrl;
-                } else if(['FAILURE', 'FAILED', 'ERROR'].includes(status)) { task.status = 'FAILURE'; task.errorMsg = data.error_msg || "生成失败"; } 
-                else { task.status = 'IN_PROGRESS'; }
+                    function findAnyUrl(obj) {
+                        if (!obj) return null;
+                        if (typeof obj === 'object') {
+                            const candidates = [obj.url, obj.video_url, obj.output, obj.size, obj.result, obj.file_url];
+                            for (let c of candidates) { if (c && typeof c === 'string' && c.startsWith('http')) return c; }
+                            for (let key in obj) {
+                                if (typeof obj[key] === 'object') { const found = findAnyUrl(obj[key]); if (found) return found; }
+                            }
+                        } return null;
+                    }
+                    const vUrl = findAnyUrl(data);
+                    if (vUrl) task.videoUrl = vUrl;
+                } else if(['FAILURE', 'FAILED', 'ERROR'].includes(status)) { 
+                    task.status = 'FAILURE'; task.errorMsg = "生成失败";
+                } else { task.status = 'IN_PROGRESS'; }
                 saveHistory(); renderTaskList(); if(activeTaskId === id) updatePreview(id); 
             } catch(e) { console.error(e); }
         }
-        function addTaskToList(id, prompt, model, dur, ratio) { taskList.unshift({ id, prompt, model, duration: dur, ratio: ratio, status: 'NOT_START', startTime: Date.now(), progress: 0 }); saveHistory(); renderTaskList(); }
+
+        function addTaskToList(id, prompt, model, dur, ratio, usedUrl, usedKey) { 
+            taskList.unshift({ id: id, prompt, model, duration: dur, ratio: ratio, status: 'NOT_START', startTime: Date.now(), progress: 0, apiUrl: usedUrl, apiKey: usedKey }); 
+            saveHistory(); renderTaskList(); 
+        }
         function saveHistory() { localStorage.setItem('sora_tasks_v3', JSON.stringify(taskList)); }
         function loadHistory() { const s = localStorage.getItem('sora_tasks_v3'); if(s) { taskList = JSON.parse(s); renderTaskList(); } }
         function clearHistory() { if(confirm("清空历史记录？")) { taskList = []; saveHistory(); renderTaskList(); activeTaskId=null; document.getElementById('preview-placeholder').classList.remove('hidden'); document.getElementById('main-player').classList.add('hidden'); } }
     </script>
 </body>
 </html>
-
