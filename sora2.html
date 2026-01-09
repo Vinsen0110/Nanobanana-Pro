@@ -18,6 +18,18 @@
         .upload-box { background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='8%2c8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); }
         .dark .upload-box { background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%233F3F46FF' stroke-width='2' stroke-dasharray='8%2c8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); }
         
+        /* 下拉菜单样式 (来自 Nanobanana) */
+        .dropdown-arrow { transition: transform 0.3s ease; }
+        .dropdown-open .dropdown-arrow { transform: rotate(180deg); }
+        .glow-effect { box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5); border-color: #8b5cf6 !important; color: #8b5cf6 !important; }
+        .model-option .check-icon { transition: opacity 0.2s; }
+
+        /* 底部导航栏样式 */
+        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 8px 0; color: #9ca3af; font-size: 10px; transition: all 0.2s; }
+        .bottom-nav-item.active { color: #8b5cf6; }
+        .bottom-nav-item i { font-size: 18px; }
+
+        /* 拖拽条 (仅电脑端显示) */
         .resizer-x { width: 6px; cursor: col-resize; background-color: #f3f4f6; border-left: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb; transition: background-color 0.2s; z-index: 50; display: flex; align-items: center; justify-content: center; }
         .dark .resizer-x { background-color: #18181b; border-color: #27272a; }
         .resizer-x:hover, .resizer-x.resizing { background-color: #d8b4fe; }
@@ -28,63 +40,44 @@
         .resizer-y:hover, .resizer-y.resizing { background-color: #d8b4fe; }
         .resizer-y::before { content: "•••"; color: #9ca3af; font-size: 10px; letter-spacing: 2px; line-height: 0; }
         
+        /* 隐藏电脑端Resizers在手机上 */
+        @media (max-width: 768px) { .resizer-x, .resizer-y { display: none !important; } }
+        
+        /* 移动端优化 */
+        .mobile-scroll { -webkit-overflow-scrolling: touch; }
+        
         .model-selector { appearance: none; background-color: #fff; border: 1px solid #e5e7eb; color: #374151; font-weight: 600; text-align: left; transition: all 0.2s ease-in-out; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280' stroke-width='2'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3e%3c/path%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1rem; }
         .dark .model-selector { background-color: #18181b; border-color: #27272a; color: #e5e7eb; }
         .model-selector:focus { outline: none; border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); color: #7c3aed; }
-
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #52525b; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #71717a; }
-
         .no-select { user-select: none; }
         .prompt-box { background-color: #f9fafb; border-radius: 8px; padding: 12px; font-size: 13px; color: #374151; line-height: 1.6; }
         .dark .prompt-box { background-color: #18181b; color: #d1d5db; }
         .task-item.selected { background-color: rgba(139, 92, 246, 0.05); border-left-color: #8b5cf6; }
         .dark .task-item.selected { background-color: rgba(139, 92, 246, 0.1); }
-
         .tab-btn { position: relative; }
         .tab-btn.active { color: #7c3aed; background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
         .dark .tab-btn.active { background-color: #27272a; color: #a78bfa; box-shadow: none; border: 1px solid #3f3f46; }
-        
         .storyboard-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; animation: fadeIn 0.2s ease-out; }
-        
-        .time-badge {
-            flex-shrink: 0; width: 100px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: bold; font-family: monospace;
-            background: white; border: 1px solid #e5e7eb; color: #4b5563;
-            border-radius: 8px; cursor: pointer; user-select: none;
-            transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
+        .time-badge { flex-shrink: 0; width: 100px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; font-family: monospace; background: white; border: 1px solid #e5e7eb; color: #4b5563; border-radius: 8px; cursor: pointer; user-select: none; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .dark .time-badge { background: #18181b; border-color: #27272a; color: #d1d5db; }
         .time-badge:hover { border-color: #8b5cf6; color: #7c3aed; }
-
-        .time-edit-mode {
-            flex-shrink: 0; width: 100px; height: 36px;
-            display: flex; align-items: center; justify-content: center; gap: 0;
-            background: white; border: 1px solid #8b5cf6; color: #7c3aed;
-            border-radius: 8px; font-size: 11px; font-weight: bold; font-family: monospace;
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1); overflow: hidden;
-        }
+        .time-edit-mode { flex-shrink: 0; width: 100px; height: 36px; display: flex; align-items: center; justify-content: center; gap: 0; background: white; border: 1px solid #8b5cf6; color: #7c3aed; border-radius: 8px; font-size: 11px; font-weight: bold; font-family: monospace; box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1); overflow: hidden; }
         .dark .time-edit-mode { background: #18181b; border-color: #8b5cf6; }
-
-        .time-input {
-            width: 50%; height: 100%; border: none; background: transparent; 
-            text-align: center; outline: none; padding: 0; color: #7c3aed;
-        }
+        .time-input { width: 50%; height: 100%; border: none; background: transparent; text-align: center; outline: none; padding: 0; color: #7c3aed; }
         .dark .time-input { color: #a78bfa; }
         .time-input:focus { background-color: rgba(139, 92, 246, 0.1); }
         .time-sep { color: #d1d5db; font-weight: normal; }
-
         .time-input.disabled { color: #9ca3af; background: #f9fafb; pointer-events: none; }
         .dark .time-input.disabled { color: #52525b; background: #27272a; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden bg-gray-50 text-gray-800 dark:bg-[#09090b] dark:text-[#e4e4e7]" onload="initApp()">
+<body class="h-screen flex flex-col overflow-hidden bg-gray-50 text-gray-800 dark:bg-[#09090b] dark:text-[#e4e4e7]" onload="initApp()" onclick="closeDropdownOnClickOutside(event)">
 
    <header class="h-14 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#09090b] flex items-center justify-between px-4 shrink-0 z-20">
         <div class="flex items-center gap-3">
@@ -103,25 +96,39 @@
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden relative" id="main-container">
-        <aside id="left-sidebar" class="w-[340px] min-w-[280px] max-w-[600px] bg-white border-r border-gray-200 dark:bg-[#0c0c0e] dark:border-[#27272a] flex flex-col overflow-y-auto z-10 transition-colors shrink-0">
+    <div class="flex flex-1 overflow-hidden relative mb-14 md:mb-0" id="main-container">
+        
+        <div class="block md:hidden w-full h-[300px] shrink-0 border-b border-gray-200 dark:border-[#27272a] hidden" id="mobile-preview-area">
+             <div id="mobile-preview-container" class="w-full h-full bg-black"></div>
+        </div>
+
+        <aside id="left-sidebar" class="w-full md:w-[340px] md:min-w-[280px] md:max-w-[600px] bg-white border-r border-gray-200 dark:bg-[#0c0c0e] dark:border-[#27272a] flex flex-col overflow-y-auto z-10 transition-colors shrink-0 absolute inset-0 md:static md:flex">
             <div class="p-5 space-y-5">
                 
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between relative z-50">
                     <label class="text-xs text-gray-500 font-bold uppercase tracking-wide">模型选择</label>
-                    <select id="model-select" onchange="updateModelLimits()" class="model-selector w-40 h-9 text-xs rounded-lg pl-3 pr-8 cursor-pointer shadow-sm">
-                        <option value="sora-2">Sora 2</option>
-                        <option value="sora-2-pro">Sora 2 Pro</option>
-                    </select>
+                    <div class="relative w-40" id="custom-model-dropdown">
+                        <input type="hidden" id="model-select" value="sora-2">
+                        <div onclick="toggleModelDropdown(event)" id="dropdown-trigger" class="w-full flex justify-between items-center bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] rounded-lg px-3 py-1.5 cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-[#27272a]">
+                            <span id="current-model-text" class="text-xs font-bold font-mono text-gray-700 dark:text-gray-300">Sora 2</span>
+                            <i class="fa-solid fa-chevron-down text-[10px] text-gray-500 dropdown-arrow"></i>
+                        </div>
+                        <div id="dropdown-options" class="hidden absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-xl shadow-xl overflow-hidden z-50 p-1">
+                            <div onclick="selectModel('sora-2', 'Sora 2')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition bg-indigo-50 dark:bg-[#27272a]" data-val="sora-2">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Sora 2</span>
+                                <i class="fa-solid fa-check text-indigo-500 text-xs opacity-100 check-icon"></i>
+                            </div>
+                            <div onclick="selectModel('sora-2-pro', 'Sora 2 Pro')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="sora-2-pro">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Sora 2 Pro</span>
+                                <i class="fa-solid fa-check text-indigo-500 text-xs opacity-0 check-icon"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="bg-gray-100 dark:bg-[#18181b] p-1 rounded-xl flex text-xs font-bold text-gray-500 dark:text-gray-400">
-                    <button onclick="switchMode('single')" id="tab-single" class="tab-btn active flex-1 py-2 rounded-lg transition duration-200 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-image"></i> 单图生成
-                    </button>
-                    <button onclick="switchMode('storyboard')" id="tab-storyboard" class="tab-btn flex-1 py-2 rounded-lg transition duration-200 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-film"></i> 故事板
-                    </button>
+                    <button onclick="switchMode('single')" id="tab-single" class="tab-btn active flex-1 py-2 rounded-lg transition duration-200 flex items-center justify-center gap-1.5"><i class="fa-solid fa-image"></i> 单图生成</button>
+                    <button onclick="switchMode('storyboard')" id="tab-storyboard" class="tab-btn flex-1 py-2 rounded-lg transition duration-200 flex items-center justify-center gap-1.5"><i class="fa-solid fa-film"></i> 故事板</button>
                 </div>
 
                 <div id="panel-single" class="space-y-4 flex flex-col h-full">
@@ -134,9 +141,7 @@
                                 <p class="text-xs text-gray-400 dark:text-gray-500 font-bold">点击上传图片</p>
                             </div>
                             <img id="preview-img" class="absolute inset-0 w-full h-full object-contain rounded-xl hidden bg-black/50 backdrop-blur-sm transition">
-                            <div id="clear-img-btn" onclick="clearImage(event)" class="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hidden hover:scale-110 transition shadow-lg z-20 cursor-pointer">
-                                <i class="fa-solid fa-xmark text-xs"></i>
-                            </div>
+                            <div id="clear-img-btn" onclick="clearImage(event)" class="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hidden hover:scale-110 transition shadow-lg z-20 cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></div>
                         </div>
                     </div>
 
@@ -160,127 +165,61 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#18181b] rounded-xl border border-gray-200 dark:border-[#27272a]">
-                            <div class="flex flex-col">
-                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300">HD 高清模式</span>
-                                <span class="text-[10px] text-gray-400">仅 Pro 可用</span>
-                            </div>
+                            <div class="flex flex-col"><span class="text-xs font-bold text-gray-700 dark:text-gray-300">HD 高清模式</span><span class="text-[10px] text-gray-400">仅 Pro 可用</span></div>
                             <input type="checkbox" id="hd-single" class="accent-violet-600 w-4 h-4 cursor-pointer" disabled>
                         </div>
                         <button onclick="submitTask()" id="generate-btn-single" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl transition transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
-                            <span id="btn-text-single">立即生成</span>
-                            <i id="loading-icon-single" class="fa-solid fa-spinner fa-spin hidden"></i>
+                            <span id="btn-text-single">立即生成</span><i id="loading-icon-single" class="fa-solid fa-spinner fa-spin hidden"></i>
                         </button>
                     </div>
                 </div>
 
                 <div id="panel-storyboard" class="space-y-3 hidden flex flex-col h-full">
                     <div class="p-3 bg-violet-50 dark:bg-violet-900/10 border border-violet-100 dark:border-violet-900/30 rounded-lg mb-2">
-                        <p class="text-[10px] text-violet-600 dark:text-violet-300 flex items-start gap-2 leading-tight">
-                            <i class="fa-solid fa-circle-info mt-0.5"></i>
-                            <span>点击时间数字可编辑。0s 和 Max 是固定的。</span>
-                        </p>
+                        <p class="text-[10px] text-violet-600 dark:text-violet-300 flex items-start gap-2 leading-tight"><i class="fa-solid fa-circle-info mt-0.5"></i><span>点击时间数字可编辑。0s 和 Max 是固定的。</span></p>
                     </div>
-                    
                     <div id="storyboard-container" class="space-y-2"></div>
-
-                    <button id="add-shot-btn" onclick="addShot()" class="w-full py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-xs font-bold text-gray-500 hover:text-violet-500 hover:border-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-plus"></i> 增加分镜
-                    </button>
-
-                    <div class="flex items-center justify-between px-2 py-1">
-                        <span class="text-xs font-bold text-gray-500">当前时间轴:</span>
-                        <span id="sb-total-duration" class="text-xs font-mono font-bold text-gray-800 dark:text-gray-200">0s / 15s</span>
-                    </div>
-
+                    <button id="add-shot-btn" onclick="addShot()" class="w-full py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-xs font-bold text-gray-500 hover:text-violet-500 hover:border-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/10 transition flex items-center justify-center gap-1"><i class="fa-solid fa-plus"></i> 增加分镜</button>
+                    <div class="flex items-center justify-between px-2 py-1"><span class="text-xs font-bold text-gray-500">当前时间轴:</span><span id="sb-total-duration" class="text-xs font-mono font-bold text-gray-800 dark:text-gray-200">0s / 15s</span></div>
                     <div class="mt-auto space-y-4 pb-6">
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <label class="text-xs text-gray-500 font-bold uppercase">比例</label>
-                                <select id="ratio-sb" class="w-full custom-input rounded-lg px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 dark:bg-[#18181b] dark:border-[#27272a] dark:text-white cursor-pointer">
-                                    <option value="16:9">16:9 (横屏)</option>
-                                    <option value="9:16">9:16 (竖屏)</option>
-                                </select>
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs text-gray-500 font-bold uppercase">总时长</label>
-                                <select id="duration-sb" onchange="resetStoryboard()" class="w-full custom-input rounded-lg px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 dark:bg-[#18181b] dark:border-[#27272a] dark:text-white cursor-pointer"></select>
-                            </div>
+                            <div class="space-y-1"><label class="text-xs text-gray-500 font-bold uppercase">比例</label><select id="ratio-sb" class="w-full custom-input rounded-lg px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 dark:bg-[#18181b] dark:border-[#27272a] dark:text-white cursor-pointer"><option value="16:9">16:9 (横屏)</option><option value="9:16">9:16 (竖屏)</option></select></div>
+                            <div class="space-y-1"><label class="text-xs text-gray-500 font-bold uppercase">总时长</label><select id="duration-sb" onchange="resetStoryboard()" class="w-full custom-input rounded-lg px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 dark:bg-[#18181b] dark:border-[#27272a] dark:text-white cursor-pointer"></select></div>
                         </div>
-                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#18181b] rounded-xl border border-gray-200 dark:border-[#27272a]">
-                            <div class="flex flex-col">
-                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300">HD 高清模式</span>
-                                <span class="text-[10px] text-gray-400">仅 Pro 可用</span>
-                            </div>
-                            <input type="checkbox" id="hd-sb" class="accent-violet-600 w-4 h-4 cursor-pointer" disabled>
-                        </div>
-                        <button onclick="submitTask()" id="generate-btn-sb" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl transition transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20">
-                            <span id="btn-text-sb">立即生成</span>
-                            <i id="loading-icon-sb" class="fa-solid fa-spinner fa-spin hidden"></i>
-                        </button>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#18181b] rounded-xl border border-gray-200 dark:border-[#27272a]"><div class="flex flex-col"><span class="text-xs font-bold text-gray-700 dark:text-gray-300">HD 高清模式</span><span class="text-[10px] text-gray-400">仅 Pro 可用</span></div><input type="checkbox" id="hd-sb" class="accent-violet-600 w-4 h-4 cursor-pointer" disabled></div>
+                        <button onclick="submitTask()" id="generate-btn-sb" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl transition transform active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"><span id="btn-text-sb">立即生成</span><i id="loading-icon-sb" class="fa-solid fa-spinner fa-spin hidden"></i></button>
                     </div>
                 </div>
-
             </div>
         </aside>
 
         <div id="resizer-x" class="resizer-x shrink-0" title="左右拖拽"></div>
 
-        <main id="right-content" class="flex-1 flex flex-col min-w-0 bg-white dark:bg-black transition-colors overflow-hidden">
+        <main id="right-content" class="w-full md:flex-1 flex flex-col min-w-0 bg-white dark:bg-black transition-colors md:overflow-hidden h-auto md:h-full hidden md:flex absolute inset-0 md:static">
             
             <div id="preview-section" style="height: 60%;" class="min-h-[200px] flex border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#0c0c0e] relative">
-                
-                <div class="flex-1 bg-black relative flex items-center justify-center overflow-hidden group">
-                    <video id="main-player" class="w-full h-full object-contain" controls autoplay loop playsinline></video>
-                    <div id="preview-placeholder" class="absolute inset-0 bg-gray-100 dark:bg-[#121214] flex flex-col items-center justify-center text-gray-400 z-10">
-                        <div class="w-20 h-20 bg-white dark:bg-[#18181b] rounded-full flex items-center justify-center mb-4 shadow-sm">
-                            <i class="fa-solid fa-clapperboard text-3xl text-gray-300 dark:text-gray-600"></i>
+                <div id="desktop-preview-wrapper" class="flex w-full h-full">
+                    <div class="flex-1 bg-black relative flex items-center justify-center overflow-hidden group">
+                        <video id="main-player" class="w-full h-full object-contain" controls autoplay loop playsinline></video>
+                        <div id="preview-placeholder" class="absolute inset-0 bg-gray-100 dark:bg-[#121214] flex flex-col items-center justify-center text-gray-400 z-10">
+                            <div class="w-20 h-20 bg-white dark:bg-[#18181b] rounded-full flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clapperboard text-3xl text-gray-300 dark:text-gray-600"></i></div>
+                            <p class="text-sm font-medium">选择任务以预览</p>
                         </div>
-                        <p class="text-sm font-medium">选择任务以预览</p>
-                    </div>
-                    <div id="preview-loading" class="absolute inset-0 bg-black/90 z-20 flex flex-col items-center justify-center text-white hidden">
-                        <div class="text-center">
-                            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-violet-500 mb-4"></i>
-                            <p class="text-lg font-bold">生成中...</p>
-                            <p class="text-sm text-gray-400 mt-2 font-mono">进度: <span id="loading-percent" class="text-violet-400">0%</span></p>
+                        <div id="preview-loading" class="absolute inset-0 bg-black/90 z-20 flex flex-col items-center justify-center text-white hidden">
+                            <div class="text-center"><i class="fa-solid fa-circle-notch fa-spin text-4xl text-violet-500 mb-4"></i><p class="text-lg font-bold">生成中...</p><p class="text-sm text-gray-400 mt-2 font-mono">进度: <span id="loading-percent" class="text-violet-400">0%</span></p></div>
                         </div>
                     </div>
-                </div>
-
-                <div class="w-[350px] bg-white dark:bg-[#0c0c0e] border-l border-gray-200 dark:border-[#27272a] flex flex-col overflow-y-auto shrink-0">
-                    <div class="p-6 space-y-6">
-                        <div class="flex items-center gap-3">
-                            <div id="status-badge" class="px-2.5 py-1 rounded text-xs font-bold bg-gray-100 text-gray-500">WAITING</div>
-                            <span class="text-xs text-gray-400 ml-auto" id="detail-date">-</span>
+                    <div class="w-[350px] bg-white dark:bg-[#0c0c0e] border-l border-gray-200 dark:border-[#27272a] flex flex-col overflow-y-auto shrink-0 hidden md:flex">
+                        <div class="p-6 space-y-6">
+                            <div class="flex items-center gap-3"><div id="status-badge" class="px-2.5 py-1 rounded text-xs font-bold bg-gray-100 text-gray-500">WAITING</div><span class="text-xs text-gray-400 ml-auto" id="detail-date">-</span></div>
+                            <div><h2 class="text-sm font-bold text-gray-800 dark:text-white mb-1 break-all">ID: <span id="detail-id" class="font-mono text-gray-500 font-normal">---</span></h2><button onclick="copyDetailId()" class="text-[10px] text-violet-500 hover:underline">复制ID</button></div>
+                            <div class="flex gap-8 text-xs"><div><p class="text-gray-400 mb-1"><i class="fa-regular fa-clock"></i> 任务耗时</p><p class="font-bold text-gray-700 dark:text-gray-300"><span id="detail-time">-</span>s</p></div><div><p class="text-gray-400 mb-1"><i class="fa-solid fa-ruler-combined"></i> 时长 / 宽高比</p><p class="font-bold text-gray-700 dark:text-gray-300"><span id="detail-duration">-</span>s <span class="mx-1 text-gray-300">|</span> <span id="detail-res">-</span></p></div></div>
+                            <div><p class="text-xs text-gray-400 mb-2"><i class="fa-regular fa-file-lines"></i> 提示词</p><div class="prompt-box select-text"><p id="detail-prompt" class="break-words">(暂无内容)</p></div></div>
+                            <div><p class="text-[10px] text-gray-400 uppercase font-bold mb-1"># RAW ID</p><code class="block text-[10px] text-gray-500 bg-gray-50 dark:bg-[#18181b] p-2 rounded break-all select-all" id="detail-raw-id">-</code></div>
                         </div>
-                        <div>
-                            <h2 class="text-sm font-bold text-gray-800 dark:text-white mb-1 break-all">ID: <span id="detail-id" class="font-mono text-gray-500 font-normal">---</span></h2>
-                            <button onclick="copyDetailId()" class="text-[10px] text-violet-500 hover:underline">复制ID</button>
+                        <div class="mt-auto p-6 border-t border-gray-100 dark:border-[#27272a] bg-gray-50/50 dark:bg-[#121214]/50">
+                            <button id="download-btn" onclick="triggerMainDownload()" class="w-full bg-black dark:bg-white text-white dark:text-black hover:opacity-80 font-bold py-3 rounded-lg transition flex items-center justify-center gap-2 pointer-events-none opacity-50"><i class="fa-solid fa-download"></i> <span id="dl-btn-text">下载视频</span></button>
                         </div>
-                        <div class="flex gap-8 text-xs">
-                            <div>
-                                <p class="text-gray-400 mb-1"><i class="fa-regular fa-clock"></i> 任务耗时</p>
-                                <p class="font-bold text-gray-700 dark:text-gray-300"><span id="detail-time">-</span>s</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 mb-1"><i class="fa-solid fa-ruler-combined"></i> 时长 / 宽高比</p>
-                                <p class="font-bold text-gray-700 dark:text-gray-300"><span id="detail-duration">-</span>s <span class="mx-1 text-gray-300">|</span> <span id="detail-res">-</span></p>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 mb-2"><i class="fa-regular fa-file-lines"></i> 提示词</p>
-                            <div class="prompt-box select-text">
-                                <p id="detail-prompt" class="break-words">(暂无内容)</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase font-bold mb-1"># RAW ID</p>
-                            <code class="block text-[10px] text-gray-500 bg-gray-50 dark:bg-[#18181b] p-2 rounded break-all select-all" id="detail-raw-id">-</code>
-                        </div>
-                    </div>
-                    <div class="mt-auto p-6 border-t border-gray-100 dark:border-[#27272a] bg-gray-50/50 dark:bg-[#121214]/50">
-                        <button id="download-btn" onclick="triggerMainDownload()" class="w-full bg-black dark:bg-white text-white dark:text-black hover:opacity-80 font-bold py-3 rounded-lg transition flex items-center justify-center gap-2 pointer-events-none opacity-50">
-                            <i class="fa-solid fa-download"></i> <span id="dl-btn-text">下载视频</span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -289,29 +228,26 @@
 
             <div id="list-section" class="flex-1 flex flex-col min-h-0 bg-white dark:bg-[#0c0c0e]">
                 <div class="h-10 border-b border-gray-200 dark:border-[#27272a] flex items-center justify-between px-6 shrink-0 bg-gray-50/50 dark:bg-[#121214]">
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="select-all" class="accent-violet-500 cursor-pointer" onchange="toggleSelectAll()">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider" id="list-header-text">任务列表</span>
-                    </div>
+                    <div class="flex items-center gap-2"><input type="checkbox" id="select-all" class="accent-violet-500 cursor-pointer" onchange="toggleSelectAll()"><span class="text-xs font-bold text-gray-500 uppercase tracking-wider" id="list-header-text">任务列表</span></div>
                     <div class="flex gap-4">
-                        <div id="batch-actions" class="hidden flex gap-2">
-                            <button onclick="batchDelete()" class="text-xs text-red-500 hover:text-red-600 flex items-center gap-1 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded transition"><i class="fa-solid fa-trash"></i> 删除选中</button>
-                        </div>
+                        <div id="batch-actions" class="hidden flex gap-2"><button onclick="batchDelete()" class="text-xs text-red-500 hover:text-red-600 flex items-center gap-1 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded transition"><i class="fa-solid fa-trash"></i> 删除选中</button></div>
                         <div class="w-[1px] h-4 bg-gray-300 dark:bg-gray-700"></div>
                         <button onclick="checkAllTasksStatus()" class="text-xs text-violet-500 hover:text-violet-600 transition flex items-center gap-1"><i class="fa-solid fa-rotate"></i> 刷新</button>
                         <button onclick="clearHistory()" class="text-xs text-gray-400 hover:text-red-500 transition flex items-center gap-1"><i class="fa-solid fa-trash"></i> 清空</button>
                     </div>
                 </div>
-
                 <div id="task-list" class="flex-1 overflow-y-auto p-0">
-                    <div id="empty-state" class="h-full flex flex-col items-center justify-center text-gray-400 opacity-60 select-none pb-10">
-                        <i class="fa-solid fa-inbox text-4xl mb-3 text-gray-300 dark:text-gray-700"></i>
-                        <p class="text-xs">暂无记录</p>
-                    </div>
+                    <div id="empty-state" class="h-full flex flex-col items-center justify-center text-gray-400 opacity-60 select-none pb-10"><i class="fa-solid fa-inbox text-4xl mb-3 text-gray-300 dark:text-gray-700"></i><p class="text-xs">暂无记录</p></div>
                 </div>
             </div>
         </main>
     </div>
+
+    <nav class="md:hidden fixed bottom-0 w-full h-14 bg-white dark:bg-[#09090b] border-t border-gray-200 dark:border-[#27272a] z-50 flex">
+        <button onclick="switchMobileTab('create')" id="mob-tab-create" class="bottom-nav-item active"><i class="fa-solid fa-pen-to-square"></i><span>创作</span></button>
+        <button onclick="switchMobileTab('preview')" id="mob-tab-preview" class="bottom-nav-item"><i class="fa-solid fa-clapperboard"></i><span>预览</span></button>
+        <button onclick="switchMobileTab('history')" id="mob-tab-history" class="bottom-nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>历史</span></button>
+    </nav>
 
     <div id="settings-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center backdrop-blur-sm">
         <div class="bg-white dark:bg-[#18181b] p-6 rounded-2xl w-[420px] shadow-2xl border border-gray-200 dark:border-[#27272a] transform transition-all scale-100">
@@ -324,27 +260,13 @@
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API 网站地址</label>
                     <input type="text" id="setting-url" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="https://api.bltcy.ai">
                     <div class="flex flex-wrap gap-2 mt-2">
-                        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
-                            <i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn
-                        </button>
-                        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
-                            <i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai
-                        </button>
-                        <button onclick="fillApiUrl('https://ai.yijiarj.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition cursor-pointer">
-                            <i class="fa-solid fa-fire"></i> 一加: ai.yijiarj.cn
-                        </button>
+                        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer"><i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn</button>
+                        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer"><i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai</button>
+                        <button onclick="fillApiUrl('https://ai.yijiarj.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition cursor-pointer"><i class="fa-solid fa-fire"></i> 一加: ai.yijiarj.cn</button>
                     </div>
                 </div>
                 <div><label class="block text-xs font-bold text-gray-500 mb-1.5 ml-1">API Key</label><input type="password" id="setting-key" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="sk-..."></div>
-                
-                <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="text-xs font-bold text-gray-500 ml-1">ImgBB 图床 Key (可选)</label>
-                        <a href="https://api.imgbb.com/" target="_blank" class="text-[10px] text-violet-500 hover:underline">获取免费Key</a>
-                    </div>
-                    <input type="password" id="setting-imgbb" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="一加API自动上传需填...">
-                </div>
-
+                <div class="pt-2 border-t border-gray-100 dark:border-gray-800"><div class="flex items-center justify-between mb-1.5"><label class="text-xs font-bold text-gray-500 ml-1">ImgBB 图床 Key (可选)</label><a href="https://api.imgbb.com/" target="_blank" class="text-[10px] text-violet-500 hover:underline">获取免费Key</a></div><input type="password" id="setting-imgbb" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-200 dark:border-[#27272a] rounded-xl p-3 text-sm dark:text-gray-200 font-mono outline-none focus:border-violet-500 transition" placeholder="一加API自动上传需填..."></div>
                 <button onclick="saveSettings()" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-violet-500/20 mt-2">保存配置</button>
             </div>
         </div>
@@ -352,285 +274,110 @@
 
     <script>
         const DEFAULT_API_URL = "https://api.bltcy.ai"; 
-        let taskList = [];
-        let currentImageBase64 = null; 
-        let currentImageFile = null; // 新增：保存原始文件对象用于上传图床
-        let pollingInterval = null;
-        let activeTaskId = null;
-        let currentMode = 'single';
-        let storyShots = []; 
+        let taskList = []; let currentImageBase64 = null; let currentImageFile = null; let pollingInterval = null; let activeTaskId = null; let currentMode = 'single'; let storyShots = []; 
 
         function initApp() {
-            loadSettings(); loadTheme(); loadHistory(); updateModelLimits();
-            setupResizers();
-            storyShots = [{ id: Date.now(), duration: 15, prompt: '', isEditing: false }];
-            renderStoryboardRows();
-            checkAllTasksStatus(); startPolling();
+            loadSettings(); loadTheme(); loadHistory(); updateModelLimits(); setupResizers(); storyShots = [{ id: Date.now(), duration: 15, prompt: '', isEditing: false }]; renderStoryboardRows(); checkAllTasksStatus(); startPolling();
+            // 初始化移动端视图（默认显示创作）
+            if(window.innerWidth < 768) switchMobileTab('create');
+            // 移动端Dom同步
+            syncPreviewDOM();
+            window.addEventListener('resize', syncPreviewDOM);
         }
 
+        function syncPreviewDOM() {
+            const isMobile = window.innerWidth < 768;
+            const desktopWrapper = document.getElementById('desktop-preview-wrapper');
+            const mobileContainer = document.getElementById('mobile-preview-container');
+            
+            if(isMobile && desktopWrapper.children.length > 0) {
+                while(desktopWrapper.childNodes.length > 0) mobileContainer.appendChild(desktopWrapper.childNodes[0]);
+            } else if (!isMobile && mobileContainer.children.length > 0) {
+                while(mobileContainer.childNodes.length > 0) desktopWrapper.appendChild(mobileContainer.childNodes[0]);
+            }
+        }
+
+        // 🟢 移动端Tab切换逻辑
+        function switchMobileTab(tabName) {
+            const createSection = document.getElementById('left-sidebar');
+            const rightContent = document.getElementById('right-content');
+            const previewSection = document.getElementById('preview-section');
+            const mobilePreviewArea = document.getElementById('mobile-preview-area');
+            const listSection = document.getElementById('list-section');
+            
+            // 重置所有底部按钮状态
+            document.querySelectorAll('.bottom-nav-item').forEach(btn => btn.classList.remove('active', 'text-violet-500'));
+            document.getElementById(`mob-tab-${tabName}`).classList.add('active');
+
+            if (tabName === 'create') {
+                createSection.classList.remove('hidden');
+                rightContent.classList.add('hidden'); 
+            } else if (tabName === 'preview') {
+                createSection.classList.add('hidden');
+                rightContent.classList.remove('hidden');
+                mobilePreviewArea.classList.remove('hidden'); // 移动端独有的预览容器
+                listSection.classList.add('hidden');
+            } else if (tabName === 'history') {
+                createSection.classList.add('hidden');
+                rightContent.classList.remove('hidden');
+                mobilePreviewArea.classList.add('hidden');
+                listSection.classList.remove('hidden');
+            }
+        }
+
+        // === UI交互逻辑 ===
+        function toggleModelDropdown(event) {
+            if(event) event.stopPropagation();
+            const container = document.getElementById('custom-model-dropdown');
+            const options = document.getElementById('dropdown-options');
+            const trigger = document.getElementById('dropdown-trigger');
+            container.classList.toggle('dropdown-open'); options.classList.toggle('hidden');
+            if (container.classList.contains('dropdown-open')) { trigger.classList.add('glow-effect'); trigger.classList.remove('bg-gray-100', 'dark:bg-[#18181b]'); } 
+            else { trigger.classList.remove('glow-effect'); trigger.classList.add('bg-gray-100', 'dark:bg-[#18181b]'); }
+        }
+
+        function selectModel(val, text) {
+            document.getElementById('model-select').value = val;
+            document.getElementById('current-model-text').innerText = text;
+            document.querySelectorAll('.model-option').forEach(opt => {
+                const check = opt.querySelector('.check-icon');
+                if(opt.dataset.val === val) { check.classList.remove('opacity-0'); check.classList.add('opacity-100'); opt.classList.add('bg-indigo-50', 'dark:bg-[#27272a]'); } 
+                else { check.classList.add('opacity-0'); check.classList.remove('opacity-100'); opt.classList.remove('bg-indigo-50', 'dark:bg-[#27272a]'); }
+            });
+            toggleModelDropdown(); updateModelLimits();
+        }
+
+        function closeDropdownOnClickOutside(event) {
+            const container = document.getElementById('custom-model-dropdown');
+            const options = document.getElementById('dropdown-options'); const trigger = document.getElementById('dropdown-trigger');
+            if (container && !container.contains(event.target)) { container.classList.remove('dropdown-open'); options.classList.add('hidden'); trigger.classList.remove('glow-effect'); trigger.classList.add('bg-gray-100', 'dark:bg-[#18181b]'); }
+        }
+
+        // ... (以下 JS 逻辑与之前版本一致) ...
         function switchMode(mode) {
             currentMode = mode;
-            const tabSingle = document.getElementById('tab-single');
-            const tabSB = document.getElementById('tab-storyboard');
-            const panelSingle = document.getElementById('panel-single');
-            const panelSB = document.getElementById('panel-storyboard');
-
-            if(mode === 'single') {
-                tabSingle.classList.add('active'); tabSB.classList.remove('active');
-                panelSingle.classList.remove('hidden'); panelSB.classList.add('hidden');
-                document.getElementById('upload-area').style.opacity = '1'; document.getElementById('upload-area').style.pointerEvents = 'auto';
-            } else {
-                tabSingle.classList.remove('active'); tabSB.classList.add('active');
-                panelSingle.classList.add('hidden'); panelSB.classList.remove('hidden');
-                document.getElementById('upload-area').style.opacity = '0.5'; document.getElementById('upload-area').style.pointerEvents = 'none';
-            }
+            const tabSingle = document.getElementById('tab-single'); const tabSB = document.getElementById('tab-storyboard'); const panelSingle = document.getElementById('panel-single'); const panelSB = document.getElementById('panel-storyboard');
+            if(mode === 'single') { tabSingle.classList.add('active'); tabSB.classList.remove('active'); panelSingle.classList.remove('hidden'); panelSB.classList.add('hidden'); document.getElementById('upload-area').style.opacity = '1'; document.getElementById('upload-area').style.pointerEvents = 'auto'; } 
+            else { tabSingle.classList.remove('active'); tabSB.classList.add('active'); panelSingle.classList.add('hidden'); panelSB.classList.remove('hidden'); document.getElementById('upload-area').style.opacity = '0.5'; document.getElementById('upload-area').style.pointerEvents = 'none'; }
         }
-
-        // === 故事板核心逻辑 ===
-        function resetStoryboard() {
-            const maxDuration = parseFloat(document.getElementById('duration-sb').value) || 15;
-            storyShots = [{ id: Date.now(), duration: maxDuration, prompt: '', isEditing: false }];
-            renderStoryboardRows();
-        }
-
-        function addShot() {
-            const maxDuration = parseFloat(document.getElementById('duration-sb').value);
-            const lastShot = storyShots[storyShots.length - 1];
-            
-            if (lastShot.duration <= 1) return;
-            let newDur = 5;
-            if (lastShot.duration < 6) newDur = lastShot.duration - 1; 
-
-            lastShot.duration -= newDur;
-            const newShot = { id: Date.now(), duration: newDur, prompt: '', isEditing: false };
-            storyShots.splice(storyShots.length - 1, 0, newShot);
-            
-            renderStoryboardRows();
-        }
-
-        function deleteShot(index) {
-            if(storyShots.length <= 1) { alert("至少保留一个分镜"); return; }
-            const deletedDuration = storyShots[index].duration;
-            storyShots.splice(index, 1);
-            if (index === storyShots.length) { 
-                storyShots[storyShots.length - 1].duration += deletedDuration;
-            } else {
-                storyShots[storyShots.length - 1].duration += deletedDuration;
-            }
-            renderStoryboardRows();
-        }
-
-        function startEditingTime(index) {
-            storyShots.forEach(s => s.isEditing = false); 
-            storyShots[index].isEditing = true;
-            renderStoryboardRows();
-        }
-
-        function updateTimePoint(shotIndex, isEndTime, newVal) {
-            const maxDuration = parseFloat(document.getElementById('duration-sb').value);
-            let val = parseFloat(newVal);
-            if(isNaN(val) || val < 0) return; 
-            let timePoints = [0];
-            storyShots.forEach(s => timePoints.push(timePoints[timePoints.length-1] + s.duration));
-            let pointIndex = isEndTime ? shotIndex + 1 : shotIndex;
-            const minVal = timePoints[pointIndex - 1] + 0.5; 
-            const maxVal = timePoints[pointIndex + 1] - 0.5;
-            if (val < minVal) val = minVal;
-            if (val > maxVal) val = maxVal;
-            timePoints[pointIndex] = val;
-            for (let i = 0; i < storyShots.length; i++) {
-                let d = timePoints[i+1] - timePoints[i];
-                storyShots[i].duration = parseFloat(d.toFixed(1));
-            }
-            storyShots[shotIndex].isEditing = false;
-            renderStoryboardRows();
-        }
-
+        function resetStoryboard() { const maxDuration = parseFloat(document.getElementById('duration-sb').value) || 15; storyShots = [{ id: Date.now(), duration: maxDuration, prompt: '', isEditing: false }]; renderStoryboardRows(); }
+        function addShot() { const maxDuration = parseFloat(document.getElementById('duration-sb').value); const lastShot = storyShots[storyShots.length - 1]; if (lastShot.duration <= 1) return; let newDur = 5; if (lastShot.duration < 6) newDur = lastShot.duration - 1; lastShot.duration -= newDur; const newShot = { id: Date.now(), duration: newDur, prompt: '', isEditing: false }; storyShots.splice(storyShots.length - 1, 0, newShot); renderStoryboardRows(); }
+        function deleteShot(index) { if(storyShots.length <= 1) { alert("至少保留一个分镜"); return; } const deletedDuration = storyShots[index].duration; storyShots.splice(index, 1); if (index === storyShots.length) { storyShots[storyShots.length - 1].duration += deletedDuration; } else { storyShots[storyShots.length - 1].duration += deletedDuration; } renderStoryboardRows(); }
+        function startEditingTime(index) { storyShots.forEach(s => s.isEditing = false); storyShots[index].isEditing = true; renderStoryboardRows(); }
+        function updateTimePoint(shotIndex, isEndTime, newVal) { const maxDuration = parseFloat(document.getElementById('duration-sb').value); let val = parseFloat(newVal); if(isNaN(val) || val < 0) return; let timePoints = [0]; storyShots.forEach(s => timePoints.push(timePoints[timePoints.length-1] + s.duration)); let pointIndex = isEndTime ? shotIndex + 1 : shotIndex; const minVal = timePoints[pointIndex - 1] + 0.5; const maxVal = timePoints[pointIndex + 1] - 0.5; if (val < minVal) val = minVal; if (val > maxVal) val = maxVal; timePoints[pointIndex] = val; for (let i = 0; i < storyShots.length; i++) { let d = timePoints[i+1] - timePoints[i]; storyShots[i].duration = parseFloat(d.toFixed(1)); } storyShots[shotIndex].isEditing = false; renderStoryboardRows(); }
         function updateShotPrompt(index, val) { storyShots[index].prompt = val; }
-
-        function renderStoryboardRows() {
-            const container = document.getElementById('storyboard-container');
-            container.innerHTML = '';
-            
-            let currentTime = 0;
-            const maxDuration = parseFloat(document.getElementById('duration-sb').value) || 15;
-            const lastIndex = storyShots.length - 1;
-
-            storyShots.forEach((shot, index) => {
-                const startTime = parseFloat(currentTime.toFixed(1));
-                const endTime = parseFloat((currentTime + shot.duration).toFixed(1)); 
-                currentTime = endTime;
-
-                const row = document.createElement('div');
-                row.className = "storyboard-row group";
-
-                let timeComponent = '';
-                if (shot.isEditing) {
-                    const startDisabled = (index === 0) ? 'disabled' : '';
-                    const endDisabled = (index === lastIndex) ? 'disabled' : '';
-                    timeComponent = `
-                        <div class="time-edit-mode">
-                            <input type="number" value="${startTime}" class="time-input ${startDisabled}"
-                                onblur="updateTimePoint(${index}, false, this.value)"
-                                onkeydown="if(event.key==='Enter') this.blur()">
-                            <span class="time-sep">-</span>
-                            <input type="number" value="${endTime}" class="time-input ${endDisabled}"
-                                onblur="updateTimePoint(${index}, true, this.value)"
-                                onkeydown="if(event.key==='Enter') this.blur()">
-                        </div>
-                    `;
-                } else {
-                    timeComponent = `
-                        <div class="time-badge" onclick="startEditingTime(${index})">
-                            <i class="fa-regular fa-clock mr-1.5 text-xs opacity-70"></i>
-                            ${startTime}-${endTime}s
-                        </div>
-                    `;
-                }
-                row.innerHTML = `
-                    ${timeComponent}
-                    <input type="text" 
-                        class="flex-1 custom-input h-9 rounded-lg px-3 text-xs bg-gray-50 border border-gray-200 dark:bg-[#18181b] dark:border-[#27272a] dark:text-white" 
-                        placeholder="分镜描述..." 
-                        value="${shot.prompt}"
-                        oninput="updateShotPrompt(${index}, this.value)"
-                    >
-                    <button onclick="deleteShot(${index})" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
-                        <i class="fa-solid fa-trash text-xs"></i>
-                    </button>
-                `;
-                container.appendChild(row);
-            });
-
-            const display = document.getElementById('sb-total-duration');
-            display.innerText = `${currentTime.toFixed(1)}s / ${maxDuration}s`;
-            
-            const addBtn = document.getElementById('add-shot-btn');
-            const lastShot = storyShots[storyShots.length - 1];
-            if(lastShot.duration <= 1) { 
-                addBtn.disabled = true; addBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                addBtn.innerHTML = `<i class="fa-solid fa-ban"></i> 时长已满`;
-            } else {
-                addBtn.disabled = false; addBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                addBtn.innerHTML = `<i class="fa-solid fa-plus"></i> 增加分镜`;
-            }
-        }
-
-        // === 一加API 模型映射逻辑 ===
-        function getYijiaModel(baseModel, duration, ratio) {
-            const isLandscape = ratio === '16:9';
-            const dur = parseInt(duration);
-
-            if (baseModel === 'sora-2-pro') {
-                if (isLandscape) {
-                    if (dur === 10) return 'sora-2-pro-landscape-10s-large-yijia';
-                    if (dur === 15) return 'sora-2-pro-landscape-15s-large-yijia';
-                    if (dur === 25) return 'sora-2-pro-landscape-25s-yijia';
-                    return 'sora-2-pro-landscape-15s-large-yijia';
-                } else {
-                    if (dur === 10) return 'sora-2-pro-10s-large-yijia';
-                    if (dur === 15) return 'sora-2-pro-15s-large-yijia';
-                    if (dur === 25) return 'sora-2-pro-25s-yijia';
-                    return 'sora-2-pro-15s-large-yijia';
-                }
-            } else {
-                if (isLandscape) {
-                     if (dur === 15) return 'sora-2-landscape-15s-yijia';
-                     return 'sora-2-landscape-yijia'; 
-                } else {
-                     if (dur === 15) return 'sora-2-15s-yijia';
-                     return 'sora-2-yijia'; 
-                }
-            }
-            return baseModel; 
-        }
-
-        function updateModelLimits() {
-            const model = document.getElementById('model-select').value;
-            const durSelectSingle = document.getElementById('duration-single');
-            const hdSingle = document.getElementById('hd-single');
-            const durSelectSb = document.getElementById('duration-sb');
-            const hdSb = document.getElementById('hd-sb');
-            
-            const currentDurSingle = durSelectSingle.value;
-            const currentDurSb = durSelectSb.value;
-            
-            durSelectSingle.innerHTML = ''; durSelectSb.innerHTML = '';
-            
-            if (model === 'sora-2-pro') {
-                const opts = [
-                    new Option("10 秒", "10"), 
-                    new Option("15 秒", "15"), 
-                    new Option("25 秒", "25")
-                ];
-                opts.forEach(o => durSelectSingle.add(o.cloneNode(true)));
-                opts.forEach(o => durSelectSb.add(o.cloneNode(true)));
-                hdSingle.disabled = false; hdSb.disabled = false;
-            } else {
-                const opts = [
-                    new Option("10 秒", "10"), 
-                    new Option("15 秒", "15")
-                ];
-                opts.forEach(o => durSelectSingle.add(o.cloneNode(true)));
-                opts.forEach(o => durSelectSb.add(o.cloneNode(true)));
-                hdSingle.disabled = true; hdSingle.checked = false;
-                hdSb.disabled = true; hdSb.checked = false;
-            }
-            
-            if(Array.from(durSelectSingle.options).some(o => o.value === currentDurSingle)) durSelectSingle.value = currentDurSingle;
-            if(Array.from(durSelectSb.options).some(o => o.value === currentDurSb)) durSelectSb.value = currentDurSb;
-
-            resetStoryboard();
-        }
-
-        function fillApiUrl(url) {
-            document.getElementById('setting-url').value = url;
-            const input = document.getElementById('setting-url');
-            input.classList.add('ring-2', 'ring-violet-500');
-            setTimeout(() => input.classList.remove('ring-2', 'ring-violet-500'), 200);
-        }
+        function renderStoryboardRows() { const container = document.getElementById('storyboard-container'); container.innerHTML = ''; let currentTime = 0; const maxDuration = parseFloat(document.getElementById('duration-sb').value) || 15; const lastIndex = storyShots.length - 1; storyShots.forEach((shot, index) => { const startTime = parseFloat(currentTime.toFixed(1)); const endTime = parseFloat((currentTime + shot.duration).toFixed(1)); currentTime = endTime; const row = document.createElement('div'); row.className = "storyboard-row group"; let timeComponent = ''; if (shot.isEditing) { const startDisabled = (index === 0) ? 'disabled' : ''; const endDisabled = (index === lastIndex) ? 'disabled' : ''; timeComponent = `<div class="time-edit-mode"><input type="number" value="${startTime}" class="time-input ${startDisabled}" onblur="updateTimePoint(${index}, false, this.value)" onkeydown="if(event.key==='Enter') this.blur()"><span class="time-sep">-</span><input type="number" value="${endTime}" class="time-input ${endDisabled}" onblur="updateTimePoint(${index}, true, this.value)" onkeydown="if(event.key==='Enter') this.blur()"></div>`; } else { timeComponent = `<div class="time-badge" onclick="startEditingTime(${index})"><i class="fa-regular fa-clock mr-1.5 text-xs opacity-70"></i>${startTime}-${endTime}s</div>`; } row.innerHTML = `${timeComponent}<input type="text" class="flex-1 custom-input h-9 rounded-lg px-3 text-xs bg-gray-50 border border-gray-200 dark:bg-[#18181b] dark:border-[#27272a] dark:text-white" placeholder="分镜描述..." value="${shot.prompt}" oninput="updateShotPrompt(${index}, this.value)"><button onclick="deleteShot(${index})" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"><i class="fa-solid fa-trash text-xs"></i></button>`; container.appendChild(row); }); const display = document.getElementById('sb-total-duration'); display.innerText = `${currentTime.toFixed(1)}s / ${maxDuration}s`; const addBtn = document.getElementById('add-shot-btn'); const lastShot = storyShots[storyShots.length - 1]; if(lastShot.duration <= 1) { addBtn.disabled = true; addBtn.classList.add('opacity-50', 'cursor-not-allowed'); addBtn.innerHTML = `<i class="fa-solid fa-ban"></i> 时长已满`; } else { addBtn.disabled = false; addBtn.classList.remove('opacity-50', 'cursor-not-allowed'); addBtn.innerHTML = `<i class="fa-solid fa-plus"></i> 增加分镜`; } }
+        function getYijiaModel(baseModel, duration, ratio) { const isLandscape = ratio === '16:9'; const dur = parseInt(duration); if (baseModel === 'sora-2-pro') { if (isLandscape) { if (dur === 10) return 'sora-2-pro-landscape-10s-large-yijia'; if (dur === 15) return 'sora-2-pro-landscape-15s-large-yijia'; if (dur === 25) return 'sora-2-pro-landscape-25s-yijia'; return 'sora-2-pro-landscape-15s-large-yijia'; } else { if (dur === 10) return 'sora-2-pro-10s-large-yijia'; if (dur === 15) return 'sora-2-pro-15s-large-yijia'; if (dur === 25) return 'sora-2-pro-25s-yijia'; return 'sora-2-pro-15s-large-yijia'; } } else { if (isLandscape) { if (dur === 15) return 'sora-2-landscape-15s-yijia'; return 'sora-2-landscape-yijia'; } else { if (dur === 15) return 'sora-2-15s-yijia'; return 'sora-2-yijia'; } } return baseModel; }
+        function updateModelLimits() { const model = document.getElementById('model-select').value; const durSelectSingle = document.getElementById('duration-single'); const hdSingle = document.getElementById('hd-single'); const durSelectSb = document.getElementById('duration-sb'); const hdSb = document.getElementById('hd-sb'); const currentDurSingle = durSelectSingle.value; const currentDurSb = durSelectSb.value; durSelectSingle.innerHTML = ''; durSelectSb.innerHTML = ''; if (model === 'sora-2-pro') { const opts = [new Option("10 秒", "10"), new Option("15 秒", "15"), new Option("25 秒", "25")]; opts.forEach(o => durSelectSingle.add(o.cloneNode(true))); opts.forEach(o => durSelectSb.add(o.cloneNode(true))); hdSingle.disabled = false; hdSb.disabled = false; } else { const opts = [new Option("10 秒", "10"), new Option("15 秒", "15")]; opts.forEach(o => durSelectSingle.add(o.cloneNode(true))); opts.forEach(o => durSelectSb.add(o.cloneNode(true))); hdSingle.disabled = true; hdSingle.checked = false; hdSb.disabled = true; hdSb.checked = false; } if(Array.from(durSelectSingle.options).some(o => o.value === currentDurSingle)) durSelectSingle.value = currentDurSingle; if(Array.from(durSelectSb.options).some(o => o.value === currentDurSb)) durSelectSb.value = currentDurSb; resetStoryboard(); }
+        function fillApiUrl(url) { document.getElementById('setting-url').value = url; const input = document.getElementById('setting-url'); input.classList.add('ring-2', 'ring-violet-500'); setTimeout(() => input.classList.remove('ring-2', 'ring-violet-500'), 200); }
         function updateApiDisplay(url) { try { document.getElementById('current-api-display').innerText = "当前: " + new URL(url).hostname; } catch (e) { document.getElementById('current-api-display').innerText = "当前: Custom"; } }
-        function setupResizers() {
-            const resizerX = document.getElementById('resizer-x'); const leftSidebar = document.getElementById('left-sidebar'); let startX = 0, startW = 0;
-            resizerX.addEventListener('mousedown', (e) => { startX = e.clientX; startW = leftSidebar.getBoundingClientRect().width; document.body.classList.add('no-select'); resizerX.classList.add('resizing'); document.addEventListener('mousemove', onMouseMoveX); document.addEventListener('mouseup', onMouseUpX); });
-            function onMouseMoveX(e) { leftSidebar.style.width = `${Math.max(280, Math.min(600, startW + (e.clientX - startX)))}px`; }
-            function onMouseUpX() { document.body.classList.remove('no-select'); resizerX.classList.remove('resizing'); document.removeEventListener('mousemove', onMouseMoveX); document.removeEventListener('mouseup', onMouseUpX); }
-            const resizerY = document.getElementById('resizer-y'); const previewSection = document.getElementById('preview-section'); const rightContent = document.getElementById('right-content'); let startY = 0, startH = 0, totalH = 0;
-            resizerY.addEventListener('mousedown', (e) => { startY = e.clientY; startH = previewSection.getBoundingClientRect().height; totalH = rightContent.getBoundingClientRect().height; document.body.classList.add('no-select'); resizerY.classList.add('resizing'); document.addEventListener('mousemove', onMouseMoveY); document.addEventListener('mouseup', onMouseUpY); });
-            function onMouseMoveY(e) { previewSection.style.height = `${Math.max(200, Math.min(totalH - 100, startH + (e.clientY - startY)))}px`; }
-            function onMouseUpY() { document.body.classList.remove('no-select'); resizerY.classList.remove('resizing'); document.removeEventListener('mousemove', onMouseMoveY); document.removeEventListener('mouseup', onMouseUpY); }
-        }
+        function setupResizers() { const resizerX = document.getElementById('resizer-x'); const leftSidebar = document.getElementById('left-sidebar'); let startX = 0, startW = 0; resizerX.addEventListener('mousedown', (e) => { startX = e.clientX; startW = leftSidebar.getBoundingClientRect().width; document.body.classList.add('no-select'); resizerX.classList.add('resizing'); document.addEventListener('mousemove', onMouseMoveX); document.addEventListener('mouseup', onMouseUpX); }); function onMouseMoveX(e) { leftSidebar.style.width = `${Math.max(280, Math.min(600, startW + (e.clientX - startX)))}px`; } function onMouseUpX() { document.body.classList.remove('no-select'); resizerX.classList.remove('resizing'); document.removeEventListener('mousemove', onMouseMoveX); document.removeEventListener('mouseup', onMouseUpX); } const resizerY = document.getElementById('resizer-y'); const previewSection = document.getElementById('preview-section'); const rightContent = document.getElementById('right-content'); let startY = 0, startH = 0, totalH = 0; resizerY.addEventListener('mousedown', (e) => { startY = e.clientY; startH = previewSection.getBoundingClientRect().height; totalH = rightContent.getBoundingClientRect().height; document.body.classList.add('no-select'); resizerY.classList.add('resizing'); document.addEventListener('mousemove', onMouseMoveY); document.addEventListener('mouseup', onMouseUpY); }); function onMouseMoveY(e) { previewSection.style.height = `${Math.max(200, Math.min(totalH - 100, startH + (e.clientY - startY)))}px`; } function onMouseUpY() { document.body.classList.remove('no-select'); resizerY.classList.remove('resizing'); document.removeEventListener('mousemove', onMouseMoveY); document.removeEventListener('mouseup', onMouseUpY); } }
         async function forceDownload(url, filename) { try { const response = await fetch(url); if (!response.ok) throw new Error("Network error"); const blob = await response.blob(); const blobUrl = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = blobUrl; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(blobUrl); } catch (e) { window.open(url, '_blank'); } }
         function triggerMainDownload() { const task = taskList.find(t => t.id === activeTaskId); if(task && task.videoUrl) { const btnText = document.getElementById('dl-btn-text'); const origText = btnText.innerText; btnText.innerText = "下载中..."; forceDownload(task.videoUrl, `sora_${task.id}.mp4`).finally(() => setTimeout(() => btnText.innerText = origText, 2000)); } }
         function downloadTask(id) { const task = taskList.find(t => t.id === id); if(task && task.videoUrl) forceDownload(task.videoUrl, `sora_${task.id}.mp4`); else alert("视频未就绪"); }
-        function updatePreview(taskId) {
-            const task = taskList.find(t => t.id === taskId); if (!task) return;
-            activeTaskId = taskId; renderTaskList(); 
-            const placeholder = document.getElementById('preview-placeholder'); const player = document.getElementById('main-player'); const loading = document.getElementById('preview-loading');
-            document.getElementById('detail-id').innerText = task.id; document.getElementById('detail-raw-id').innerText = task.id; document.getElementById('detail-prompt').innerText = task.prompt; document.getElementById('detail-duration').innerText = task.duration; document.getElementById('detail-date').innerText = new Date(task.startTime).toLocaleString(); document.getElementById('detail-res').innerText = task.ratio; 
-            const statusEl = document.getElementById('status-badge'); const dlBtn = document.getElementById('download-btn');
-            if (task.status === 'SUCCESS') { placeholder.classList.add('hidden'); loading.classList.add('hidden'); player.classList.remove('hidden'); if (task.videoUrl && task.videoUrl !== player.src) player.src = task.videoUrl; statusEl.innerText = "完成"; statusEl.className = "px-2.5 py-1 rounded text-xs font-bold bg-green-100 text-green-600"; document.getElementById('detail-time').innerText = task.finishTime ? ((task.finishTime - task.startTime)/1000).toFixed(0) : '-'; dlBtn.classList.remove('pointer-events-none', 'opacity-50'); } 
-            else if (task.status === 'FAILURE') { placeholder.classList.remove('hidden'); loading.classList.add('hidden'); player.classList.add('hidden'); player.pause(); statusEl.innerText = "失败"; statusEl.className = "px-2.5 py-1 rounded text-xs font-bold bg-red-100 text-red-600"; document.getElementById('detail-time').innerText = '-'; dlBtn.classList.add('pointer-events-none', 'opacity-50'); } 
-            else { placeholder.classList.add('hidden'); loading.classList.remove('hidden'); player.classList.add('hidden'); player.pause(); statusEl.innerText = "生成中"; statusEl.className = "px-2.5 py-1 rounded text-xs font-bold bg-blue-100 text-blue-600"; document.getElementById('loading-percent').innerText = (task.progress || 0) + '%'; document.getElementById('detail-time').innerText = ((Date.now() - task.startTime)/1000).toFixed(0); dlBtn.classList.add('pointer-events-none', 'opacity-50'); }
-        }
+        function updatePreview(taskId) { const task = taskList.find(t => t.id === taskId); if (!task) return; activeTaskId = taskId; renderTaskList(); const placeholder = document.getElementById('preview-placeholder'); const player = document.getElementById('main-player'); const loading = document.getElementById('preview-loading'); document.getElementById('detail-id').innerText = task.id; document.getElementById('detail-raw-id').innerText = task.id; document.getElementById('detail-prompt').innerText = task.prompt; document.getElementById('detail-duration').innerText = task.duration; document.getElementById('detail-date').innerText = new Date(task.startTime).toLocaleString(); document.getElementById('detail-res').innerText = task.ratio; const statusEl = document.getElementById('status-badge'); const dlBtn = document.getElementById('download-btn'); if (task.status === 'SUCCESS') { placeholder.classList.add('hidden'); loading.classList.add('hidden'); player.classList.remove('hidden'); if (task.videoUrl && task.videoUrl !== player.src) player.src = task.videoUrl; statusEl.innerText = "完成"; statusEl.className = "px-2.5 py-1 rounded text-xs font-bold bg-green-100 text-green-600"; document.getElementById('detail-time').innerText = task.finishTime ? ((task.finishTime - task.startTime)/1000).toFixed(0) : '-'; dlBtn.classList.remove('pointer-events-none', 'opacity-50'); } else if (task.status === 'FAILURE') { placeholder.classList.remove('hidden'); loading.classList.add('hidden'); player.classList.add('hidden'); player.pause(); statusEl.innerText = "失败"; statusEl.className = "px-2.5 py-1 rounded text-xs font-bold bg-red-100 text-red-600"; document.getElementById('detail-time').innerText = '-'; dlBtn.classList.add('pointer-events-none', 'opacity-50'); } else { placeholder.classList.add('hidden'); loading.classList.remove('hidden'); player.classList.add('hidden'); player.pause(); statusEl.innerText = "生成中"; statusEl.className = "px-2.5 py-1 rounded text-xs font-bold bg-blue-100 text-blue-600"; document.getElementById('loading-percent').innerText = (task.progress || 0) + '%'; document.getElementById('detail-time').innerText = ((Date.now() - task.startTime)/1000).toFixed(0); dlBtn.classList.add('pointer-events-none', 'opacity-50'); } }
         function copyDetailId() { const id = document.getElementById('detail-id').innerText; if(id !== '---') { navigator.clipboard.writeText(id); alert("ID 已复制"); } }
-        function renderTaskList() {
-            const container = document.getElementById('task-list'); if (taskList.length === 0) { container.innerHTML = `<div id="empty-state" class="h-full flex flex-col items-center justify-center text-gray-400 opacity-60 select-none pb-10"><i class="fa-solid fa-inbox text-4xl mb-3 text-gray-300 dark:text-gray-700"></i><p class="text-xs">暂无记录</p></div>`; updateListHeader(); return; }
-            container.innerHTML = '';
-            taskList.forEach(task => {
-                const isActive = activeTaskId === task.id;
-                const div = document.createElement('div');
-                div.className = `task-item flex items-center gap-4 px-6 py-3 border-b border-gray-100 dark:border-[#27272a] cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-[#121214] ${isActive ? 'selected bg-violet-50/50 dark:bg-violet-900/10 border-l-4 border-l-violet-500' : 'border-l-4 border-l-transparent'}`;
-                div.onclick = () => updatePreview(task.id);
-                let thumbHtml = ''; if (task.status === 'SUCCESS' && task.videoUrl) { thumbHtml = `<div class="w-16 h-10 bg-black rounded overflow-hidden relative shrink-0 shadow-sm group"><video src="${task.videoUrl}" class="w-full h-full object-cover" preload="metadata" onmouseover="this.play()" onmouseout="this.pause()" muted></video></div>`; } else { thumbHtml = `<div class="w-16 h-10 bg-gray-100 dark:bg-[#27272a] rounded flex items-center justify-center shrink-0"><i class="fa-solid ${task.status==='FAILURE'?'fa-triangle-exclamation text-red-400':'fa-spinner fa-spin text-gray-400'}"></i></div>`; }
-                let statusText = ''; if(task.status === 'SUCCESS') statusText = `<span class="text-green-500 font-bold text-xs"><i class="fa-solid fa-check"></i></span>`; else if(task.status === 'FAILURE') statusText = `<span class="text-red-500 font-bold text-xs"><i class="fa-solid fa-xmark"></i></span>`; else statusText = `<span class="text-blue-500 font-bold text-xs">${task.progress||0}%</span>`;
-                div.innerHTML = `<div class="shrink-0 flex items-center justify-center" onclick="event.stopPropagation()"><input type="checkbox" class="task-checkbox accent-violet-500 w-4 h-4 cursor-pointer" value="${task.id}" onclick="event.stopPropagation(); updateListHeader()"></div>${thumbHtml}<div class="flex-1 min-w-0 flex flex-col justify-center gap-1"><div class="flex items-center justify-between"><span class="text-xs font-mono text-gray-400 dark:text-gray-500">ID: ${task.id.slice(0,8)}...</span><span class="text-[10px] text-gray-400">${new Date(task.startTime).toLocaleTimeString()}</span></div><p class="text-xs font-medium text-gray-700 dark:text-gray-300 truncate pr-4">${task.prompt}</p></div><div class="flex items-center gap-3">${statusText}<button onclick="event.stopPropagation(); downloadTask('${task.id}')" class="text-gray-400 hover:text-violet-500"><i class="fa-solid fa-download"></i></button><button onclick="event.stopPropagation(); deleteTask('${task.id}')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button></div>`;
-                container.appendChild(div);
-            });
-            const masterCheck = document.getElementById('select-all'); const allBoxes = document.querySelectorAll('.task-checkbox');
-            if(allBoxes.length > 0) { const allChecked = Array.from(allBoxes).every(cb => cb.checked); masterCheck.checked = allChecked; masterCheck.indeterminate = !allChecked && Array.from(allBoxes).some(cb => cb.checked); } else { masterCheck.checked = false; masterCheck.indeterminate = false; }
-            updateListHeader();
-        }
+        function renderTaskList() { const container = document.getElementById('task-list'); if (taskList.length === 0) { container.innerHTML = `<div id="empty-state" class="h-full flex flex-col items-center justify-center text-gray-400 opacity-60 select-none pb-10"><i class="fa-solid fa-inbox text-4xl mb-3 text-gray-300 dark:text-gray-700"></i><p class="text-xs">暂无记录</p></div>`; updateListHeader(); return; } container.innerHTML = ''; taskList.forEach(task => { const isActive = activeTaskId === task.id; const div = document.createElement('div'); div.className = `task-item flex items-center gap-4 px-6 py-3 border-b border-gray-100 dark:border-[#27272a] cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-[#121214] ${isActive ? 'selected bg-violet-50/50 dark:bg-violet-900/10 border-l-4 border-l-violet-500' : 'border-l-4 border-l-transparent'}`; div.onclick = () => updatePreview(task.id); let thumbHtml = ''; if (task.status === 'SUCCESS' && task.videoUrl) { thumbHtml = `<div class="w-16 h-10 bg-black rounded overflow-hidden relative shrink-0 shadow-sm group"><video src="${task.videoUrl}" class="w-full h-full object-cover" preload="metadata" onmouseover="this.play()" onmouseout="this.pause()" muted></video></div>`; } else { thumbHtml = `<div class="w-16 h-10 bg-gray-100 dark:bg-[#27272a] rounded flex items-center justify-center shrink-0"><i class="fa-solid ${task.status==='FAILURE'?'fa-triangle-exclamation text-red-400':'fa-spinner fa-spin text-gray-400'}"></i></div>`; } let statusText = ''; if(task.status === 'SUCCESS') statusText = `<span class="text-green-500 font-bold text-xs"><i class="fa-solid fa-check"></i></span>`; else if(task.status === 'FAILURE') statusText = `<span class="text-red-500 font-bold text-xs"><i class="fa-solid fa-xmark"></i></span>`; else statusText = `<span class="text-blue-500 font-bold text-xs">${task.progress||0}%</span>`; div.innerHTML = `<div class="shrink-0 flex items-center justify-center" onclick="event.stopPropagation()"><input type="checkbox" class="task-checkbox accent-violet-500 w-4 h-4 cursor-pointer" value="${task.id}" onclick="event.stopPropagation(); updateListHeader()"></div>${thumbHtml}<div class="flex-1 min-w-0 flex flex-col justify-center gap-1"><div class="flex items-center justify-between"><span class="text-xs font-mono text-gray-400 dark:text-gray-500">ID: ${task.id.slice(0,8)}...</span><span class="text-[10px] text-gray-400">${new Date(task.startTime).toLocaleTimeString()}</span></div><p class="text-xs font-medium text-gray-700 dark:text-gray-300 truncate pr-4">${task.prompt}</p></div><div class="flex items-center gap-3">${statusText}<button onclick="event.stopPropagation(); downloadTask('${task.id}')" class="text-gray-400 hover:text-violet-500"><i class="fa-solid fa-download"></i></button><button onclick="event.stopPropagation(); deleteTask('${task.id}')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button></div>`; container.appendChild(div); }); const masterCheck = document.getElementById('select-all'); const allBoxes = document.querySelectorAll('.task-checkbox'); if(allBoxes.length > 0) { const allChecked = Array.from(allBoxes).every(cb => cb.checked); masterCheck.checked = allChecked; masterCheck.indeterminate = !allChecked && Array.from(allBoxes).some(cb => cb.checked); } else { masterCheck.checked = false; masterCheck.indeterminate = false; } updateListHeader(); }
         function toggleSelectAll() { const masterCheck = document.getElementById('select-all'); document.querySelectorAll('.task-checkbox').forEach(cb => cb.checked = masterCheck.checked); updateListHeader(); }
         function updateListHeader() { const checkedCount = document.querySelectorAll('.task-checkbox:checked').length; const headerText = document.getElementById('list-header-text'); const batchActions = document.getElementById('batch-actions'); if (checkedCount > 0) { headerText.innerText = `已选 ${checkedCount} 项`; headerText.classList.add('text-violet-500'); batchActions.classList.remove('hidden'); } else { headerText.innerText = `任务列表 (${taskList.length})`; headerText.classList.remove('text-violet-500'); batchActions.classList.add('hidden'); } }
         function batchDelete() { const checkboxes = document.querySelectorAll('.task-checkbox:checked'); if (checkboxes.length === 0) return; if (!confirm(`确认删除选中的 ${checkboxes.length} 个任务吗？`)) return; const idsToDelete = Array.from(checkboxes).map(cb => cb.value); taskList = taskList.filter(t => !idsToDelete.includes(t.id)); saveHistory(); renderTaskList(); if (idsToDelete.includes(activeTaskId)) { activeTaskId = null; document.getElementById('preview-placeholder').classList.remove('hidden'); document.getElementById('main-player').classList.add('hidden'); } document.getElementById('select-all').checked = false; }
@@ -639,265 +386,17 @@
         function loadTheme() { if(localStorage.getItem('sora_theme') === 'light') { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').className = 'fa-solid fa-sun text-purple-500'; } else { document.documentElement.classList.add('dark'); document.getElementById('theme-icon').className = 'fa-solid fa-moon'; } }
         function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
         function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+        function loadSettings() { document.getElementById('setting-key').value = localStorage.getItem('sora_api_key') || ''; document.getElementById('setting-imgbb').value = localStorage.getItem('sora_imgbb_key') || ''; let url = localStorage.getItem('sora_api_url'); if (!url || url.includes('yijiazj.cn')) { url = "https://api.bltcy.ai"; localStorage.setItem('sora_api_url', url); } document.getElementById('setting-url').value = url; updateApiDisplay(url); }
+        function saveSettings() { let url = document.getElementById('setting-url').value.trim(); if(url.endsWith('/')) url = url.slice(0, -1); localStorage.setItem('sora_api_key', document.getElementById('setting-key').value.trim()); localStorage.setItem('sora_api_url', url || DEFAULT_API_URL); localStorage.setItem('sora_imgbb_key', document.getElementById('setting-imgbb').value.trim()); updateApiDisplay(url || DEFAULT_API_URL); closeSettings(); }
+        function handleImageUpload(e) { const file = e.target.files[0]; if(!file) return; currentImageFile = file; const reader = new FileReader(); reader.onload = (evt) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); const max = 1024; let w=img.width, h=img.height; if(w>max||h>max){const r=Math.min(max/w,max/h);w*=r;h*=r;} canvas.width=w;canvas.height=h;ctx.drawImage(img,0,0,w,h); currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7); document.getElementById('preview-img').src = currentImageBase64; document.getElementById('preview-img').classList.remove('hidden'); document.getElementById('upload-placeholder').classList.add('hidden'); document.getElementById('clear-img-btn').classList.remove('hidden'); }; img.src = evt.target.result; }; reader.readAsDataURL(file); }
+        function clearImage(e) { e.stopPropagation(); document.getElementById('file-input').value = ''; document.getElementById('preview-img').classList.add('hidden'); document.getElementById('upload-placeholder').classList.remove('hidden'); document.getElementById('clear-img-btn').classList.add('hidden'); currentImageBase64 = null; currentImageFile = null; }
         
-        // 自动加载配置
-        function loadSettings() { 
-            document.getElementById('setting-key').value = localStorage.getItem('sora_api_key') || ''; 
-            document.getElementById('setting-imgbb').value = localStorage.getItem('sora_imgbb_key') || ''; // 加载图床KEY
-            let url = localStorage.getItem('sora_api_url');
-            if (!url || url.includes('yijiazj.cn')) { 
-                url = "https://api.bltcy.ai"; 
-                localStorage.setItem('sora_api_url', url); 
-            }
-            document.getElementById('setting-url').value = url; 
-            updateApiDisplay(url); 
-        }
-
-        // 保存配置
-        function saveSettings() { 
-            let url = document.getElementById('setting-url').value.trim(); 
-            if(url.endsWith('/')) url = url.slice(0, -1); 
-            localStorage.setItem('sora_api_key', document.getElementById('setting-key').value.trim()); 
-            localStorage.setItem('sora_api_url', url || DEFAULT_API_URL); 
-            localStorage.setItem('sora_imgbb_key', document.getElementById('setting-imgbb').value.trim()); // 保存图床KEY
-            updateApiDisplay(url || DEFAULT_API_URL); 
-            closeSettings(); 
-        }
-
-        // 修改：处理图片上传（保存文件对象）
-        function handleImageUpload(e) { 
-            const file = e.target.files[0]; 
-            if(!file) return; 
-            currentImageFile = file; // 保存原始文件对象
-            const reader = new FileReader(); 
-            reader.onload = (evt) => { 
-                const img = new Image(); 
-                img.onload = () => { 
-                    const canvas = document.createElement('canvas'); 
-                    const ctx = canvas.getContext('2d'); 
-                    const max = 1024; 
-                    let w=img.width, h=img.height; 
-                    if(w>max||h>max){const r=Math.min(max/w,max/h);w*=r;h*=r;} 
-                    canvas.width=w;canvas.height=h;
-                    ctx.drawImage(img,0,0,w,h); 
-                    currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7); 
-                    document.getElementById('preview-img').src = currentImageBase64; 
-                    document.getElementById('preview-img').classList.remove('hidden'); 
-                    document.getElementById('upload-placeholder').classList.add('hidden'); 
-                    document.getElementById('clear-img-btn').classList.remove('hidden'); 
-                }; 
-                img.src = evt.target.result; 
-            }; 
-            reader.readAsDataURL(file); 
-        }
-
-        function clearImage(e) { 
-            e.stopPropagation(); 
-            document.getElementById('file-input').value = ''; 
-            document.getElementById('preview-img').classList.add('hidden'); 
-            document.getElementById('upload-placeholder').classList.remove('hidden'); 
-            document.getElementById('clear-img-btn').classList.add('hidden'); 
-            currentImageBase64 = null; 
-            currentImageFile = null;
-        }
-
-        // 🔴 新增：上传图片到 ImgBB
-        async function uploadImageToImgbb(file) {
-            const apiKey = localStorage.getItem('sora_imgbb_key');
-            if (!apiKey) {
-                alert("⚠️ 请先在设置中填写 ImgBB API Key！\n\n一加 API 需要网络图片链接，请去 api.imgbb.com 获取免费 Key。");
-                throw new Error("Missing ImgBB API Key");
-            }
-
-            const formData = new FormData();
-            formData.append("image", file);
-
-            try {
-                // 🔴 关键修改：添加 &expiration=604800 (7天后自动删除)
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}&expiration=604800`, {
-                    method: "POST",
-                    body: formData
-                });
-                const data = await res.json();
-                if (data.success) {
-                    return data.data.url;
-                } else {
-                    throw new Error(data.error?.message || "上传图床失败");
-                }
-            } catch (e) {
-                alert("图床上传失败: " + e.message);
-                throw e;
-            }
-        }
-
-        // 修改版：submitTask (集成自动上传)
-        async function submitTask() {
-            const key = localStorage.getItem('sora_api_key');
-            let url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
-            if(!key) { openSettings(); return; }
-
-            const isYijia = url.includes('yijia') || url.includes('oneplus');
-
-            const btnId = currentMode === 'single' ? 'generate-btn-single' : 'generate-btn-sb';
-            const iconId = currentMode === 'single' ? 'loading-icon-single' : 'loading-icon-sb';
-            const txtId = currentMode === 'single' ? 'btn-text-single' : 'btn-text-sb';
-            
-            const btn = document.getElementById(btnId);
-            const icon = document.getElementById(iconId);
-            const txt = document.getElementById(txtId);
-
-            let prompt = '';
-            let finalDuration = null;
-            let finalRatio = null;
-            let finalHd = false;
-
-            if(currentMode === 'single') {
-                prompt = document.getElementById('prompt-input').value.trim();
-                finalDuration = document.getElementById('duration-single').value;
-                finalRatio = document.getElementById('ratio-single').value;
-                finalHd = document.getElementById('hd-single').checked;
-            } else {
-                let parts = [];
-                let totalSec = 0;
-                storyShots.forEach((shot, idx) => {
-                    const desc = shot.prompt.trim();
-                    if(desc) {
-                        parts.push(`Shot ${idx+1}:\nduration: ${shot.duration}sec\nScene: ${desc}`);
-                        totalSec += shot.duration;
-                    }
-                });
-                if(parts.length === 0) { alert("请至少填写一个分镜描述"); return; }
-                prompt = parts.join('\n');
-                finalDuration = document.getElementById('duration-sb').value;
-                finalRatio = document.getElementById('ratio-sb').value;
-                finalHd = document.getElementById('hd-sb').checked;
-            }
-
-            if(!prompt) { alert("请输入提示词"); return; }
-
-            btn.disabled = true; btn.classList.add('opacity-75'); 
-            icon.classList.remove('hidden');
-            txt.innerText = "提交中...";
-
-            try {
-                const images = []; 
-                let finalImageUrl = null;
-
-                // 🔴 处理图片逻辑：自动上传图床（无输入框版）
-                if (currentMode === 'single') {
-                    // 1. 一加API -> 必须上传图床
-                    if (isYijia && currentImageFile) {
-                        txt.innerText = "正在上传图片...";
-                        finalImageUrl = await uploadImageToImgbb(currentImageFile);
-                    }
-                    // 2. 其他API -> 直接用Base64
-                    else if (currentImageBase64) {
-                        images.push(currentImageBase64);
-                    }
-                }
-
-                // 恢复文字
-                txt.innerText = "提交任务...";
-
-                let modelToSend = document.getElementById('model-select').value;
-                if (isYijia) {
-                    modelToSend = getYijiaModel(modelToSend, finalDuration, finalRatio);
-                }
-
-                const payload = {
-                    model: modelToSend,
-                    prompt: prompt,
-                    aspect_ratio: finalRatio,
-                    duration: parseInt(finalDuration),
-                    hd: finalHd,
-                    images: images
-                };
-
-                // 一加专用字段
-                if (isYijia && finalImageUrl) {
-                    payload.input_reference = finalImageUrl;
-                }
-
-                const endpoint = isYijia ? '/v1/video/generations' : '/v2/videos/generations';
-
-                const res = await fetch(`${url}${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                
-                if(!res.ok) throw new Error(data.error?.message || "提交失败");
-                const taskId = data.task_id || data.id || (data.data && data.data.id);
-                
-                if(taskId) {
-                    addTaskToList(taskId, prompt, modelToSend, payload.duration, payload.aspect_ratio, url, key);
-                    updatePreview(taskId);
-                    checkTaskStatus(taskId);
-                } else { alert("无 Task ID 返回"); }
-            } catch(e) { alert("错误: " + e.message); } 
-            finally {
-                btn.disabled = false; btn.classList.remove('opacity-75'); 
-                icon.classList.add('hidden');
-                txt.innerText = "立即生成";
-            }
-        }
-        
+        async function uploadImageToImgbb(file) { const apiKey = localStorage.getItem('sora_imgbb_key'); if (!apiKey) { alert("⚠️ 请先在设置中填写 ImgBB API Key！\n\n一加 API 需要网络图片链接，请去 api.imgbb.com 获取免费 Key。"); throw new Error("Missing ImgBB API Key"); } const formData = new FormData(); formData.append("image", file); try { const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}&expiration=604800`, { method: "POST", body: formData }); const data = await res.json(); if (data.success) { return data.data.url; } else { throw new Error(data.error?.message || "上传图床失败"); } } catch (e) { alert("图床上传失败: " + e.message); throw e; } }
+        async function submitTask() { const key = localStorage.getItem('sora_api_key'); let url = localStorage.getItem('sora_api_url') || DEFAULT_API_URL; if(!key) { openSettings(); return; } const isYijia = url.includes('yijia') || url.includes('oneplus'); const btnId = currentMode === 'single' ? 'generate-btn-single' : 'generate-btn-sb'; const iconId = currentMode === 'single' ? 'loading-icon-single' : 'loading-icon-sb'; const txtId = currentMode === 'single' ? 'btn-text-single' : 'btn-text-sb'; const btn = document.getElementById(btnId); const icon = document.getElementById(iconId); const txt = document.getElementById(txtId); let prompt = ''; let finalDuration = null; let finalRatio = null; let finalHd = false; if(currentMode === 'single') { prompt = document.getElementById('prompt-input').value.trim(); finalDuration = document.getElementById('duration-single').value; finalRatio = document.getElementById('ratio-single').value; finalHd = document.getElementById('hd-single').checked; } else { let parts = []; let totalSec = 0; storyShots.forEach((shot, idx) => { const desc = shot.prompt.trim(); if(desc) { parts.push(`Shot ${idx+1}:\nduration: ${shot.duration}sec\nScene: ${desc}`); totalSec += shot.duration; } }); if(parts.length === 0) { alert("请至少填写一个分镜描述"); return; } prompt = parts.join('\n'); finalDuration = document.getElementById('duration-sb').value; finalRatio = document.getElementById('ratio-sb').value; finalHd = document.getElementById('hd-sb').checked; } if(!prompt) { alert("请输入提示词"); return; } btn.disabled = true; btn.classList.add('opacity-75'); icon.classList.remove('hidden'); txt.innerText = "提交中..."; try { const images = []; let finalImageUrl = null; if (currentMode === 'single') { if (isYijia && currentImageFile) { txt.innerText = "正在上传图片..."; finalImageUrl = await uploadImageToImgbb(currentImageFile); } else if (currentImageBase64) { images.push(currentImageBase64); } } txt.innerText = "提交任务..."; let modelToSend = document.getElementById('model-select').value; if (isYijia) { modelToSend = getYijiaModel(modelToSend, finalDuration, finalRatio); } const payload = { model: modelToSend, prompt: prompt, aspect_ratio: finalRatio, duration: parseInt(finalDuration), hd: finalHd, images: images }; if (isYijia && finalImageUrl) { payload.input_reference = finalImageUrl; } const endpoint = isYijia ? '/v1/video/generations' : '/v2/videos/generations'; const res = await fetch(`${url}${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` }, body: JSON.stringify(payload) }); const data = await res.json(); if(!res.ok) throw new Error(data.error?.message || "提交失败"); const taskId = data.task_id || data.id || (data.data && data.data.id); if(taskId) { addTaskToList(taskId, prompt, modelToSend, payload.duration, payload.aspect_ratio, url, key); updatePreview(taskId); checkTaskStatus(taskId); if(window.innerWidth < 768) switchMobileTab('preview'); } else { alert("无 Task ID 返回"); } } catch(e) { alert("错误: " + e.message); } finally { btn.disabled = false; btn.classList.remove('opacity-75'); icon.classList.add('hidden'); txt.innerText = "立即生成"; } }
         function startPolling() { if(pollingInterval) clearInterval(pollingInterval); pollingInterval = setInterval(() => { const pending = taskList.some(t => t.status !== 'SUCCESS' && t.status !== 'FAILURE'); if(pending) checkAllTasksStatus(); }, 4000); }
-        
-        async function checkAllTasksStatus() { 
-            const pending = taskList.filter(t => t.status !== 'FAILURE' && (t.status !== 'SUCCESS' || !t.videoUrl)); 
-            for(const t of pending) await checkTaskStatus(t.id); 
-        }
-        
-        async function checkTaskStatus(id) {
-            const task = taskList.find(t => t.id === id); if(!task) return;
-            const key = task.apiKey || localStorage.getItem('sora_api_key');
-            const url = task.apiUrl || localStorage.getItem('sora_api_url') || DEFAULT_API_URL;
-            const isYijia = url.includes('yijia') || url.includes('oneplus');
-            const endpoint = isYijia ? `/v1/video/generations/${id}` : `/v2/videos/generations/${id}`;
-
-            try {
-                const res = await fetch(`${url}${endpoint}`, { headers: {'Authorization': `Bearer ${key}`} });
-                if(!res.ok) return;
-                let data = await res.json();
-                if (Array.isArray(data) && data.length > 0) { data = data[0]; }
-                
-                let status = '';
-                if(data.status) status = data.status;
-                else if(data.data && data.data.status) status = data.data.status;
-                else if(data.data && data.data.data && data.data.data.status) status = data.data.data.status;
-                status = status.toUpperCase();
-                
-                if(data.progress) task.progress = parseInt(data.progress);
-                else if(data.data && data.data.progress) task.progress = parseInt(data.data.progress);
-                else if(data.data && data.data.data && data.data.data.progress) task.progress = parseInt(data.data.data.progress);
-
-                if(['SUCCESS', 'SUCCEEDED', 'COMPLETED'].includes(status)) {
-                    task.status = 'SUCCESS'; task.progress = 100; task.finishTime = Date.now();
-                    function findAnyUrl(obj) {
-                        if (!obj) return null;
-                        if (typeof obj === 'object') {
-                            const candidates = [obj.url, obj.video_url, obj.output, obj.size, obj.result, obj.file_url];
-                            for (let c of candidates) { if (c && typeof c === 'string' && c.startsWith('http')) return c; }
-                            for (let key in obj) {
-                                if (typeof obj[key] === 'object') { const found = findAnyUrl(obj[key]); if (found) return found; }
-                            }
-                        } return null;
-                    }
-                    const vUrl = findAnyUrl(data);
-                    if (vUrl) task.videoUrl = vUrl;
-                } else if(['FAILURE', 'FAILED', 'ERROR'].includes(status)) { 
-                    task.status = 'FAILURE'; task.errorMsg = "生成失败";
-                } else { task.status = 'IN_PROGRESS'; }
-                saveHistory(); renderTaskList(); if(activeTaskId === id) updatePreview(id); 
-            } catch(e) { console.error(e); }
-        }
-
-        function addTaskToList(id, prompt, model, dur, ratio, usedUrl, usedKey) { 
-            taskList.unshift({ id: id, prompt, model, duration: dur, ratio: ratio, status: 'NOT_START', startTime: Date.now(), progress: 0, apiUrl: usedUrl, apiKey: usedKey }); 
-            saveHistory(); renderTaskList(); 
-        }
+        async function checkAllTasksStatus() { const pending = taskList.filter(t => t.status !== 'FAILURE' && (t.status !== 'SUCCESS' || !t.videoUrl)); for(const t of pending) await checkTaskStatus(t.id); }
+        async function checkTaskStatus(id) { const task = taskList.find(t => t.id === id); if(!task) return; const key = task.apiKey || localStorage.getItem('sora_api_key'); const url = task.apiUrl || localStorage.getItem('sora_api_url') || DEFAULT_API_URL; const isYijia = url.includes('yijia') || url.includes('oneplus'); const endpoint = isYijia ? `/v1/video/generations/${id}` : `/v2/videos/generations/${id}`; try { const res = await fetch(`${url}${endpoint}`, { headers: {'Authorization': `Bearer ${key}`} }); if(!res.ok) return; let data = await res.json(); if (Array.isArray(data) && data.length > 0) { data = data[0]; } let status = ''; if(data.status) status = data.status; else if(data.data && data.data.status) status = data.data.status; else if(data.data && data.data.data && data.data.data.status) status = data.data.data.status; status = status.toUpperCase(); if(data.progress) task.progress = parseInt(data.progress); else if(data.data && data.data.progress) task.progress = parseInt(data.data.progress); else if(data.data && data.data.data && data.data.data.progress) task.progress = parseInt(data.data.data.progress); if(['SUCCESS', 'SUCCEEDED', 'COMPLETED'].includes(status)) { task.status = 'SUCCESS'; task.progress = 100; task.finishTime = Date.now(); function findAnyUrl(obj) { if (!obj) return null; if (typeof obj === 'object') { const candidates = [obj.url, obj.video_url, obj.output, obj.size, obj.result, obj.file_url]; for (let c of candidates) { if (c && typeof c === 'string' && c.startsWith('http')) return c; } for (let key in obj) { if (typeof obj[key] === 'object') { const found = findAnyUrl(obj[key]); if (found) return found; } } } return null; } const vUrl = findAnyUrl(data); if (vUrl) task.videoUrl = vUrl; } else if(['FAILURE', 'FAILED', 'ERROR'].includes(status)) { task.status = 'FAILURE'; task.errorMsg = "生成失败"; } else { task.status = 'IN_PROGRESS'; } saveHistory(); renderTaskList(); if(activeTaskId === id) updatePreview(id); } catch(e) { console.error(e); } }
+        function addTaskToList(id, prompt, model, dur, ratio, usedUrl, usedKey) { taskList.unshift({ id: id, prompt, model, duration: dur, ratio: ratio, status: 'NOT_START', startTime: Date.now(), progress: 0, apiUrl: usedUrl, apiKey: usedKey }); saveHistory(); renderTaskList(); }
         function saveHistory() { localStorage.setItem('sora_tasks_v3', JSON.stringify(taskList)); }
         function loadHistory() { const s = localStorage.getItem('sora_tasks_v3'); if(s) { taskList = JSON.parse(s); renderTaskList(); } }
         function clearHistory() { if(confirm("清空历史记录？")) { taskList = []; saveHistory(); renderTaskList(); activeTaskId=null; document.getElementById('preview-placeholder').classList.remove('hidden'); document.getElementById('main-player').classList.add('hidden'); } }
