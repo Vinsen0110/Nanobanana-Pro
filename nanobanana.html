@@ -15,7 +15,7 @@
         .custom-input { transition: all 0.2s; }
         .custom-input:focus { border-color: #6366f1; outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
         .custom-input:read-only { background-color: #f3f4f6; color: #9ca3af; cursor: not-allowed; border-color: #e5e7eb; }
-        .dark .custom-input:read-only { background-color: #27272a; color: #71717a; border-color: #3f3f46; }
+        .dark .custom-input:read-only { background-color: #27272a; color: #717171; border-color: #3f3f46; }
         select:disabled { background-color: #e5e7eb; color: #9ca3af; cursor: not-allowed !important; }
         .dark select:disabled { background-color: #27272a; color: #52525b; }
         select { cursor: pointer !important; }
@@ -91,7 +91,7 @@
                         <input type="hidden" id="model-input" value="nano-banana-2-4k">
                         <div onclick="toggleModelDropdown(event)" id="dropdown-trigger" class="w-full flex justify-between items-center bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] rounded-lg px-3 py-1.5 cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-[#27272a]">
                             <span id="current-model-text" class="text-xs font-bold font-mono text-gray-700 dark:text-gray-300">nano-banana-2-4K</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] text-gray-500 dropdown-arrow"></i>
+                             <i class="fa-solid fa-chevron-down text-[10px] text-gray-500 dropdown-arrow"></i>
                         </div>
                         <div id="dropdown-options" class="hidden absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-xl shadow-xl overflow-hidden z-50 p-1">
                             <div onclick="selectModel('nano-banana-2-4k', 'nano-banana-2-4K')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-2-4k">
@@ -125,6 +125,7 @@
                     <label class="text-xs text-black dark:text-gray-200 font-bold uppercase">宽高比</label>
                     <div class="relative">
                         <select id="ratio-select" class="w-full custom-input rounded px-3 py-2 text-sm bg-gray-50 border-gray-300 text-black dark:bg-[#18181b] dark:border-[#27272a] dark:text-white appearance-none cursor-pointer">
+                            <option value="auto">Auto (自动)</option>
                             <option value="1:1">1:1 (正方形)</option>
                             <option value="2:3">2:3 (竖屏)</option>
                             <option value="3:2">3:2 (横屏)</option>
@@ -173,11 +174,11 @@
                  <div class="h-12 border-b border-gray-200 dark:border-[#27272a] bg-white dark:bg-[#0c0c0e] flex items-center justify-between px-4 shrink-0 z-20 transition-colors">
                     <button onclick="importCurrentImage()" class="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white flex items-center gap-2 transition" title="将当前图作为参考图">
                         <i class="fa-solid fa-arrow-left"></i> <span class="hidden md:inline">导入</span>
-                    </button>
+                     </button>
                     <div class="flex items-center gap-4">
                         <button onclick="downloadCurrentImage()" class="text-xs text-gray-500 dark:text-gray-400 hover:text-purple-500 dark:hover:text-purple-500 flex items-center gap-2 transition">下载 JPG <i class="fa-solid fa-download"></i></button>
                     </div>
-                </div>
+                 </div>
                 <div class="flex-1 relative flex flex-col overflow-hidden select-none bg-gray-200 dark:bg-black transition-colors" id="preview-area">
                     <div class="absolute top-4 left-4 z-30 flex items-center gap-4 bg-white/80 dark:bg-[#18181b]/80 backdrop-blur rounded-lg px-3 py-1.5 border border-gray-200 dark:border-[#27272a] shadow-sm">
                         <span class="text-xs font-bold text-gray-800 dark:text-white">Preview</span>
@@ -228,7 +229,7 @@
     <div id="editor-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex flex-col items-center justify-center">
         <div class="absolute top-6 flex gap-4 bg-white dark:bg-[#18181b] p-2 rounded-full shadow-2xl border border-gray-200 dark:border-[#27272a] z-50">
             <div class="flex gap-2 border-r border-gray-200 dark:border-gray-700 pr-4 mr-2">
-                <div class="color-btn bg-red-500 active" onclick="setDrawColor('#ef4444', this)"></div>
+                 <div class="color-btn bg-red-500 active" onclick="setDrawColor('#ef4444', this)"></div>
                 <div class="color-btn bg-amber-500" onclick="setDrawColor('#f59e0b', this)"></div>
                 <div class="color-btn bg-emerald-500" onclick="setDrawColor('#10b981', this)"></div>
                 <div class="color-btn bg-blue-500" onclick="setDrawColor('#3b82f6', this)"></div>
@@ -260,16 +261,16 @@
             <div class="flex justify-between items-center mb-4"><h3 class="text-lg font-bold dark:text-white flex items-center gap-2"><i class="fa-solid fa-gear text-purple-500"></i> API 设置</h3><button onclick="closeSettings()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">API 网站地址 (自动追加 /v1/images/edits)</label>
+                     <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">API 网站地址 (自动追加 /v1/images/edits)</label>
                     <input type="text" id="modal-api-url" class="w-full bg-gray-50 dark:bg-[#0c0c0e] border border-gray-300 dark:border-[#27272a] rounded p-3 text-sm text-gray-800 dark:text-gray-200 outline-none focus:border-purple-500" placeholder="https://api.bltcy.ai">
                     <div class="flex gap-2 mt-2">
-                        <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
+                         <button onclick="fillApiUrl('https://ai.t8star.cn')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 text-xs font-bold text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/40 transition cursor-pointer">
                             <i class="fa-solid fa-spa"></i> 贞贞: ai.t8star.cn
                         </button>
-                        <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
+                         <button onclick="fillApiUrl('https://api.bltcy.ai')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition cursor-pointer">
                             <i class="fa-solid fa-landmark"></i> 柏拉图: api.bltcy.ai
                         </button>
-                    </div>
+                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-2 uppercase">API Key</label>
@@ -286,7 +287,7 @@
         let imageSlots = new Array(MAX_SLOTS).fill(null);
         let currentActiveSlot = -1; 
         let batchSize = 1;
-        let currentMainImageUrl = ""; 
+        let currentMainImageUrl = "";
         let scale = 1, panning = false, pointX = 0, pointY = 0, startX = 0, startY = 0;
         let originalRefImage = null; 
         let historyData = [];
@@ -312,13 +313,14 @@
             document.getElementById('modal-api-url').value = savedUrl || DEFAULT_API_URL;
             updateApiDisplay(savedUrl || DEFAULT_API_URL);
             if (!savedKey) openSettings();
+      
             const savedTheme = localStorage.getItem('nano_theme');
             const icon = document.getElementById('theme-icon');
             if (savedTheme === 'light') { document.documentElement.classList.remove('dark'); icon.className = 'fa-solid fa-sun text-purple-500'; }
             else { document.documentElement.classList.add('dark'); icon.className = 'fa-solid fa-moon'; }
             ctx = canvas.getContext('2d');
             document.getElementById('text-tool-input').addEventListener('keydown', (e) => {
-                if(e.key === 'Enter') finalizeText();
+                 if(e.key === 'Enter') finalizeText();
             });
             renderSlots();
             const savedHistory = localStorage.getItem('nano_history_data');
@@ -372,16 +374,16 @@
                 ctx.strokeStyle = action.color;
                 ctx.lineWidth = 5;
                 ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
+                 ctx.lineJoin = 'round';
                 if(action.type === 'path') {
                     ctx.beginPath();
                     if(action.points.length > 0) {
                         ctx.moveTo(action.points[0].x, action.points[0].y);
-                        for(let i=1; i<action.points.length; i++) { ctx.lineTo(action.points[i].x, action.points[i].y); }
+                         for(let i=1; i<action.points.length; i++) { ctx.lineTo(action.points[i].x, action.points[i].y); }
                     }
                     ctx.stroke();
                 } else if(action.type === 'text') {
-                    ctx.font = "bold 24px Arial";
+                     ctx.font = "bold 24px Arial";
                     ctx.fillText(action.text, action.x, action.y);
                 }
             });
@@ -613,9 +615,18 @@
         
         zoomContainer.addEventListener('wheel', (e) => { if (imgWrapper.classList.contains('hidden')) return; e.preventDefault(); const delta = -e.deltaY; (delta > 0) ? (scale *= 1.1) : (scale /= 1.1); if (scale < 0.5) scale = 0.5; if (scale > 5) scale = 5; updateTransform(); });
         
-        zoomContainer.addEventListener('mousedown', startPan);
+        // 修复：滑块在鼠标点击下失效的问题
+        zoomContainer.addEventListener('mousedown', (e) => {
+            if (e.target.closest('#slider-handle')) {
+                isSliding = true;
+                e.preventDefault();
+                return;
+            }
+            if (imgWrapper.classList.contains('hidden')) return;
+            startPan(e);
+        });
+
         let initialPinchDist = 0;
-        
         zoomContainer.addEventListener('touchstart', (e) => {
             if (e.target.closest('#slider-handle')) { isSliding = true; e.preventDefault(); return; }
             if (imgWrapper.classList.contains('hidden')) return;
@@ -623,7 +634,6 @@
                 e.preventDefault(); 
                 initialPinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
             } else if (e.touches.length === 1) {
-                // 触摸时始终允许拖拽，不再限制 scale > 1
                 e.preventDefault();
                 startPan(e);
             }
@@ -663,7 +673,6 @@
                 return; 
             } 
             if (!panning) return;
-            // 修复点：移除 scale > 1 的判断，实现在任何缩放倍数下都能鼠标拖拽移动
             pointX = getEvtX(e) - startX;
             pointY = getEvtY(e) - startY; 
             updateTransform(); 
@@ -677,7 +686,6 @@
             if (tapLength < 500 && tapLength > 0) { resetZoom(); e.preventDefault(); }
             lastTap = currentTime;
         });
-
         function setBatchSize(num) { batchSize = num; document.querySelectorAll('.batch-btn').forEach(btn => { if(parseInt(btn.dataset.val) === num) btn.className = "batch-btn active-btn flex-1 py-2 text-xs rounded transition"; else btn.className = "batch-btn inactive-btn bg-gray-100 border-gray-300 text-gray-500 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-400 flex-1 py-2 text-xs rounded transition"; }); }
 
         async function submitTask() {
@@ -692,7 +700,7 @@
             const btn = document.getElementById('generate-btn'), icon = document.getElementById('loading-icon');
             if (!prompt) { alert("请输入提示词"); return; }
             btn.disabled = true;
-            btn.classList.add('opacity-70', 'cursor-not-allowed'); icon.classList.remove('hidden'); 
+            btn.classList.add('opacity-70', 'cursor-not-allowed'); icon.classList.remove('hidden');
             btn.querySelector('span').innerText = `生成中 (0/${batchSize})...`; 
             const validImages = imageSlots.filter(item => item !== null); 
             originalRefImage = null;
@@ -762,7 +770,7 @@
                 <div class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/60 to-transparent pointer-events-none"></div>
                 <div class="absolute top-2 left-2 z-20"><input type="checkbox" class="task-checkbox" onchange="updateBatchState()" onclick="event.stopPropagation()"></div>
                 <div class="absolute top-2 right-2 flex gap-3 opacity-100 md:opacity-0 group-hover:opacity-100 transition duration-200 z-20">
-                    <button onclick="event.stopPropagation(); downloadSingleImage('${url}')" class="w-6 h-6 rounded-full bg-black/40 hover:bg-purple-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition" title="下载"><i class="fa-solid fa-download text-[10px]"></i></button>
+                     <button onclick="event.stopPropagation(); downloadSingleImage('${url}')" class="w-6 h-6 rounded-full bg-black/40 hover:bg-purple-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition" title="下载"><i class="fa-solid fa-download text-[10px]"></i></button>
                     <button onclick="event.stopPropagation(); deleteHistoryItem(this)" class="w-6 h-6 rounded-full bg-black/40 hover:bg-red-500 text-white flex items-center justify-center backdrop-blur border border-white/10 transition" title="删除"><i class="fa-solid fa-trash text-[10px]"></i></button>
                 </div>
                 <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none">
@@ -781,7 +789,8 @@
             if(checked.length > 0) { batchActions.classList.remove('hidden'); titleLabel.innerHTML = `已选 <span class="text-purple-500">${checked.length}</span> 项`; titleLabel.classList.add('text-gray-900', 'dark:text-white'); } 
             else { batchActions.classList.add('hidden'); titleLabel.innerHTML = '任务列表'; titleLabel.classList.remove('text-gray-900', 'dark:text-white'); }
             const mainCb = document.getElementById('select-all');
-            if(checked.length === checkboxes.length && checkboxes.length > 0) mainCb.checked = true; else if(checked.length === 0) mainCb.checked = false; else mainCb.indeterminate = true;
+            if(checked.length === checkboxes.length && checkboxes.length > 0) mainCb.checked = true; else if(checked.length === 0) mainCb.checked = false;
+            else mainCb.indeterminate = true;
         }
 
         async function batchDownload() {
