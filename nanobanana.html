@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Xs的工具箱</title>
     <link rel="icon" href="kitty.png">
-    <script src="https://cdn.tailwindcss.com"></script>
+    
     <script>
-        tailwind.config = { darkMode: 'class' }
+        window.tailwind = { darkMode: 'class' }
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif;}
+        /* 优化2：添加预设背景色，防止JS加载前的白屏闪烁 */
+        html, body { background-color: #f9fafb; color: #1f2937; }
+        html.dark body { background-color: #09090b !important; color: #e4e4e7 !important; }
+
+        /* 优化1：移除 body 的 transition 动画，提高唤醒速度 */
+        body { font-family: 'Inter', sans-serif; }
+        
         .custom-input { transition: all 0.2s; }
         .custom-input:focus { border-color: #6366f1; outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
         .custom-input:read-only { background-color: #f3f4f6; color: #9ca3af; cursor: not-allowed; border-color: #e5e7eb; }
@@ -898,4 +906,3 @@
     </script>
 </body>
 </html>
-
