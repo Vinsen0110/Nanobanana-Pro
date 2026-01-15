@@ -5,21 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Xs的工具箱</title>
     <link rel="icon" href="kitty.png">
-    
-    <script>
-        window.tailwind = { darkMode: 'class' }
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* 优化2：添加预设背景色，防止JS加载前的白屏闪烁 */
-        html, body { background-color: #f9fafb; color: #1f2937; }
-        html.dark body { background-color: #09090b !important; color: #e4e4e7 !important; }
-
-        /* 优化1：移除 body 的 transition 动画，提高唤醒速度 */
-        body { font-family: 'Inter', sans-serif; }
-        
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
         .custom-input { transition: all 0.2s; }
         .custom-input:focus { border-color: #6366f1; outline: none; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
         .custom-input:read-only { background-color: #f3f4f6; color: #9ca3af; cursor: not-allowed; border-color: #e5e7eb; }
@@ -642,29 +634,6 @@
             imageSlots.forEach((file, index) => {
                 const slotNum = index + 1; const div = document.createElement('div');
                 div.className = `relative w-full aspect-[4/3] rounded-lg border-2 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center group ${file ? 'border-transparent bg-gray-900' : 'border-gray-300 dark:border-[#27272a] hover:border-purple-500 dark:hover:border-purple-500 bg-gray-50 dark:bg-[#18181b] hover:bg-purple-50 dark:hover:bg-[#1f1f22]'}`;
-                
-                // --- 拖拽上传支持开始 ---
-                div.addEventListener('dragover', (e) => {
-                    e.preventDefault(); e.stopPropagation();
-                    div.style.borderColor = '#a855f7'; div.style.backgroundColor = 'rgba(168, 85, 247, 0.05)';
-                });
-                div.addEventListener('dragleave', (e) => {
-                    e.preventDefault(); e.stopPropagation();
-                    div.style.borderColor = ''; div.style.backgroundColor = '';
-                });
-                div.addEventListener('drop', (e) => {
-                    e.preventDefault(); e.stopPropagation();
-                    div.style.borderColor = ''; div.style.backgroundColor = '';
-                    const dt = e.dataTransfer; const files = dt.files;
-                    if(files && files.length > 0) {
-                        const droppedFile = files[0];
-                        if(droppedFile.type.startsWith('image/')) {
-                            imageSlots[index] = droppedFile; renderSlots(); updatePromptLockState();
-                        }
-                    }
-                });
-                // --- 拖拽上传支持结束 ---
-
                 if (file) {
                     const reader = new FileReader(); reader.onload = (e) => {
                         let doodleBadge = file.isDoodled ? `<div class="absolute bottom-1 right-1 text-xs text-indigo-400 font-bold z-10"><i class="fa-solid fa-pen-nib"></i></div>` : "";
@@ -780,46 +749,6 @@
                 outcomes.forEach(outcome => { if (outcome.status === 'fulfilled') { allResults.push(...outcome.value); } else { console.error("部分请求失败:", outcome.reason); } });
                 const duration = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
                 if (allResults.length > 0) { 
-                    // New preloading with timeout safety valve
-                    let progress = 0;
-                    const btnSpan = btn.querySelector('span');
-                    btnSpan.innerText = "图片加载中 0%...";
-                    
-                    await new Promise((resolve) => {
-                        let isResolved = false;
-                        
-                        // Force finish function to clean up and resolve
-                        const finish = () => {
-                            if (isResolved) return;
-                            isResolved = true;
-                            clearInterval(interval);
-                            btnSpan.innerText = "图片加载中 100%...";
-                            setTimeout(resolve, 200);
-                        };
-
-                        const interval = setInterval(() => {
-                            if (progress < 30) progress += 2;
-                            else if (progress < 80) progress += 0.5;
-                            else if (progress < 99) progress += 0.1;
-                            
-                            if (progress >= 99) progress = 99;
-                            btnSpan.innerText = `图片加载中 ${Math.floor(progress)}%...`;
-                        }, 100);
-
-                        // Safety Timeout: If loading takes more than 10 seconds, force show it
-                        setTimeout(() => {
-                            if (!isResolved) {
-                                console.warn("Image load timed out, forcing display");
-                                finish();
-                            }
-                        }, 10000); // 10 seconds timeout
-
-                        const img = new Image();
-                        img.onload = finish;
-                        img.onerror = finish; // Even if error, resolve to let browser try showing broken img icon or cached version
-                        img.src = allResults[0].url;
-                    });
-
                     setMainImage(allResults[0].url, duration, originalRefImage);
                     allResults.forEach(img => addToHistory(img.url, prompt, duration)); 
                     if(window.innerWidth < 768) { setTimeout(() => { document.getElementById('preview-section-wrapper').scrollIntoView({ behavior: 'smooth' }); }, 100); }
