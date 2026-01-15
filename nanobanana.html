@@ -628,12 +628,57 @@
         function resizeTasklist(e) { const h = window.innerHeight - e.clientY; if (h > 120 && h < 600) taskPanel.style.height = h + 'px'; }
         function stopResizeTasklist() { document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeTasklist); document.removeEventListener('mouseup', stopResizeTasklist); }
 
-        function renderSlots() {
-            const grid = document.getElementById('slots-grid'); const currentModel = document.getElementById('model-input').value; const canDoodle = (currentModel === 'nano-banana-2-4k');
+       function renderSlots() {
+            const grid = document.getElementById('slots-grid'); 
+            const currentModel = document.getElementById('model-input').value; 
+            const canDoodle = (currentModel === 'nano-banana-2-4k');
             grid.innerHTML = '';
+
             imageSlots.forEach((file, index) => {
-                const slotNum = index + 1; const div = document.createElement('div');
+                const slotNum = index + 1; 
+                const div = document.createElement('div');
+                
+                // 保持原有的样式类名不变
                 div.className = `relative w-full aspect-[4/3] rounded-lg border-2 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center group ${file ? 'border-transparent bg-gray-900' : 'border-gray-300 dark:border-[#27272a] hover:border-purple-500 dark:hover:border-purple-500 bg-gray-50 dark:bg-[#18181b] hover:bg-purple-50 dark:hover:bg-[#1f1f22]'}`;
+                
+                // --- 新增：拖拽事件监听 ---
+                // 1. 当拖拽文件经过格子上方时
+                div.ondragover = (e) => {
+                    e.preventDefault(); // 必须阻止默认行为，否则无法触发 drop
+                    // 添加高亮视觉反馈 (紫色边框 + 轻微缩放)
+                    if (!file) {
+                        div.classList.add('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
+                    }
+                };
+
+                // 2. 当拖拽离开格子时
+                div.ondragleave = (e) => {
+                    e.preventDefault();
+                    // 移除高亮
+                    div.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
+                };
+
+                // 3. 当松开鼠标放下文件时
+                div.ondrop = (e) => {
+                    e.preventDefault();
+                    // 移除高亮
+                    div.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
+                    
+                    // 获取拖拽的文件
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        const droppedFile = e.dataTransfer.files[0];
+                        // 检查是否为图片
+                        if (droppedFile.type.startsWith('image/')) {
+                            imageSlots[index] = droppedFile; // 存入对应的格子位置
+                            renderSlots(); // 刷新界面
+                            updatePromptLockState(); // 更新锁定状态
+                        } else {
+                            alert("请拖入图片格式的文件");
+                        }
+                    }
+                };
+                // --- 拖拽逻辑结束 ---
+
                 if (file) {
                     const reader = new FileReader(); reader.onload = (e) => {
                         let doodleBadge = file.isDoodled ? `<div class="absolute bottom-1 right-1 text-xs text-indigo-400 font-bold z-10"><i class="fa-solid fa-pen-nib"></i></div>` : "";
@@ -835,3 +880,4 @@
     </script>
 </body>
 </html>
+
