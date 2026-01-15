@@ -628,70 +628,6 @@
         function resizeTasklist(e) { const h = window.innerHeight - e.clientY; if (h > 120 && h < 600) taskPanel.style.height = h + 'px'; }
         function stopResizeTasklist() { document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeTasklist); document.removeEventListener('mouseup', stopResizeTasklist); }
 
-       function renderSlots() {
-            const grid = document.getElementById('slots-grid'); 
-            const currentModel = document.getElementById('model-input').value; 
-            const canDoodle = (currentModel === 'nano-banana-2-4k');
-            grid.innerHTML = '';
-
-            imageSlots.forEach((file, index) => {
-                const slotNum = index + 1; 
-                const div = document.createElement('div');
-                
-                // 保持原有的样式类名不变
-                div.className = `relative w-full aspect-[4/3] rounded-lg border-2 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center group ${file ? 'border-transparent bg-gray-900' : 'border-gray-300 dark:border-[#27272a] hover:border-purple-500 dark:hover:border-purple-500 bg-gray-50 dark:bg-[#18181b] hover:bg-purple-50 dark:hover:bg-[#1f1f22]'}`;
-                
-                // --- 新增：拖拽事件监听 ---
-                // 1. 当拖拽文件经过格子上方时
-                div.ondragover = (e) => {
-                    e.preventDefault(); // 必须阻止默认行为，否则无法触发 drop
-                    // 添加高亮视觉反馈 (紫色边框 + 轻微缩放)
-                    if (!file) {
-                        div.classList.add('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
-                    }
-                };
-
-                // 2. 当拖拽离开格子时
-                div.ondragleave = (e) => {
-                    e.preventDefault();
-                    // 移除高亮
-                    div.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
-                };
-
-                // 3. 当松开鼠标放下文件时
-                div.ondrop = (e) => {
-                    e.preventDefault();
-                    // 移除高亮
-                    div.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
-                    
-                    // 获取拖拽的文件
-                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                        const droppedFile = e.dataTransfer.files[0];
-                        // 检查是否为图片
-                        if (droppedFile.type.startsWith('image/')) {
-                            imageSlots[index] = droppedFile; // 存入对应的格子位置
-                            renderSlots(); // 刷新界面
-                            updatePromptLockState(); // 更新锁定状态
-                        } else {
-                            alert("请拖入图片格式的文件");
-                        }
-                    }
-                };
-                // --- 拖拽逻辑结束 ---
-
-                if (file) {
-                    const reader = new FileReader(); reader.onload = (e) => {
-                        let doodleBadge = file.isDoodled ? `<div class="absolute bottom-1 right-1 text-xs text-indigo-400 font-bold z-10"><i class="fa-solid fa-pen-nib"></i></div>` : "";
-                        let editBtn = canDoodle ? `<div onclick="openEditor(${index}, event)" class="absolute bottom-1 left-1 w-5 h-5 bg-indigo-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm z-20 hover:scale-110 hover:bg-indigo-400" title="涂鸦编辑"><i class="fa-solid fa-paintbrush text-[10px]"></i></div>` : "";
-                        div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover pointer-events-none"><div class="absolute top-1 left-1 bg-black/60 text-white text-[9px] font-bold px-1.5 rounded backdrop-blur-sm z-10">图 ${slotNum}</div>${editBtn} ${doodleBadge}<div onclick="clearSlot(${index}, event)" class="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm z-20 hover:scale-110"><i class="fa-solid fa-xmark text-[10px]"></i></div><div onclick="viewOriginal('${e.target.result}')" class="absolute inset-0 z-0"></div>`;
-                    }; reader.readAsDataURL(file);
-                } else {
-                    div.onclick = () => triggerSlotUpload(index);
-                    div.innerHTML = `<i class="fa-solid fa-plus text-gray-300 dark:text-gray-600 text-lg mb-1 group-hover:text-purple-500 transition"></i><span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono group-hover:text-purple-500 transition">图片 ${slotNum}</span>`;
-                }
-                grid.appendChild(div);
-            });
-        }
         function triggerSlotUpload(index) { currentActiveSlot = index; const input = document.getElementById('slot-file-input'); input.value = ''; input.click(); }
         function handleSlotFile(event) { const file = event.target.files[0]; if (!file) return; imageSlots[currentActiveSlot] = file; renderSlots(); updatePromptLockState(); }
         function clearSlot(index, event) { if(event) event.stopPropagation(); imageSlots[index] = null; renderSlots(); updatePromptLockState(); }
@@ -757,6 +693,124 @@
             }); 
         }
 
+        // --- 新增：自动创建加载进度条组件 ---
+        function ensureLoaderExists() {
+            if (document.getElementById('custom-loader')) return;
+            const container = document.getElementById('zoom-container');
+            const loaderDiv = document.createElement('div');
+            loaderDiv.id = 'custom-loader';
+            loaderDiv.className = 'hidden absolute z-50 flex flex-col items-center justify-center bg-white/90 dark:bg-[#09090b]/90 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-[#27272a] transition-all select-none';
+            loaderDiv.innerHTML = `
+                <div class="relative w-16 h-16 mb-4 flex items-center justify-center">
+                    <div class="absolute inset-0 border-4 border-indigo-100 dark:border-indigo-900 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                    <i class="fa-solid fa-image text-indigo-500 text-xl animate-pulse"></i>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">图像渲染中</div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 font-mono mb-2">接收 4K 数据流...</div>
+                    <div class="w-48 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden relative">
+                        <div id="loader-bar" class="h-full bg-gradient-to-r from-purple-500 to-indigo-600 w-0 transition-all duration-100 ease-out"></div>
+                    </div>
+                    <div id="loader-percent" class="mt-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 font-mono">0%</div>
+                </div>
+            `;
+            container.appendChild(loaderDiv);
+        }
+
+        // --- 新增：预加载图片并显示进度的核心逻辑 ---
+        function preloadImageAndDisplay(url, duration, refSrc) {
+            ensureLoaderExists();
+            const loader = document.getElementById('custom-loader');
+            const percentText = document.getElementById('loader-percent');
+            const bar = document.getElementById('loader-bar');
+            
+            loader.classList.remove('hidden');
+            if(!document.getElementById('img-wrapper').classList.contains('hidden')) {
+                document.getElementById('main-image').style.filter = 'blur(10px) grayscale(100%)';
+            }
+            
+            percentText.innerText = '0%';
+            bar.style.width = '0%';
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+
+            xhr.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    const percent = Math.round((event.loaded / event.total) * 100);
+                    percentText.innerText = percent + '%';
+                    bar.style.width = percent + '%';
+                }
+            };
+
+            xhr.onload = () => {
+                loader.classList.add('hidden');
+                document.getElementById('main-image').style.filter = '';
+                if (xhr.status === 200) {
+                    const blobUrl = URL.createObjectURL(xhr.response);
+                    setMainImage(blobUrl, duration, refSrc);
+                } else {
+                    setMainImage(url, duration, refSrc);
+                }
+            };
+
+            xhr.onerror = () => {
+                loader.classList.add('hidden');
+                document.getElementById('main-image').style.filter = '';
+                setMainImage(url, duration, refSrc);
+            };
+
+            xhr.send();
+        }
+
+        // --- 修改后：包含拖拽功能的 renderSlots ---
+        function renderSlots() {
+            const grid = document.getElementById('slots-grid'); 
+            const currentModel = document.getElementById('model-input').value; 
+            const canDoodle = (currentModel === 'nano-banana-2-4k');
+            grid.innerHTML = '';
+
+            imageSlots.forEach((file, index) => {
+                const slotNum = index + 1; 
+                const div = document.createElement('div');
+                div.className = `relative w-full aspect-[4/3] rounded-lg border-2 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center group ${file ? 'border-transparent bg-gray-900' : 'border-gray-300 dark:border-[#27272a] hover:border-purple-500 dark:hover:border-purple-500 bg-gray-50 dark:bg-[#18181b] hover:bg-purple-50 dark:hover:bg-[#1f1f22]'}`;
+                
+                div.ondragover = (e) => {
+                    e.preventDefault();
+                    if (!file) div.classList.add('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
+                };
+                div.ondragleave = (e) => {
+                    e.preventDefault();
+                    div.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
+                };
+                div.ondrop = (e) => {
+                    e.preventDefault();
+                    div.classList.remove('border-purple-500', 'bg-purple-100', 'dark:bg-[#27272a]', 'scale-95');
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        const droppedFile = e.dataTransfer.files[0];
+                        if (droppedFile.type.startsWith('image/')) {
+                            imageSlots[index] = droppedFile; renderSlots(); updatePromptLockState();
+                        } else { alert("请拖入图片格式的文件"); }
+                    }
+                };
+
+                if (file) {
+                    const reader = new FileReader(); reader.onload = (e) => {
+                        let doodleBadge = file.isDoodled ? `<div class="absolute bottom-1 right-1 text-xs text-indigo-400 font-bold z-10"><i class="fa-solid fa-pen-nib"></i></div>` : "";
+                        let editBtn = canDoodle ? `<div onclick="openEditor(${index}, event)" class="absolute bottom-1 left-1 w-5 h-5 bg-indigo-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm z-20 hover:scale-110 hover:bg-indigo-400" title="涂鸦编辑"><i class="fa-solid fa-paintbrush text-[10px]"></i></div>` : "";
+                        div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover pointer-events-none"><div class="absolute top-1 left-1 bg-black/60 text-white text-[9px] font-bold px-1.5 rounded backdrop-blur-sm z-10">图 ${slotNum}</div>${editBtn} ${doodleBadge}<div onclick="clearSlot(${index}, event)" class="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm z-20 hover:scale-110"><i class="fa-solid fa-xmark text-[10px]"></i></div><div onclick="viewOriginal('${e.target.result}')" class="absolute inset-0 z-0"></div>`;
+                    }; reader.readAsDataURL(file);
+                } else {
+                    div.onclick = () => triggerSlotUpload(index);
+                    div.innerHTML = `<i class="fa-solid fa-plus text-gray-300 dark:text-gray-600 text-lg mb-1 group-hover:text-purple-500 transition"></i><span class="text-[10px] text-gray-400 dark:text-gray-500 font-mono group-hover:text-purple-500 transition">图片 ${slotNum}</span>`;
+                }
+                grid.appendChild(div);
+            });
+        }
+
+        // --- 修改后：对接加载进度的 submitTask ---
         async function submitTask() {
             const apiKey = localStorage.getItem('nano_api_key'); if (!apiKey) { openSettings(); return; }
             let baseUrl = localStorage.getItem('nano_api_url') || DEFAULT_API_URL;
@@ -766,11 +820,17 @@
             const size = document.getElementById('size-input').value;
             const modelName = document.getElementById('model-input').value;
             const btn = document.getElementById('generate-btn'), icon = document.getElementById('loading-icon');
+            
             if (!prompt) { alert("请输入提示词"); return; }
+            
+            ensureLoaderExists();
+
             btn.disabled = true; btn.classList.add('opacity-70', 'cursor-not-allowed'); icon.classList.remove('hidden');
             btn.querySelector('span').innerText = `生成中 (0/${batchSize})...`; 
+            
             const validImages = imageSlots.filter(item => item !== null); originalRefImage = null;
             if (validImages.length > 0) { const reader = new FileReader(); reader.onload = (e) => { originalRefImage = e.target.result; }; reader.readAsDataURL(validImages[0]); }
+            
             const startTime = Date.now();
             const sendRequest = async () => {
                 const isTxt2Img = validImages.length === 0; let endpoint, body, headers;
@@ -787,14 +847,16 @@
                 const data = await response.json(); if (!response.ok) throw new Error(data.error?.message || "请求失败");
                 return data.data || (data.url ? [{url: data.url}] : []);
             };
+            
             try {
                 const requestPromises = Array.from({ length: batchSize }, () => sendRequest());
                 const outcomes = await Promise.allSettled(requestPromises);
                 const allResults = [];
                 outcomes.forEach(outcome => { if (outcome.status === 'fulfilled') { allResults.push(...outcome.value); } else { console.error("部分请求失败:", outcome.reason); } });
                 const duration = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
+                
                 if (allResults.length > 0) { 
-                    setMainImage(allResults[0].url, duration, originalRefImage);
+                    preloadImageAndDisplay(allResults[0].url, duration, originalRefImage);
                     allResults.forEach(img => addToHistory(img.url, prompt, duration)); 
                     if(window.innerWidth < 768) { setTimeout(() => { document.getElementById('preview-section-wrapper').scrollIntoView({ behavior: 'smooth' }); }, 100); }
                 } else { alert("生成失败，请检查设置或重试"); }
@@ -880,4 +942,3 @@
     </script>
 </body>
 </html>
-
