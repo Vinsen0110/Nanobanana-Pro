@@ -392,6 +392,7 @@
                 } catch (e) { console.error("History Load Error", e); }
             }
             updateModelRestrictions();
+            updateGenerateButtonPrice(); // 强制初始化调用
         });
 
         // 自定义下拉逻辑 (模型) - 向下
@@ -415,6 +416,7 @@
                 else { check.classList.add('opacity-0'); check.classList.remove('opacity-100'); opt.classList.remove('bg-indigo-50', 'dark:bg-[#27272a]'); }
             });
             toggleModelDropdown(); renderSlots(); updatePromptLockState();
+            updateGenerateButtonPrice(); // 触发价格更新
         }
 
         // 自定义下拉逻辑 (宽高比) - 向上
@@ -615,7 +617,14 @@
         function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
         function saveSettings() { 
             const key = document.getElementById('modal-api-key').value.trim(), url = document.getElementById('modal-api-url').value.trim();
-            if (key) { localStorage.setItem('nano_api_key', key); localStorage.setItem('nano_api_url', url || DEFAULT_API_URL); updateApiDisplay(url || DEFAULT_API_URL); updateModelRestrictions(); closeSettings(); } 
+            if (key) { 
+                localStorage.setItem('nano_api_key', key); 
+                localStorage.setItem('nano_api_url', url || DEFAULT_API_URL); 
+                updateApiDisplay(url || DEFAULT_API_URL); 
+                updateModelRestrictions(); 
+                closeSettings(); 
+                updateGenerateButtonPrice(); // 设置保存后更新价格
+            } 
             else { alert("请输入API Key"); } 
         }
 
@@ -690,7 +699,8 @@
                 } else {
                     btn.className = "batch-btn inactive-btn bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] text-gray-700 dark:text-gray-300 flex-1 py-1.5 text-xs rounded-lg transition"; 
                 }
-            }); 
+            });
+            updateGenerateButtonPrice(); // 数量变化更新价格
         }
 
         // --- 新增：自动创建加载进度条组件 ---
@@ -810,6 +820,39 @@
             });
         }
 
+        // --- 核心修正：价格计算与更新 ---
+        function updateGenerateButtonPrice() {
+            // 获取并清理 URL，移除空白
+            let url = (localStorage.getItem('nano_api_url') || DEFAULT_API_URL).trim();
+            const model = document.getElementById('model-input').value;
+            let unitPrice = 0;
+
+            console.log("Price Calc Debug:", { url, model, batchSize });
+
+            // 增强的匹配逻辑
+            if (url.includes('bltcy.ai')) { // 柏拉图渠道
+                if (model === 'nano-banana-2-4k') unitPrice = 0.2;
+                // hd在该渠道被禁用或无报价
+            } else if (url.includes('t8star.cn')) { // 贞贞渠道
+                if (model === 'nano-banana-2-4k') unitPrice = 0.27; // Pro对应2-4k
+                if (model === 'nano-banana-hd') unitPrice = 0.162; // hd对应hd
+            }
+
+            const total = unitPrice * batchSize;
+            const btnSpan = document.querySelector('#generate-btn span');
+            const loadingIcon = document.getElementById('loading-icon');
+
+            // 仅在非加载状态下更新文字
+            if (loadingIcon && loadingIcon.classList.contains('hidden')) {
+                if (total > 0) {
+                    // 使用 - 0.2¥ 格式
+                    btnSpan.innerText = `✨ 立即生成 - ${parseFloat(total.toFixed(3))}¥`;
+                } else {
+                    btnSpan.innerText = `✨ 立即生成`;
+                }
+            }
+        }
+
         // --- 修改后：对接加载进度的 submitTask ---
         async function submitTask() {
             const apiKey = localStorage.getItem('nano_api_key'); if (!apiKey) { openSettings(); return; }
@@ -861,7 +904,13 @@
                     if(window.innerWidth < 768) { setTimeout(() => { document.getElementById('preview-section-wrapper').scrollIntoView({ behavior: 'smooth' }); }, 100); }
                 } else { alert("生成失败，请检查设置或重试"); }
             } catch (err) { console.error(err); alert("错误: " + err.message); } 
-            finally { btn.disabled = false; btn.classList.remove('opacity-70', 'cursor-not-allowed'); icon.classList.add('hidden'); btn.querySelector('span').innerText = "✨ 立即生成"; }
+            finally { 
+                btn.disabled = false; 
+                btn.classList.remove('opacity-70', 'cursor-not-allowed'); 
+                icon.classList.add('hidden'); 
+                // 恢复价格显示而不是纯文字
+                updateGenerateButtonPrice();
+            }
         }
 
         function setMainImage(url, duration = "", refSrc = null) {
@@ -942,6 +991,3 @@
     </script>
 </body>
 </html>
-
-
-
