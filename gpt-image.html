@@ -312,6 +312,7 @@
                     }
                 } catch (e) { console.error("History Load Error", e); }
             }
+            updateGenerateButtonPrice(); // 初始化价格显示
         });
 
         // Dropdown Logic (Model)
@@ -333,6 +334,7 @@
                 else { check.classList.add('opacity-0'); check.classList.remove('opacity-100'); opt.classList.remove('bg-cyan-50', 'dark:bg-[#27272a]'); }
             });
             toggleModelDropdown();
+            updateGenerateButtonPrice(); // 模型变化更新价格
         }
 
         // Dropdown Logic (Ratio)
@@ -418,7 +420,13 @@
         function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
         function saveSettings() { 
             const key = document.getElementById('modal-api-key').value.trim(), url = document.getElementById('modal-api-url').value.trim();
-            if (key) { localStorage.setItem('gpt_api_key', key); localStorage.setItem('gpt_api_url', url || DEFAULT_API_URL); updateApiDisplay(url || DEFAULT_API_URL); closeSettings(); } 
+            if (key) { 
+                localStorage.setItem('gpt_api_key', key); 
+                localStorage.setItem('gpt_api_url', url || DEFAULT_API_URL); 
+                updateApiDisplay(url || DEFAULT_API_URL); 
+                closeSettings(); 
+                updateGenerateButtonPrice(); // 设置保存后更新价格
+            } 
             else { alert("请输入API Key"); } 
         }
 
@@ -496,7 +504,33 @@
                 } else {
                     btn.className = "batch-btn inactive-btn bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] text-gray-700 dark:text-gray-300 flex-1 py-1.5 text-xs rounded-lg transition"; 
                 }
-            }); 
+            });
+            updateGenerateButtonPrice(); // 数量变化更新价格
+        }
+
+        // --- 新增：价格计算逻辑 ---
+        function updateGenerateButtonPrice() {
+            const model = document.getElementById('model-input').value;
+            let unitPrice = 0;
+
+            // 针对 gpt-image-1.5 设置价格
+            if (model === 'gpt-image-1.5') {
+                unitPrice = 0.05;
+            }
+
+            const total = unitPrice * batchSize;
+            const btnSpan = document.querySelector('#generate-btn span');
+            const loadingIcon = document.getElementById('loading-icon');
+
+            // 仅在非加载状态下更新文字
+            if (loadingIcon && loadingIcon.classList.contains('hidden')) {
+                if (total > 0) {
+                    // 使用 - 0.05¥ 格式
+                    btnSpan.innerText = `🚀 立即生成 - ${parseFloat(total.toFixed(3))}¥`;
+                } else {
+                    btnSpan.innerText = `🚀 立即生成`;
+                }
+            }
         }
 
         // Loader
@@ -702,7 +736,13 @@
                     if(window.innerWidth < 768) { setTimeout(() => { document.getElementById('preview-section-wrapper').scrollIntoView({ behavior: 'smooth' }); }, 100); }
                 } else { alert("生成失败，API未返回有效图片"); }
             } catch (err) { console.error(err); alert("错误: " + err.message); } 
-            finally { btn.disabled = false; btn.classList.remove('opacity-70', 'cursor-not-allowed'); icon.classList.add('hidden'); btn.querySelector('span').innerText = "🚀 立即对话生成"; }
+            finally { 
+                btn.disabled = false; 
+                btn.classList.remove('opacity-70', 'cursor-not-allowed'); 
+                icon.classList.add('hidden'); 
+                // 恢复价格显示
+                updateGenerateButtonPrice();
+            }
         }
 
         function setMainImage(url, duration = "", refSrc = null) {
@@ -793,6 +833,3 @@
 </body>
 
 </html>
-
-
-
