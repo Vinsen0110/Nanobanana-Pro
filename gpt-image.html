@@ -508,14 +508,22 @@
             updateGenerateButtonPrice(); // 数量变化更新价格
         }
 
-        // --- 新增：价格计算逻辑 ---
+        // --- 新增：价格计算逻辑 (已更新) ---
         function updateGenerateButtonPrice() {
             const model = document.getElementById('model-input').value;
+            // 读取当前设置的 API 地址
+            const apiUrl = document.getElementById('modal-api-url').value || localStorage.getItem('gpt_api_url') || DEFAULT_API_URL;
             let unitPrice = 0;
 
             // 针对 gpt-image-1.5 设置价格
             if (model === 'gpt-image-1.5') {
-                unitPrice = 0.05;
+                // 如果 API 地址包含 t8star (贞贞)，价格为 0.0675
+                if (apiUrl.indexOf('t8star') !== -1) {
+                     unitPrice = 0.0675;
+                } else {
+                     // 默认为 0.05
+                     unitPrice = 0.05;
+                }
             }
 
             const total = unitPrice * batchSize;
@@ -526,7 +534,7 @@
             if (loadingIcon && loadingIcon.classList.contains('hidden')) {
                 if (total > 0) {
                     // 使用 - 0.05¥ 格式
-                    btnSpan.innerText = `🚀 立即生成 - ${parseFloat(total.toFixed(3))}¥`;
+                    btnSpan.innerText = `🚀 立即生成 - ${parseFloat(total.toFixed(4))}¥`; // 使用 toFixed(4) 以显示 0.0675
                 } else {
                     btnSpan.innerText = `🚀 立即生成`;
                 }
