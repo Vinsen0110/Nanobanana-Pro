@@ -121,6 +121,17 @@
                         <span onclick="unlockPrompt()" class="cursor-pointer underline hover:text-indigo-400 font-bold ml-2">解锁</span>
                     </p>
                 </div>
+
+                <div class="space-y-2 pt-1">
+                    <label class="text-xs text-black-500 font-bold uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-font text-indigo-500"></i> 文字快速修改 (可选)
+                    </label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="text-edit-old" class="w-full custom-input rounded-lg px-3 py-2 text-xs bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600" placeholder="原文字...">
+                        <input type="text" id="text-edit-new" class="w-full custom-input rounded-lg px-3 py-2 text-xs bg-gray-50 border-gray-300 text-gray-800 dark:bg-[#18181b] dark:border-[#27272a] dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-600" placeholder="修改为...">
+                    </div>
+                    <p class="text-[9px] text-gray-400">填写后将自动追加至提示词，不填则不发送。</p>
+                </div>
                 
                 <div class="space-y-2">
                     <label class="text-xs text-black dark:text-gray-200 font-bold uppercase">宽高比</label>
@@ -392,10 +403,10 @@
                 } catch (e) { console.error("History Load Error", e); }
             }
             updateModelRestrictions();
-            updateGenerateButtonPrice(); // 强制初始化调用
+            updateGenerateButtonPrice(); 
         });
 
-        // 自定义下拉逻辑 (模型) - 向下
+        // 自定义下拉逻辑 (模型)
         function toggleModelDropdown(event) {
             if(event) event.stopPropagation();
             const container = document.getElementById('custom-model-dropdown');
@@ -416,10 +427,10 @@
                 else { check.classList.add('opacity-0'); check.classList.remove('opacity-100'); opt.classList.remove('bg-indigo-50', 'dark:bg-[#27272a]'); }
             });
             toggleModelDropdown(); renderSlots(); updatePromptLockState();
-            updateGenerateButtonPrice(); // 触发价格更新
+            updateGenerateButtonPrice(); 
         }
 
-        // 自定义下拉逻辑 (宽高比) - 向上
+        // 自定义下拉逻辑 (宽高比)
         function toggleRatioDropdown(event) {
             if(event) event.stopPropagation();
             const container = document.getElementById('custom-ratio-dropdown');
@@ -440,7 +451,7 @@
             toggleRatioDropdown();
         }
 
-        // 自定义下拉逻辑 (分辨率) - 向下
+        // 自定义下拉逻辑 (分辨率)
         function toggleSizeDropdown(event) {
             if(event) event.stopPropagation();
             const trigger = document.getElementById('size-trigger');
@@ -623,7 +634,7 @@
                 updateApiDisplay(url || DEFAULT_API_URL); 
                 updateModelRestrictions(); 
                 closeSettings(); 
-                updateGenerateButtonPrice(); // 设置保存后更新价格
+                updateGenerateButtonPrice(); 
             } 
             else { alert("请输入API Key"); } 
         }
@@ -700,10 +711,9 @@
                     btn.className = "batch-btn inactive-btn bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] text-gray-700 dark:text-gray-300 flex-1 py-1.5 text-xs rounded-lg transition"; 
                 }
             });
-            updateGenerateButtonPrice(); // 数量变化更新价格
+            updateGenerateButtonPrice(); 
         }
 
-        // --- 新增：自动创建加载进度条组件 ---
         function ensureLoaderExists() {
             if (document.getElementById('custom-loader')) return;
             const container = document.getElementById('zoom-container');
@@ -728,7 +738,6 @@
             container.appendChild(loaderDiv);
         }
 
-        // --- 新增：预加载图片并显示进度的核心逻辑 ---
         function preloadImageAndDisplay(url, duration, refSrc) {
             ensureLoaderExists();
             const loader = document.getElementById('custom-loader');
@@ -775,7 +784,6 @@
             xhr.send();
         }
 
-        // --- 修改后：包含拖拽功能的 renderSlots ---
         function renderSlots() {
             const grid = document.getElementById('slots-grid'); 
             const currentModel = document.getElementById('model-input').value; 
@@ -820,54 +828,49 @@
             });
         }
 
-        // --- 核心修正：价格计算与更新 ---
         function updateGenerateButtonPrice() {
-            // 获取并清理 URL，移除空白
             let url = (localStorage.getItem('nano_api_url') || DEFAULT_API_URL).trim();
             const model = document.getElementById('model-input').value;
             let unitPrice = 0;
-
-            console.log("Price Calc Debug:", { url, model, batchSize });
-
-            // 增强的匹配逻辑
-            if (url.includes('bltcy.ai')) { // 柏拉图渠道
+            if (url.includes('bltcy.ai')) { 
                 if (model === 'nano-banana-2-4k') unitPrice = 0.2;
-                // hd在该渠道被禁用或无报价
-            } else if (url.includes('t8star.cn')) { // 贞贞渠道
-                if (model === 'nano-banana-2-4k') unitPrice = 0.27; // Pro对应2-4k
-                if (model === 'nano-banana-hd') unitPrice = 0.162; // hd对应hd
+            } else if (url.includes('t8star.cn')) { 
+                if (model === 'nano-banana-2-4k') unitPrice = 0.27; 
+                if (model === 'nano-banana-hd') unitPrice = 0.162; 
             }
-
             const total = unitPrice * batchSize;
             const btnSpan = document.querySelector('#generate-btn span');
             const loadingIcon = document.getElementById('loading-icon');
-
-            // 仅在非加载状态下更新文字
             if (loadingIcon && loadingIcon.classList.contains('hidden')) {
-                if (total > 0) {
-                    // 使用 - 0.2¥ 格式
-                    btnSpan.innerText = `✨ 立即生成 - ${parseFloat(total.toFixed(3))}¥`;
-                } else {
-                    btnSpan.innerText = `✨ 立即生成`;
-                }
+                if (total > 0) { btnSpan.innerText = `✨ 立即生成 - ${parseFloat(total.toFixed(3))}¥`; } 
+                else { btnSpan.innerText = `✨ 立即生成`; }
             }
         }
 
-        // --- 修改后：对接加载进度的 submitTask ---
         async function submitTask() {
             const apiKey = localStorage.getItem('nano_api_key'); if (!apiKey) { openSettings(); return; }
             let baseUrl = localStorage.getItem('nano_api_url') || DEFAULT_API_URL;
             baseUrl = baseUrl.replace(/\/v1\/images\/(edits|generations)\/?$/, '').replace(/\/+$/, '');
-            const prompt = document.getElementById('prompt-input').value.trim();
+            
+            let basePrompt = document.getElementById('prompt-input').value.trim();
+            const oldText = document.getElementById('text-edit-old').value.trim();
+            const newText = document.getElementById('text-edit-new').value.trim();
+            
+            // 构建最终发送给模型的提示词
+            let finalPrompt = basePrompt;
+            if (oldText && newText) {
+                // 如果用户填写了文字修改，自动在提示词后追加格式化后的要求
+                finalPrompt += ` 文字编辑要求：把 “${oldText}” 修改为 “${newText}”`;
+            }
+
             const ratio = document.getElementById('ratio-input').value; 
             const size = document.getElementById('size-input').value;
             const modelName = document.getElementById('model-input').value;
             const btn = document.getElementById('generate-btn'), icon = document.getElementById('loading-icon');
             
-            if (!prompt) { alert("请输入提示词"); return; }
+            if (!finalPrompt) { alert("请输入提示词"); return; }
             
             ensureLoaderExists();
-
             btn.disabled = true; btn.classList.add('opacity-70', 'cursor-not-allowed'); icon.classList.remove('hidden');
             btn.querySelector('span').innerText = `生成中 (0/${batchSize})...`; 
             
@@ -880,10 +883,10 @@
                 headers = { 'Authorization': `Bearer ${apiKey}` };
                 if (isTxt2Img) {
                     endpoint = `${baseUrl}/v1/images/generations`; headers['Content-Type'] = 'application/json';
-                    body = JSON.stringify({ model: modelName, prompt: prompt, aspect_ratio: ratio, image_size: size, n: 1, response_format: 'url' });
+                    body = JSON.stringify({ model: modelName, prompt: finalPrompt, aspect_ratio: ratio, image_size: size, n: 1, response_format: 'url' });
                 } else {
                     endpoint = `${baseUrl}/v1/images/edits`; const formData = new FormData();
-                    formData.append('model', modelName); formData.append('prompt', prompt); formData.append('aspect_ratio', ratio); formData.append('image_size', size); formData.append('n', 1); formData.append('response_format', 'url');
+                    formData.append('model', modelName); formData.append('prompt', finalPrompt); formData.append('aspect_ratio', ratio); formData.append('image_size', size); formData.append('n', 1); formData.append('response_format', 'url');
                     validImages.forEach((file) => formData.append('image', file)); body = formData;
                 }
                 const response = await fetch(endpoint, { method: 'POST', headers: headers, body: body });
@@ -900,15 +903,12 @@
                 
                 if (allResults.length > 0) { 
                     preloadImageAndDisplay(allResults[0].url, duration, originalRefImage);
-                    allResults.forEach(img => addToHistory(img.url, prompt, duration)); 
+                    allResults.forEach(img => addToHistory(img.url, basePrompt, duration)); 
                     if(window.innerWidth < 768) { setTimeout(() => { document.getElementById('preview-section-wrapper').scrollIntoView({ behavior: 'smooth' }); }, 100); }
                 } else { alert("生成失败，请检查设置或重试"); }
             } catch (err) { console.error(err); alert("错误: " + err.message); } 
             finally { 
-                btn.disabled = false; 
-                btn.classList.remove('opacity-70', 'cursor-not-allowed'); 
-                icon.classList.add('hidden'); 
-                // 恢复价格显示而不是纯文字
+                btn.disabled = false; btn.classList.remove('opacity-70', 'cursor-not-allowed'); icon.classList.add('hidden'); 
                 updateGenerateButtonPrice();
             }
         }
