@@ -19,195 +19,264 @@
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
+        /* 密码拦截层样式 */
+        #auth-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-[#fafafa] min-h-screen flex flex-col text-gray-800 relative">
     
-    <div class="md:hidden bg-white border-b border-gray-100 p-4 sticky top-0 z-40 shadow-sm flex justify-between items-center">
-        <div class="font-bold text-lg text-indigo-600 flex items-center gap-2">
-            <img src="kitty.png" class="w-6 h-6 rounded-md" onerror="this.style.display='none'"> Xs的工具箱
-        </div>
-        <div class="relative group">
-            <button class="bg-emerald-50 text-emerald-600 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-full transition flex items-center gap-1.5">
-                <i class="fa-solid fa-key"></i> 注册/Key <i class="fa-solid fa-chevron-down text-[10px]"></i>
-            </button>
-            <div class="absolute top-full right-0 pt-2 w-40 hidden group-hover:block group-focus-within:block">
-                <div class="bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden ring-1 ring-black/5 p-1">
-                    <a href="https://api.bltcy.ai/register?aff=dlam79084" target="_blank" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-blue-50 hover:text-blue-500 rounded-lg"><i class="fa-solid fa-landmark text-blue-400"></i> 柏拉图API</a>
-                    <a href="https://ai.t8star.cn/register?aff=XUPQ71902" target="_blank" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-pink-50 hover:text-pink-500 rounded-lg"><i class="fa-solid fa-spa text-pink-400"></i> 贞贞API</a>
-                    <a href="https://ai.yijiarj.cn/register?aff=ayGf" target="_blank" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-red-50 hover:text-red-500 rounded-lg"><i class="fa-solid fa-fire text-red-400"></i> 一加API</a>
-                </div>
+    <div id="auth-overlay">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 text-center max-w-sm w-full mx-4 modal-enter">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-shield-halved text-2xl"></i>
             </div>
-        </div>
-    </div>
-
-    <div class="hidden md:block absolute top-6 right-6 z-40">
-        <div class="relative group">
-            <button class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-sm flex items-center gap-1.5 cursor-pointer ring-1 ring-emerald-500/50">
-                <i class="fa-solid fa-key"></i> 获取Key <i class="fa-solid fa-caret-down text-[10px] opacity-80"></i>
-            </button>
-            <div class="absolute top-full right-0 pt-2 w-32 hidden group-hover:block">
-                <div class="bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden ring-1 ring-black/5">
-                    <div class="py-1">
-                        <a href="https://api.bltcy.ai/register?aff=dlam79084" target="_blank" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition"><i class="fa-solid fa-landmark text-blue-400"></i> 柏拉图API</a>
-                        <div class="h-[1px] bg-gray-100 mx-2"></div>
-                        <a href="https://ai.t8star.cn/register?aff=XUPQ71902" target="_blank" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-purple-500 transition"><i class="fa-solid fa-spa text-pink-400"></i> 贞贞API</a>
-                        <div class="h-[1px] bg-gray-100 mx-2"></div>
-                        <a href="https://ai.yijiarj.cn/register?aff=ayGf" target="_blank" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-red-500 transition"><i class="fa-solid fa-fire text-red-400"></i> 一加API</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex-1 flex flex-col items-center p-4 md:p-6 pt-4 md:pt-24 pb-20">
-
-        <div class="text-center mb-5 md:mb-20 space-y-2 md:space-y-4">
-            <h1 class="text-4xl md:text-5xl font-bold text-[#6366f1] tracking-tight">选择生成的模型</h1>
-            <p class="text-gray-400 text-sm md:text-lg">聚合全球顶尖AI视觉创作引擎</p>
-        </div>
-
-        <div class="w-full max-w-6xl space-y-4 md:space-y-24">
-            <section>
-                <div class="flex items-center gap-2 mb-2 px-1">
-                     <div class="w-1 h-5 bg-yellow-500 rounded-full"></div>
-                    <h2 class="text-lg md:text-xl font-bold text-gray-800"><i class="fa-solid fa-palette text-yellow-500 mr-2"></i>AI 绘画设计</h2>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-                    <a href="nanobanana.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-yellow-400/50 group">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-400 to-orange-500"></div>
-                        <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
-                            <img src="https://raw.githubusercontent.com/Vinsen0110/Nano2-Pro-Zz/main/nanobanana.jpg" class="w-full h-full object-cover" alt="Icon" onerror="this.src='kitty.png'">
-                        </div>
-                        <div class="flex-1 min-w-0 text-left pt-0.5">
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-yellow-600 transition-colors">Nano Banana Pro</h3>
-                            <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">专业级图片生成与重绘工具</p>
-                        </div>
-                        <div class="shrink-0 text-yellow-600 font-bold text-xs flex items-center self-center">
-                            开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
-
-                    <a href="gpt-image.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-cyan-400/50 group">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-emerald-500"></div>
-                        <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
-                            <img src="https://raw.githubusercontent.com/Vinsen0110/Nano2-Pro-Zz/main/gpt.png" class="w-full h-full object-cover" alt="GPT Icon" onerror="this.src='kitty.png'">
-                        </div>
-                        <div class="flex-1 min-w-0 text-left pt-0.5">
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">GPT-image</h3>
-                            <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">OpenAI 官方图像生成与编辑</p>
-                        </div>
-                        <div class="shrink-0 text-cyan-600 font-bold text-xs flex items-center self-center">
-                            开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            <section>
-                <div class="flex items-center gap-2 mb-2 px-1">
-                    <div class="w-1 h-5 bg-indigo-500 rounded-full"></div>
-                    <h2 class="text-lg md:text-xl font-bold text-gray-800"><i class="fa-solid fa-film text-indigo-500 mr-2"></i>AI 视频生成</h2>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-                    <a href="veo3.1.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-purple-400/50 group">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-400 to-fuchsia-500"></div>
-                        <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
-                            <img src="veo3.1.png" class="w-full h-full object-cover" alt="Veo 3.1">
-                        </div>
-                        <div class="flex-1 min-w-0 text-left pt-0.5">
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">Veo 3.1</h3>
-                            <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">DeepMind 电影级创作</p>
-                        </div>
-                        <div class="shrink-0 text-purple-600 font-bold text-xs flex items-center self-center">
-                            开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
-
-                    <a href="sora2.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-indigo-400/50 group">
-                         <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 to-indigo-500"></div>
-                        <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
-                            <img src="sora2.png" class="w-full h-full object-cover" alt="Sora 2">
-                        </div>
-                        <div class="flex-1 min-w-0 text-left pt-0.5">
-                            <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Sora 2</h3>
-                            <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">OpenAI 最新视频生成模型</p>
-                        </div>
-                        <div class="shrink-0 text-indigo-600 font-bold text-xs flex items-center self-center">
-                            开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <button onclick="toggleModal(true)" class="fixed bottom-6 right-6 z-40 bg-white text-emerald-600 border border-emerald-100 shadow-xl rounded-full px-5 py-3 font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform ring-4 ring-emerald-50/50 cursor-pointer">
-        <div class="bg-emerald-100 w-8 h-8 rounded-full flex items-center justify-center text-emerald-600">
-            <i class="fa-solid fa-tags"></i>
-        </div>
-        <span>价格表</span>
-    </button>
-
-    <div id="price-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-gray-900/30 backdrop-blur-sm transition-opacity" onclick="toggleModal(false)"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">访问受限</h2>
+            <p class="text-gray-500 text-sm mb-6">请输入 6 位身份验证码以继续</p>
             
-            <div class="bg-white w-full max-w-7xl rounded-2xl shadow-2xl p-6 md:p-8 pointer-events-auto relative modal-enter">
-                
-                <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+            <input type="password" id="access-password" maxlength="6" autofocus
+                class="w-full text-center text-2xl tracking-[1em] font-bold border-2 border-gray-100 rounded-xl py-3 focus:border-indigo-500 focus:outline-none transition-all mb-4"
+                placeholder="••••••">
+            
+            <button onclick="verifyPassword()" 
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-indigo-200">
+                验证并进入
+            </button>
+            <p id="error-msg" class="text-red-500 text-xs mt-3 hidden text-center font-semibold">密码错误，请重新输入</p>
+        </div>
+    </div>
+
+    <div id="main-content" style="visibility: hidden;">
+        <div class="md:hidden bg-white border-b border-gray-100 p-4 sticky top-0 z-40 shadow-sm flex justify-between items-center">
+            <div class="font-bold text-lg text-indigo-600 flex items-center gap-2">
+                <img src="kitty.png" class="w-6 h-6 rounded-md" onerror="this.style.display='none'"> Xs的工具箱
+            </div>
+            <div class="relative group">
+                <button class="bg-emerald-50 text-emerald-600 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-full transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-key"></i> 注册/Key <i class="fa-solid fa-chevron-down text-[10px]"></i>
                 </button>
-
-                <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-file-invoice-dollar text-emerald-500"></i> 各渠道价格公示
-                </h3>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-xs text-gray-900 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-                    
-                    <div class="space-y-3 px-2">
-                        <h4 class="font-extrabold text-indigo-700 text-center text-sm bg-indigo-50 py-1.5 rounded-lg">【柏拉图】渠道</h4>
-                        <div class="space-y-2 font-mono text-gray-600">
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 / Pro</span><span class="font-bold text-black">0.1 / 2.5 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 Fast</span><span class="font-bold text-black">0.2 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro</span><span class="font-bold text-black">0.3 / 0.3 / 1 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro (4K)</span><span class="font-bold text-black">0.5 / 0.5 / 2 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Nanobanana Pro</span><span class="font-bold text-black">0.2 ¥</span></div>
-                            <div class="flex justify-between items-center whitespace-nowrap"><span class="font-extrabold text-black">GPT-image</span><span class="font-bold text-black">0.05 ¥</span></div>
-                        </div>
+                <div class="absolute top-full right-0 pt-2 w-40 hidden group-hover:block group-focus-within:block">
+                    <div class="bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden ring-1 ring-black/5 p-1">
+                        <a href="https://api.bltcy.ai/register?aff=dlam79084" target="_blank" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-blue-50 hover:text-blue-500 rounded-lg"><i class="fa-solid fa-landmark text-blue-400"></i> 柏拉图API</a>
+                        <a href="https://ai.t8star.cn/register?aff=XUPQ71902" target="_blank" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-pink-50 hover:text-pink-500 rounded-lg"><i class="fa-solid fa-spa text-pink-400"></i> 贞贞API</a>
+                        <a href="https://ai.yijiarj.cn/register?aff=ayGf" target="_blank" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-600 hover:bg-red-50 hover:text-red-500 rounded-lg"><i class="fa-solid fa-fire text-red-400"></i> 一加API</a>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="space-y-3 px-2 pt-4 md:pt-0">
-                        <h4 class="font-extrabold text-purple-700 text-center text-sm bg-purple-50 py-1.5 rounded-lg">【贞贞】渠道</h4>
-                        <div class="space-y-2 font-mono text-gray-600">
-                             <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 / Pro</span><span class="font-bold text-black">0.135 / 3.375 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 Fast</span><span class="font-bold text-black">0.27 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro</span><span class="font-bold text-black">0.405 / 0.405 / 1.35 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro (4K)</span><span class="font-bold text-black">0.675 / 0.675 / 2.7 ¥</span></div>
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Nanobanana hd / Pro</span><span class="font-bold text-black">0.162 / 0.27 ¥</span></div>
-                            <div class="flex justify-between items-center whitespace-nowrap"><span class="font-extrabold text-black">GPT-image</span><span class="font-bold text-black">0.0675 ¥</span></div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 px-2 pt-4 md:pt-0">
-                        <h4 class="font-extrabold text-pink-600 text-center text-sm bg-pink-50 py-1.5 rounded-lg">【一加】渠道</h4>
-                        <div class="space-y-2 font-mono text-gray-600">
-                            <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 10s / 15s </span><span class="font-bold text-black">0.19 / 0.24 ¥</span></div>
-                             <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 Pro 10s / 15s / 25s </span><span class="font-bold text-black">1.15 / 1.8 / 2.2 ¥</span></div>
+        <div class="hidden md:block absolute top-6 right-6 z-40">
+            <div class="relative group">
+                <button class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-sm flex items-center gap-1.5 cursor-pointer ring-1 ring-emerald-500/50">
+                    <i class="fa-solid fa-key"></i> 获取Key <i class="fa-solid fa-caret-down text-[10px] opacity-80"></i>
+                </button>
+                <div class="absolute top-full right-0 pt-2 w-32 hidden group-hover:block">
+                    <div class="bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden ring-1 ring-black/5">
+                        <div class="py-1">
+                            <a href="https://api.bltcy.ai/register?aff=dlam79084" target="_blank" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition"><i class="fa-solid fa-landmark text-blue-400"></i> 柏拉图API</a>
+                            <div class="h-[1px] bg-gray-100 mx-2"></div>
+                            <a href="https://ai.t8star.cn/register?aff=XUPQ71902" target="_blank" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-purple-500 transition"><i class="fa-solid fa-spa text-pink-400"></i> 贞贞API</a>
+                            <div class="h-[1px] bg-gray-100 mx-2"></div>
+                            <a href="https://ai.yijiarj.cn/register?aff=ayGf" target="_blank" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-red-500 transition"><i class="fa-solid fa-fire text-red-400"></i> 一加API</a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center p-4 md:p-6 pt-4 md:pt-24 pb-20">
+
+            <div class="text-center mb-5 md:mb-20 space-y-2 md:space-y-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#6366f1] tracking-tight">选择生成的模型</h1>
+                <p class="text-gray-400 text-sm md:text-lg">聚合全球顶尖AI视觉创作引擎</p>
+            </div>
+
+            <div class="w-full max-w-6xl space-y-4 md:space-y-24">
+                <section>
+                    <div class="flex items-center gap-2 mb-2 px-1">
+                         <div class="w-1 h-5 bg-yellow-500 rounded-full"></div>
+                        <h2 class="text-lg md:text-xl font-bold text-gray-800"><i class="fa-solid fa-palette text-yellow-500 mr-2"></i>AI 绘画设计</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+                        <a href="nanobanana.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-yellow-400/50 group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-400 to-orange-500"></div>
+                            <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
+                                <img src="https://raw.githubusercontent.com/Vinsen0110/Nano2-Pro-Zz/main/nanobanana.jpg" class="w-full h-full object-cover" alt="Icon" onerror="this.src='kitty.png'">
+                            </div>
+                            <div class="flex-1 min-w-0 text-left pt-0.5">
+                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-yellow-600 transition-colors">Nano Banana Pro</h3>
+                                <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">专业级图片生成与重绘工具</p>
+                            </div>
+                            <div class="shrink-0 text-yellow-600 font-bold text-xs flex items-center self-center">
+                                开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+
+                        <a href="gpt-image.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-cyan-400/50 group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 to-emerald-500"></div>
+                            <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
+                                <img src="https://raw.githubusercontent.com/Vinsen0110/Nano2-Pro-Zz/main/gpt.png" class="w-full h-full object-cover" alt="GPT Icon" onerror="this.src='kitty.png'">
+                            </div>
+                            <div class="flex-1 min-w-0 text-left pt-0.5">
+                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">GPT-image</h3>
+                                <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">OpenAI 官方图像生成与编辑</p>
+                            </div>
+                            <div class="shrink-0 text-cyan-600 font-bold text-xs flex items-center self-center">
+                                开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="flex items-center gap-2 mb-2 px-1">
+                        <div class="w-1 h-5 bg-indigo-500 rounded-full"></div>
+                        <h2 class="text-lg md:text-xl font-bold text-gray-800"><i class="fa-solid fa-film text-indigo-500 mr-2"></i>AI 视频生成</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+                        <a href="veo3.1.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-purple-400/50 group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-400 to-fuchsia-500"></div>
+                            <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
+                                <img src="veo3.1.png" class="w-full h-full object-cover" alt="Veo 3.1">
+                            </div>
+                            <div class="flex-1 min-w-0 text-left pt-0.5">
+                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">Veo 3.1</h3>
+                                <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">DeepMind 电影级创作</p>
+                            </div>
+                            <div class="shrink-0 text-purple-600 font-bold text-xs flex items-center self-center">
+                                开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+
+                        <a href="sora2.html" class="relative block bg-white rounded-xl p-3 md:p-6 border border-gray-100 shadow-sm flex items-start gap-5 overflow-hidden card-hover cursor-pointer ring-1 ring-gray-100 hover:ring-indigo-400/50 group">
+                             <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 to-indigo-500"></div>
+                            <div class="w-16 h-16 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 shrink-0">
+                                <img src="sora2.png" class="w-full h-full object-cover" alt="Sora 2">
+                            </div>
+                            <div class="flex-1 min-w-0 text-left pt-0.5">
+                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Sora 2</h3>
+                                <p class="text-gray-500 text-xs mt-1.5 leading-relaxed">OpenAI 最新视频生成模型</p>
+                            </div>
+                            <div class="shrink-0 text-indigo-600 font-bold text-xs flex items-center self-center">
+                                开始生成 <i class="fa-solid fa-arrow-right ml-1.5 transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <button onclick="toggleModal(true)" class="fixed bottom-6 right-6 z-40 bg-white text-emerald-600 border border-emerald-100 shadow-xl rounded-full px-5 py-3 font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform ring-4 ring-emerald-50/50 cursor-pointer">
+            <div class="bg-emerald-100 w-8 h-8 rounded-full flex items-center justify-center text-emerald-600">
+                <i class="fa-solid fa-tags"></i>
+            </div>
+            <span>价格表</span>
+        </button>
+
+        <div id="price-modal" class="fixed inset-0 z-50 hidden">
+            <div class="absolute inset-0 bg-gray-900/30 backdrop-blur-sm transition-opacity" onclick="toggleModal(false)"></div>
+            <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
                 
-                <div class="mt-6 text-center text-[10px] text-gray-400">
-                    * 价格仅供参考，实际扣费以API后台为准
+                <div class="bg-white w-full max-w-7xl rounded-2xl shadow-2xl p-6 md:p-8 pointer-events-auto relative modal-enter">
+                    
+                    <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-file-invoice-dollar text-emerald-500"></i> 各渠道价格公示
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-xs text-gray-900 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                        
+                        <div class="space-y-3 px-2">
+                            <h4 class="font-extrabold text-indigo-700 text-center text-sm bg-indigo-50 py-1.5 rounded-lg">【柏拉图】渠道</h4>
+                            <div class="space-y-2 font-mono text-gray-600">
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 / Pro</span><span class="font-bold text-black">0.1 / 2.5 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 Fast</span><span class="font-bold text-black">0.2 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro</span><span class="font-bold text-black">0.3 / 0.3 / 1 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro (4K)</span><span class="font-bold text-black">0.5 / 0.5 / 2 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Nanobanana Pro</span><span class="font-bold text-black">0.2 ¥</span></div>
+                                <div class="flex justify-between items-center whitespace-nowrap"><span class="font-extrabold text-black">GPT-image</span><span class="font-bold text-black">0.05 ¥</span></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 px-2 pt-4 md:pt-0">
+                            <h4 class="font-extrabold text-purple-700 text-center text-sm bg-purple-50 py-1.5 rounded-lg">【贞贞】渠道</h4>
+                            <div class="space-y-2 font-mono text-gray-600">
+                                 <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 / Pro</span><span class="font-bold text-black">0.135 / 3.375 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 Fast</span><span class="font-bold text-black">0.27 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro</span><span class="font-bold text-black">0.405 / 0.405 / 1.35 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Veo 3.1 / Com / Pro (4K)</span><span class="font-bold text-black">0.675 / 0.675 / 2.7 ¥</span></div>
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Nanobanana hd / Pro</span><span class="font-bold text-black">0.162 / 0.27 ¥</span></div>
+                                <div class="flex justify-between items-center whitespace-nowrap"><span class="font-extrabold text-black">GPT-image</span><span class="font-bold text-black">0.0675 ¥</span></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 px-2 pt-4 md:pt-0">
+                            <h4 class="font-extrabold text-pink-600 text-center text-sm bg-pink-50 py-1.5 rounded-lg">【一加】渠道</h4>
+                            <div class="space-y-2 font-mono text-gray-600">
+                                <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 10s / 15s </span><span class="font-bold text-black">0.19 / 0.24 ¥</span></div>
+                                 <div class="flex justify-between items-center border-b border-dashed border-gray-100 pb-1 whitespace-nowrap"><span class="font-extrabold text-black">Sora 2 Pro 10s / 15s / 25s </span><span class="font-bold text-black">1.15 / 1.8 / 2.2 ¥</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center text-[10px] text-gray-400">
+                        * 价格仅供参考，实际扣费以API后台为准
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 核心验证逻辑 (已混淆) ---
+        // "NjY2ODg4" 是 "666888" 的 Base64 编码
+        // 即使别人按 F12 看到这段代码，也只看到乱码，无法直接知道原密码是啥
+        const ENCRYPTED_PASS = "NjY2ODg4"; 
+
+        function verifyPassword() {
+            const input = document.getElementById('access-password').value;
+            const errorMsg = document.getElementById('error-msg');
+            const overlay = document.getElementById('auth-overlay');
+            const content = document.getElementById('main-content');
+
+            // 将用户输入的值进行加密，然后比对
+            if (btoa(input) === ENCRYPTED_PASS) {
+                // 验证成功
+                sessionStorage.setItem('site_auth', 'true');
+                overlay.style.display = 'none';
+                content.style.visibility = 'visible';
+            } else {
+                errorMsg.classList.remove('hidden');
+                document.getElementById('access-password').value = '';
+            }
+        }
+
+        // 页面加载检查
+        window.onload = function() {
+            if (sessionStorage.getItem('site_auth') === 'true') {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-content').style.visibility = 'visible';
+            }
+        };
+
+        // 绑定回车键
+        document.getElementById('access-password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyPassword();
+        });
+
+        // 原始模态框逻辑
         function toggleModal(show) {
             const modal = document.getElementById('price-modal');
             if(show) {
