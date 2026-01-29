@@ -48,6 +48,15 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         .option-disabled { opacity: 0.5 !important; pointer-events: none !important; cursor: not-allowed !important; background-color: #f3f4f6 !important; border-color: #e5e7eb !important; }
         .dark .option-disabled { background-color: #27272a !important; border-color: #3f3f46 !important; }
+        
+        /* Agent Window Styles */
+        #agent-window { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .agent-expanded { width: 400px; height: 650px; border-radius: 1rem; }
+        .agent-collapsed { width: 48px; height: 48px; border-radius: 9999px; overflow: hidden; }
+        @media (max-width: 640px) {
+            .agent-expanded { width: 100vw; height: 100vh; bottom: 0 !important; right: 0 !important; top: auto !important; transform: none !important; border-radius: 0; }
+        }
+        
         @media (max-width: 768px) {
             .resizer-x, .resizer-y { display: none; }
             #main-container { height: auto !important; overflow: visible !important; }
@@ -293,6 +302,96 @@
             </div>
         </main>
     </div>
+
+    <div id="agent-window" class="fixed right-4 top-1/2 -translate-y-1/2 z-[90] bg-white dark:bg-[#09090b] shadow-2xl border border-gray-200 dark:border-[#27272a] agent-collapsed flex flex-col overflow-hidden transition-all duration-300">
+        <button onclick="toggleAgentWindow()" id="agent-toggle-btn" class="absolute inset-0 flex items-center justify-center text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-[#18181b] transition z-10 w-full h-full">
+            <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+        </button>
+
+        <div id="agent-content" class="flex flex-col h-full hidden">
+            <div class="h-12 shrink-0 border-b border-gray-100 dark:border-[#27272a] flex items-center justify-between px-4 bg-gray-50 dark:bg-[#121214]">
+                <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>自定义Agent节点</span>
+                </div>
+                 <div class="flex items-center gap-2">
+                     <select id="agent-model-select" class="text-[10px] bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded px-1 py-0.5 outline-none dark:text-gray-300">
+                         <option value="gemini-3-pro-preview">Gemini 3 Pro</option>
+                     </select>
+                    <button onclick="toggleAgentWindow()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50 dark:bg-[#09090b]">
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-gray-400"></span> 元提示词 (Meta Prompt)
+                        </label>
+                        <button onclick="togglePromptLibrary()" class="text-[10px] bg-gray-200 dark:bg-[#27272a] hover:bg-gray-300 dark:hover:bg-[#3f3f46] px-2 py-0.5 rounded text-gray-600 dark:text-gray-300 transition">常用提示词库 <i class="fa-solid fa-chevron-down ml-1 text-[8px]"></i></button>
+                    </div>
+                    
+                    <div id="prompt-library-panel" class="hidden bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-lg p-3 space-y-3 shadow-lg">
+                        <div class="flex items-center justify-between border-b border-gray-100 dark:border-[#27272a] pb-2">
+                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">提示词库 (<span id="lib-count">0</span> 项)</span>
+                            <div class="flex gap-1">
+                                <button onclick="createNewPrompt()" class="bg-green-500 text-white text-[10px] px-2 py-0.5 rounded hover:bg-green-600">新建</button>
+                                <button onclick="saveCurrentAsPrompt()" class="bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded hover:bg-blue-600">保存当前</button>
+                                <button onclick="togglePromptLibrary()" class="bg-gray-200 dark:bg-[#27272a] text-gray-600 dark:text-gray-400 text-[10px] px-2 py-0.5 rounded hover:bg-gray-300">收起</button>
+                            </div>
+                        </div>
+                        <div id="prompt-lib-list" class="max-h-32 overflow-y-auto space-y-2">
+                            </div>
+                    </div>
+
+                    <textarea id="agent-meta-prompt" class="w-full h-20 custom-input rounded-lg p-2 text-xs bg-white dark:bg-[#18181b] border-gray-200 dark:border-[#27272a] resize-none" placeholder="输入元提示词... (设定身份、风格等)"></textarea>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-gray-400"></span> 用户需求 (User Input)
+                    </label>
+                    <div class="relative">
+                        <textarea id="agent-user-input" class="w-full h-24 custom-input rounded-lg p-2 text-xs bg-white dark:bg-[#18181b] border-gray-200 dark:border-[#27272a] resize-none pr-8" placeholder="输入文字内容... 
+
+# 用户可以固定化自己的提示词，比如图片的宣传片风格开头，统一的风格化等。
+# 也可以让输入自己的分镜脚本，视频反推，人设师等，自定义的元提示词。"></textarea>
+                        <div class="absolute bottom-2 right-2 flex gap-1">
+                            <button onclick="document.getElementById('agent-img-upload').click()" class="w-6 h-6 rounded-md bg-gray-100 dark:bg-[#27272a] hover:bg-purple-100 dark:hover:bg-purple-900/30 text-gray-500 hover:text-purple-500 flex items-center justify-center transition" title="上传参考图">
+                                <i class="fa-solid fa-image"></i>
+                            </button>
+                            <input type="file" id="agent-img-upload" class="hidden" accept="image/*" onchange="handleAgentImage(event)">
+                        </div>
+                    </div>
+                    <div id="agent-img-preview-area" class="hidden mt-2 relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200 dark:border-[#27272a] group">
+                        <img id="agent-img-preview" class="w-full h-full object-cover">
+                        <button onclick="clearAgentImage()" class="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-[10px]"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                     <div class="flex justify-between items-center">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-gray-400"></span> 输出内容 (Output)
+                        </label>
+                         <button onclick="copyAgentOutput()" class="text-[10px] text-purple-500 hover:text-purple-600">复制</button>
+                     </div>
+                    <textarea id="agent-output" class="w-full h-40 custom-input rounded-lg p-2 text-xs bg-gray-50 dark:bg-[#121214] border-gray-200 dark:border-[#27272a] resize-none font-mono text-gray-600 dark:text-gray-300" placeholder="输出文字内容...
+
+# 输出执行后的文字内容。
+# 每次执行后新结果覆盖旧的结果"></textarea>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 dark:border-[#27272a] bg-white dark:bg-[#09090b]">
+                <button onclick="runAgent()" id="agent-run-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 rounded-lg transition text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play text-xs"></i> 运行
+                </button>
+            </div>
+        </div>
+    </div>
     
     <div id="editor-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex flex-col items-center justify-center">
         <div class="absolute top-6 flex gap-4 bg-white dark:bg-[#18181b] p-2 rounded-full shadow-2xl border border-gray-200 dark:border-[#27272a] z-50">
@@ -379,6 +478,10 @@
         let draggingActionIndex = -1;
         let dragStartOffset = { x: 0, y: 0 };
         let isSliding = false;
+        
+        // Agent Global Vars
+        let agentPromptLib = [];
+        let agentBase64Img = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedKey = localStorage.getItem('nano_api_key');
@@ -407,7 +510,10 @@
                 } catch (e) { console.error("History Load Error", e); }
             }
             updateModelRestrictions();
-            updateGenerateButtonPrice(); 
+            updateGenerateButtonPrice();
+            
+            // Initialize Agent Lib
+            loadAgentPromptLib();
         });
 
         // 自定义下拉逻辑 (模型)
@@ -505,17 +611,25 @@
             try { const hostname = new URL(url).hostname; document.getElementById('current-api-display').innerText = "当前: " + hostname; } 
             catch (e) { document.getElementById('current-api-display').innerText = "当前: Custom"; }
         }
+        
+        // --- 核心修改：模型限制逻辑 (支持 MnAPI 禁用 HD) ---
         function updateModelRestrictions() {
             const currentUrl = localStorage.getItem('nano_api_url') || DEFAULT_API_URL;
             const isPlato = currentUrl.includes('bltcy.ai');
+            const isMnapi = currentUrl.includes('mnapi.com'); // MnAPI 检测
             const hdOption = document.querySelector('.model-option[data-val="nano-banana-hd"]');
+            
             if (!hdOption) return;
-            if (isPlato) {
+            
+            if (isPlato || isMnapi) { // 柏拉图或MnAPI都禁用HD
                 hdOption.classList.add('option-disabled');
                 const currentModel = document.getElementById('model-input').value;
                 if (currentModel === 'nano-banana-hd') selectModel('nano-banana-2-4k', 'nano-banana-2-4K');
-            } else { hdOption.classList.remove('option-disabled'); }
+            } else { 
+                hdOption.classList.remove('option-disabled'); 
+            }
         }
+        
         function saveHistoryToLocal() { if (historyData.length > 50) historyData = historyData.slice(0, 50); localStorage.setItem('nano_history_data', JSON.stringify(historyData)); }
         
         function redrawCanvas() {
@@ -1053,6 +1167,214 @@
             if(!currentMainImageUrl) { alert("当前没有可导入的图片"); return; }
             const emptyIndex = imageSlots.findIndex(slot => slot === null); if (emptyIndex === -1) { alert("格子已满 (9张)，请先删除一些图片"); return; }
             try { const r = await fetch(currentMainImageUrl); const b = await r.blob(); const f = new File([b], `import_${Date.now()}.jpg`, { type: b.type }); imageSlots[emptyIndex] = f; renderSlots(); } catch(e) { alert("导入失败"); }
+        }
+
+        /* --- Agent Window Functions --- */
+        function toggleAgentWindow() {
+            const win = document.getElementById('agent-window');
+            const content = document.getElementById('agent-content');
+            const btn = document.getElementById('agent-toggle-btn');
+            
+            if (win.classList.contains('agent-collapsed')) {
+                win.classList.remove('agent-collapsed');
+                win.classList.add('agent-expanded');
+                btn.classList.add('hidden');
+                setTimeout(() => content.classList.remove('hidden'), 200);
+            } else {
+                content.classList.add('hidden');
+                win.classList.remove('agent-expanded');
+                win.classList.add('agent-collapsed');
+                setTimeout(() => btn.classList.remove('hidden'), 200);
+            }
+        }
+        
+        function handleAgentImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                agentBase64Img = e.target.result;
+                document.getElementById('agent-img-preview').src = agentBase64Img;
+                document.getElementById('agent-img-preview-area').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function clearAgentImage() {
+            agentBase64Img = null;
+            document.getElementById('agent-img-preview').src = '';
+            document.getElementById('agent-img-preview-area').classList.add('hidden');
+            document.getElementById('agent-img-upload').value = '';
+        }
+        
+        async function runAgent() {
+            const apiKey = localStorage.getItem('nano_api_key'); if (!apiKey) { openSettings(); return; }
+            let baseUrl = localStorage.getItem('nano_api_url') || DEFAULT_API_URL;
+            baseUrl = baseUrl.replace(/\/v1\/images\/(edits|generations)\/?$/, '').replace(/\/+$/, '');
+            
+            const meta = document.getElementById('agent-meta-prompt').value.trim();
+            const user = document.getElementById('agent-user-input').value.trim();
+            const model = document.getElementById('agent-model-select').value;
+            const outputArea = document.getElementById('agent-output');
+            const btn = document.getElementById('agent-run-btn');
+
+            if (!user && !agentBase64Img) { alert('请输入内容或上传图片'); return; }
+
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 思考中...';
+            outputArea.value = "正在连接 AI 模型...";
+            
+            // Build Messages
+            let messages = [];
+            if (meta) messages.push({ role: 'system', content: meta });
+            
+            let userContent = [];
+            if (user) userContent.push({ type: "text", text: user });
+            if (agentBase64Img) {
+                userContent.push({ type: "image_url", image_url: { url: agentBase64Img } });
+            }
+            
+            // If strictly text, can simplify content string for compatibility, but object array is standard for multimodal
+            if (userContent.length === 1 && userContent[0].type === 'text') {
+                messages.push({ role: 'user', content: user });
+            } else {
+                messages.push({ role: 'user', content: userContent });
+            }
+
+            try {
+                // OpenAI Compatible Chat Endpoint
+                const response = await fetch(`${baseUrl}/v1/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        max_tokens: 4096
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error?.message || "请求失败");
+                
+                const resultText = data.choices[0]?.message?.content || "无返回内容";
+                outputArea.value = resultText;
+            } catch (e) {
+                outputArea.value = "错误: " + e.message;
+            } finally {
+                btn.disabled = false; 
+                btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i> 运行';
+            }
+        }
+        
+        function copyAgentOutput() {
+            const text = document.getElementById('agent-output').value;
+            if(!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('button[onclick="copyAgentOutput()"]');
+                const originalText = btn.innerText;
+                btn.innerText = "已复制";
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        }
+
+        // --- Prompt Library Functions (Updated for Full Data Save) ---
+        function togglePromptLibrary() {
+            const panel = document.getElementById('prompt-library-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function loadAgentPromptLib() {
+            const stored = localStorage.getItem('nano_prompt_lib');
+            if (stored) {
+                try { agentPromptLib = JSON.parse(stored); } catch (e) { agentPromptLib = []; }
+            } else {
+                // Init with defaults if empty
+                agentPromptLib = [
+                    { id: Date.now(), title: "角色板", content: "你是一位经验丰富的电影概念设计师，请分析上传的图片，描述其角色特征、服饰细节和整体风格。", user: "" },
+                    { id: Date.now()+1, title: "分镜版", content: "请作为专业分镜师，将这段文字转化为详细的电影分镜脚本，包含景别、运镜和画面内容。", user: "" }
+                ];
+                saveAgentPromptLib();
+            }
+            renderAgentPromptLib();
+        }
+
+        function saveAgentPromptLib() {
+            localStorage.setItem('nano_prompt_lib', JSON.stringify(agentPromptLib));
+            renderAgentPromptLib();
+        }
+
+        function renderAgentPromptLib() {
+            const list = document.getElementById('prompt-lib-list');
+            const count = document.getElementById('lib-count');
+            count.innerText = agentPromptLib.length;
+            list.innerHTML = '';
+            
+            agentPromptLib.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-gray-50 dark:bg-[#27272a] p-2 rounded text-xs group";
+                div.innerHTML = `
+                    <span class="font-bold truncate max-w-[120px] dark:text-gray-300" title="${item.title}">${item.title}</span>
+                    <div class="flex gap-1 opacity-60 group-hover:opacity-100 transition">
+                        <button onclick="applyPrompt(${index})" class="bg-indigo-500 text-white px-1.5 py-0.5 rounded hover:bg-indigo-600">应用</button>
+                        <button onclick="editPrompt(${index})" class="text-gray-500 hover:text-blue-500 px-1"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deletePrompt(${index})" class="text-gray-500 hover:text-red-500 px-1"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function createNewPrompt() {
+            // New prompt logic: Just clear inputs to let user type new one
+            if(confirm("新建提示词会清空当前输入框，是否继续？")) {
+                document.getElementById('agent-meta-prompt').value = "";
+                document.getElementById('agent-user-input').value = "";
+            }
+        }
+
+        function saveCurrentAsPrompt() {
+            const metaContent = document.getElementById('agent-meta-prompt').value;
+            const userContent = document.getElementById('agent-user-input').value;
+            
+            if(!metaContent && !userContent) { alert("当前内容为空，无法保存"); return; }
+            
+            const title = prompt("为当前提示词组合命名:");
+            if(!title) return;
+            
+            // Save both Meta and User content
+            agentPromptLib.push({ 
+                id: Date.now(), 
+                title: title, 
+                content: metaContent, // Keeping 'content' for backward compat or strictly meta
+                user: userContent 
+            });
+            saveAgentPromptLib();
+        }
+
+        function deletePrompt(index) {
+            if(confirm("确定删除此提示词吗？")) {
+                agentPromptLib.splice(index, 1);
+                saveAgentPromptLib();
+            }
+        }
+        
+        function editPrompt(index) {
+            // Load it into the inputs to let user edit, then they can save as new or overwrite (logic simplified to load)
+            const item = agentPromptLib[index];
+            if(confirm(`要将 "${item.title}" 加载到编辑区进行修改吗？\n(修改后请点击“保存当前”并删除旧的，或重新覆盖)`)) {
+                 applyPrompt(index);
+            }
+        }
+
+        function applyPrompt(index) {
+            const item = agentPromptLib[index];
+            // Apply to Meta Prompt
+            document.getElementById('agent-meta-prompt').value = item.content || "";
+            // Apply to User Input (Handle old data that might not have 'user' field)
+            document.getElementById('agent-user-input').value = item.user || "";
         }
     </script>
 </body>
