@@ -99,16 +99,16 @@
                     <div class="relative w-40" id="custom-model-dropdown">
                         <input type="hidden" id="model-input" value="nano-banana-2-4k">
                         <div onclick="toggleModelDropdown(event)" id="dropdown-trigger" class="w-full flex justify-between items-center bg-gray-100 dark:bg-[#18181b] border border-transparent dark:border-[#27272a] rounded-lg px-3 py-1.5 cursor-pointer transition-all hover:bg-gray-200 dark:hover:bg-[#27272a]">
-                            <span id="current-model-text" class="text-xs font-bold font-mono text-gray-700 dark:text-black-300">nano-banana-2-4K</span>
+                            <span id="current-model-text" class="text-xs font-bold font-mono text-gray-700 dark:text-black-300">Nano Banana Pro</span>
                              <i class="fa-solid fa-chevron-down text-[10px] text-gray-500 dropdown-arrow"></i>
                         </div>
                         <div id="dropdown-options" class="hidden absolute top-full right-0 mt-2 w-48 bg-white dark:bg-[#18181b] border border-gray-200 dark:border-[#27272a] rounded-xl shadow-xl overflow-hidden z-50 p-1">
-                            <div onclick="selectModel('nano-banana-2-4k', 'nano-banana-2-4K')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-2-4k">
-                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">nano-banana-2-4K</span>
+                            <div onclick="selectModel('nano-banana-2-4k', 'Nano Banana Pro')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-2-4k">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Nano Banana Pro</span>
                                 <i class="fa-solid fa-check text-indigo-500 text-xs opacity-100 check-icon"></i>
                             </div>
-                            <div onclick="selectModel('nano-banana-hd', 'nano-banana-hd')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-hd">
-                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">nano-banana-hd</span>
+                            <div onclick="selectModel('nano-banana-hd', 'Nano Banana')" class="model-option flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-indigo-50 dark:hover:bg-[#27272a] group transition" data-val="nano-banana-hd">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Nano Banana</span>
                                 <i class="fa-solid fa-check text-indigo-500 text-xs opacity-0 check-icon"></i>
                             </div>
                             </div>
@@ -621,10 +621,10 @@
             
             if (!hdOption) return;
             
-            if (isPlato || isMnapi) { // 柏拉图或MnAPI都禁用HD
+            if (isPlato || isMnapi) { // 柏拉图或MnAPI都禁用HD (Nano Banana)
                 hdOption.classList.add('option-disabled');
                 const currentModel = document.getElementById('model-input').value;
-                if (currentModel === 'nano-banana-hd') selectModel('nano-banana-2-4k', 'nano-banana-2-4K');
+                if (currentModel === 'nano-banana-hd') selectModel('nano-banana-2-4k', 'Nano Banana Pro');
             } else { 
                 hdOption.classList.remove('option-disabled'); 
             }
@@ -952,6 +952,9 @@
             } else if (url.includes('t8star.cn')) { 
                 if (model === 'nano-banana-2-4k') unitPrice = 0.27; 
                 if (model === 'nano-banana-hd') unitPrice = 0.162; 
+            } else if (url.includes('mnapi.com')) { 
+                // 新增 MN API 计费逻辑
+                if (model === 'nano-banana-2-4k') unitPrice = 0.15;
             }
             const total = unitPrice * batchSize;
             const btnSpan = document.querySelector('#generate-btn span');
@@ -1037,7 +1040,7 @@
                 headers = { 'Authorization': `Bearer ${apiKey}` };
                 
                 // --- 智能映射核心逻辑 ---
-                // 如果是 MnAPI 且选了 nano-banana-2-4k，则偷偷换成 gemini-3-pro-image-preview-4k
+                // 如果是 MnAPI 且选了 Nano Banana Pro (内部值: nano-banana-2-4k)，则自动映射为 gemini-3-pro-image-preview-4k
                 let requestModelName = modelName;
                 if (baseUrl.includes('mnapi.com') && modelName === 'nano-banana-2-4k') {
                     requestModelName = 'gemini-3-pro-image-preview-4k';
